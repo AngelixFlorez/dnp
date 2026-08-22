@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Interactivo IDF – Colombia 2020‑2024</title>
+  <meta name="description" content="Visualización interactiva del IDF por departamentos colombianos (2020‑2024)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-titles">
+      <p class="eyebrow">Departamento Nacional de Planeación</p>
+      <h1>Dashboard – Índice de Desempeño Fiscal (IDF)</h1>
+    </div>
+    <div class="selectors">
+      <label for="yearSelect">Año:</label>
+      <select id="yearSelect"></select>
+      <label for="deptSelect">Departamento:</label>
+      <select id="deptSelect"></select>
+    </div>
+  </header>
+
+  <!-- KPI Cards -->
+  <section class="kpi-section" aria-label="Indicadores clave">
+    <div class="kpi-card"><h2>IDF Promedio<br/>Nacional</h2><p class="value" data-key="nationalAvg">–</p></div>
+    <div class="kpi-card"><h2># Departamentos</h2><p class="value" data-key="deptCount">–</p></div>
+    <div class="kpi-card"><h2>IDF Departamento</h2><p class="value" data-key="deptScore">–</p></div>
+    <div class="kpi-card"><h2>Variación IDF<br/>(pp)</h2><p class="value" data-key="variation">–</p></div>
+    <div class="kpi-card"><h2>Máximo Nacional</h2><p class="value" data-key="max">–</p></div>
+    <div class="kpi-card"><h2>Mínimo Nacional</h2><p class="value" data-key="min">–</p></div>
+    <div class="kpi-card"><h2>Brecha Fiscal<br/>(Max‑Min)</h2><p class="value" data-key="gap">–</p></div>
+  </section>
+
+  <!-- Mapa + Ficha departamento -->
+  <main class="grid-layout">
+    <section class="map-section" aria-label="Mapa interactivo de Colombia">
+      <div class="map-legend"><h3>Rangos de Desempeño</h3><ul>
+        <li><span class="legend-color deterioro"></span>Deterioro (&lt; 40)</li>
+        <li><span class="legend-color riesgo"></span>Riesgo (40‑&lt; 60)</li>
+        <li><span class="legend-color vulnerable"></span>Vulnerable (60‑&lt; 70)</li>
+        <li><span class="legend-color solvente"></span>Solvente (70‑&lt; 80)</li>
+        <li><span class="legend-color sostenible"></span>Sostenible (≥ 80)</li>
+      </ul></div>
+      <div id="svgMapContainer" class="svg-container"></div>
+      <div class="map-controls">
+        <button id="zoomIn" title="Acercar">+</button>
+        <button id="zoomOut" title="Alejar">−</button>
+        <button id="zoomReset" title="Restablecer vista">⟲</button>
+      </div>
+    </section>
+
+    <section class="detail-section" aria-label="Ficha del departamento seleccionado">
+      <div class="section-heading">
+        <p class="eyebrow">Ficha Departamental</p>
+        <h2 id="deptName">Selecciona un departamento</h2>
+      </div>
+      <div class="dimension-tables">
+        <table class="dimension-table" id="resultsTable">
+          <caption>Dimensión Resultados (80 %)</caption>
+          <thead><tr><th>Indicador</th><th>Resultado</th><th>Calificación</th><th>Res. Año Ant.</th><th>Calif. Año Ant.</th><th>Var. Res.</th><th>Var. Calif.</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <table class="dimension-table" id="managementTable">
+          <caption>Dimensión Gestión (20 % + Bonos)</caption>
+          <thead><tr><th>Indicador</th><th>Resultado</th><th>Calificación</th><th>Res. Año Ant.</th><th>Calif. Año Ant.</th><th>Var. Res.</th><th>Var. Calif.</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Evolución Histórica + Top 10 + Distribución por rangos -->
+  <section class="charts-section" aria-label="Gráficos e historial">
+    <div class="chart-card wide">
+      <h3>Evolución Histórica IDF</h3>
+      <div class="evo-table-wrapper"><table class="evo-table" id="evoTable">
+        <thead><tr><th>Año</th><th>IDF Prom.</th><th>Var. (pp)</th><th>Deptos.</th><th>Máximo</th><th>Mínimo</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+    <div class="chart-card">
+      <h3>IDF Promedio Nacional por Año</h3>
+      <canvas id="historicalChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Distribución por Rangos de Desempeño</h3>
+      <div class="dist-table-wrapper"><table class="dist-table" id="distTable">
+        <thead><tr><th>Rango</th><th>Cant.</th><th>%</th><th>IDF Prom.</th></tr></thead>
+        <tbody></tbody>
+        <tfoot><tr><td><strong>TOTAL</strong></td><td id="distTotalCant">–</td><td>100%</td><td id="distTotalAvg">–</td></tr></tfoot>
+      </table></div>
+      <canvas id="nationalDistributionChart" height="220"></canvas>
+    </div>
+  </section>
+
+  <!-- Top 10 + Distribución por Tipología + Categoría -->
+  <section class="charts-section" aria-label="Rankings y distribuciones">
+    <div class="chart-card">
+      <h3>Top 10 Departamentos – Mayor IDF</h3>
+      <div class="top10-table-wrapper"><table class="top10-table" id="top10Table">
+        <thead><tr><th>#</th><th>Departamento</th><th>IDF</th><th>Rango</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+      <canvas id="top10Chart" height="300"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Distribución por Rangos – Tipología</h3>
+      <div class="tipologia-table-wrapper"><table class="tipologia-table" id="tipologiaTable">
+        <thead><tr><th>Tipología</th><th>Deterioro</th><th>Riesgo</th><th>Vulnerable</th><th>Solvente</th><th>Sostenible</th><th>Total</th><th>IDF Prom.</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+    <div class="chart-card">
+      <h3>Distribución por Rangos – Categoría Ley 617</h3>
+      <div class="categoria-table-wrapper"><table class="categoria-table" id="categoriaTable">
+        <thead><tr><th>Categoría</th><th>Deterioro</th><th>Riesgo</th><th>Vulnerable</th><th>Solvente</th><th>Sostenible</th><th>Total</th><th>IDF Prom.</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- Consulta histórica del departamento -->
+  <section class="charts-section" aria-label="Consulta histórica del departamento">
+    <div class="chart-card wide">
+      <h3>Consulta Histórica – <span id="histDeptName">Departamento</span></h3>
+      <div class="hist-table-wrapper"><table class="hist-table" id="histTable">
+        <thead><tr><th>Año</th><th>Región</th><th>Categoría</th><th>Tipología</th><th>IDF</th><th>Rango</th><th>Ranking Nal.</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- Calculator Modal -->
+  <div id="calcModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <span class="close" id="calcClose">&times;</span>
+      <h2>Calculadora IDF</h2>
+      <p>En esta sección se muestra el desglose del cálculo del IDF para el departamento seleccionado.</p>
+      <div id="calcDetails">Cargando...</div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>Desarrollado por el Departamento Nacional de Planeación (DNP) · © <span id="year"></span></p>
+  </footer>
+
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+  <script src="app.js"></script>
+</body>
+</html>

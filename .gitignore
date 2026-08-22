@@ -1,0 +1,31 @@
+# Git ignore file for the project
+# OS generated files
+Thumbs.db
+.DS_Store
+
+# Node.js dependencies
+node_modules/
+
+# Python compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment variables
+.env
+
+# Log files
+*.log
+
+# Editor directories
+.vscode/
+.idea/
+
+# Build directories
+build/
+Dist/
+
+# Others
+coverage/
+*.sqlite3
+*.pdf
