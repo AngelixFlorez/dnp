@@ -1,31 +1,18 @@
-# Git ignore file for the project
-# OS generated files
+# OS
 Thumbs.db
+Desktop.ini
 .DS_Store
-.gitignore
-# Node.js dependencies
-node_modules/
 
-# Python compiled files
-__pycache__/
-*.py[cod]
-*.pyo
-
-# Environment variables
-.env
-
-# Log files
-*.log
-
-# Editor directories
+# Editor
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# Build directories
-build/
-Dist/
+# Python
+__pycache__/
+*.pyc
+.env
 
-# Others
-coverage/
-*.sqlite3
-*.pdf
+# Logs
+*.log
