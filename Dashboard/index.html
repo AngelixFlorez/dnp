@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Índice de Desempeño Fiscal — IDF</title>
+<style>
+:root{
+  --navy:#152444;
+  --navy-2:#1c2f57;
+  --navy-3:#22386b;
+  --pink:#e6007e;
+  --pink-2:#c2006b;
+  --orange:#f5821f;
+  --red:#e0393e;
+  --purple:#8e3fa3;
+  --green:#7cb342;
+  --green-dk:#2e7d32;
+  --bg:#eef1f6;
+  --card:#ffffff;
+  --line:#dde3ee;
+  --text:#1c2438;
+  --muted:#6b7688;
+  --gold:#c98a1d;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:"Segoe UI",Roboto,Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:13px;
+}
+.app{max-width:1300px;margin:0 auto;padding:14px 14px 40px;}
+
+/* ===== TOP NAV ===== */
+.topnav{
+  display:flex;
+  gap:6px;
+  margin-bottom:14px;
+}
+.topnav button{
+  flex:1;
+  background:var(--navy);
+  color:#cdd6ea;
+  border:none;
+  padding:14px 10px;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:.2px;
+  cursor:pointer;
+  border-radius:3px;
+  transition:background .15s ease;
+}
+.topnav button:hover{background:var(--navy-2);}
+.topnav button.active{
+  background:var(--pink);
+  color:#fff;
+}
+
+.page{display:none;}
+.page.active{display:block;}
+
+/* ===== generic cards / bars ===== */
+.panel{
+  background:var(--card);
+  border-radius:4px;
+  box-shadow:0 1px 3px rgba(20,30,60,.08);
+  margin-bottom:14px;
+  overflow:hidden;
+}
+.section-bar{
+  background:var(--pink);
+  color:#fff;
+  font-weight:700;
+  font-size:13px;
+  letter-spacing:.3px;
+  padding:9px 14px;
+}
+.section-bar.navy{background:var(--navy);}
+.panel-body{padding:16px 18px;}
+
+/* ===== INSTRUCTIVO HEADER ===== */
+.hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--card);
+  border-radius:4px;
+  box-shadow:0 1px 3px rgba(20,30,60,.08);
+  padding:18px 22px;
+  margin-bottom:14px;
+  gap:20px;
+}
+.hero-left{display:flex;align-items:center;gap:16px;}
+.hero-badge{
+  width:54px;height:54px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#3452a0,#152444 70%);
+  flex:0 0 auto;
+}
+.hero-title h1{
+  margin:0;
+  font-size:22px;
+  color:var(--navy);
+  font-weight:800;
+  line-height:1.15;
+}
+.hero-title p{
+  margin:2px 0 0;
+  color:var(--muted);
+  font-size:12.5px;
+}
+.hero-links{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  font-size:12px;
+  color:var(--pink-2);
+}
+.hero-links span{display:flex;align-items:center;gap:6px;}
+.hero-links span::before{content:"○";color:var(--pink);font-size:10px;}
+.hero-logos{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  font-size:11px;
+  color:var(--muted);
+  text-align:center;
+}
+.logo-chip{
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:6px 10px;
+  font-weight:700;
+  color:var(--navy);
+  min-width:70px;
+}
+
+/* intro text panel */
+.intro-title{
+  background:var(--pink);
+  color:#fff;
+  font-weight:700;
+  font-size:13px;
+  padding:9px 14px;
+}
+.intro-text{padding:14px 18px;line-height:1.6;color:#37415a;font-size:12.7px;}
+
+/* 80/20 split */
+.split80{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.split80 .col{padding:18px 20px;}
+.split80 .col.left{border-right:1px solid var(--line);}
+.big-pct{font-size:32px;font-weight:800;color:var(--navy);}
+.big-pct .lbl{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-top:2px;}
+.pct-row{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
+.pct-num{font-size:34px;font-weight:800;}
+.pct-num.pink{color:var(--pink);}
+.pct-num.navy{color:var(--navy);}
+.pct-desc{font-size:12.2px;color:#45506a;line-height:1.55;margin-top:6px;}
+.pct-desc b{color:var(--navy);}
+
+/* rangos cards */
+.rangos-wrap{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+  padding:16px 18px;
+}
+.rango-card{
+  border-radius:4px;
+  color:#fff;
+  padding:12px 12px 14px;
+  min-height:120px;
+}
+.rango-card .pts{font-size:12px;font-weight:700;opacity:.9;}
+.rango-card .name{font-size:15px;font-weight:800;margin:4px 0 6px;}
+.rango-card .desc{font-size:11px;line-height:1.45;opacity:.95;}
+.rango-card.c1{background:var(--red);}
+.rango-card.c2{background:var(--orange);}
+.rango-card.c3{background:var(--purple);}
+.rango-card.c4{background:#6fae37;}
+.rango-card.c5{background:var(--green-dk);}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:12.2px;}
+th,td{padding:7px 10px;text-align:center;border-bottom:1px solid var(--line);}
+th{background:#f4f6fb;color:var(--navy);font-weight:700;font-size:11.5px;}
+td.left, th.left{text-align:left;}
+.pos{color:var(--green-dk);font-weight:700;}
+.neg{color:var(--red);font-weight:700;}
+
+/* charts */
+.chart-title{font-size:13px;font-weight:800;color:var(--navy);margin:0 0 2px;}
+.chart-sub{font-size:11px;color:var(--muted);margin:0 0 14px;}
+.chart-area{
+  display:flex;
+  align-items:flex-end;
+  gap:26px;
+  height:210px;
+  padding:0 6px 4px;
+  border-bottom:1px solid var(--line);
+  overflow-x:auto;
+}
+.bar-group{
+  display:flex;
+  align-items:flex-end;
+  gap:3px;
+  flex:0 0 auto;
+  height:100%;
+}
+.bar-group .bar{
+  width:16px;
+  border-radius:2px 2px 0 0;
+  position:relative;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+}
+.bar-group .bar .val{
+  position:absolute;
+  top:-16px;
+  font-size:9px;
+  color:var(--navy);
+  font-weight:700;
+  white-space:nowrap;
+}
+.chart-xlabels{
+  display:flex;
+  gap:26px;
+  padding:6px 6px 0;
+  overflow-x:auto;
+}
+.chart-xlabels .xg{
+  flex:0 0 auto;
+  width:70px;
+  text-align:center;
+  font-size:10.5px;
+  color:var(--navy);
+  font-weight:700;
+}
+.legend-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  padding:10px 6px 0;
+  font-size:11px;
+  color:#45506a;
+}
+.legend-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle;}
+
+/* ranking chart (single bars per city) */
+.rank-chart{
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  height:230px;
+  padding:20px 6px 4px;
+  overflow-x:auto;
+  border-bottom:1px solid var(--line);
+}
+.rank-bar-wrap{
+  flex:0 0 auto;
+  width:34px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-end;
+  height:100%;
+  position:relative;
+}
+.rank-bar-wrap .diamond{
+  position:absolute;
+  width:8px;height:8px;
+  background:var(--orange);
+  transform:rotate(45deg);
+  left:50%;
+  margin-left:-4px;
+}
+.rank-bar-wrap .val{font-size:9.5px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.rank-bar-wrap .bar{width:20px;border-radius:2px 2px 0 0;}
+.rank-labels{
+  display:flex;
+  gap:8px;
+  padding:6px 6px 0;
+  overflow-x:auto;
+}
+.rank-labels .lab{
+  flex:0 0 auto;
+  width:34px;
+  font-size:8.7px;
+  color:var(--navy);
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  text-align:right;
+  height:110px;
+  overflow:hidden;
+}
+
+/* distribution table bottom */
+.dist-table td.range-name{text-align:left;font-weight:600;}
+
+/* ================= FICHA MUNICIPAL ================= */
+.ficha-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  background:var(--card);
+  border-radius:4px;
+  box-shadow:0 1px 3px rgba(20,30,60,.08);
+  padding:16px 20px;
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.ficha-header h2{margin:0 0 2px;color:var(--navy);font-size:16px;}
+.ficha-header p{margin:0;color:var(--muted);font-size:11.5px;max-width:640px;line-height:1.5;}
+.municipio-select{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.municipio-select label{font-size:11px;color:var(--muted);font-weight:700;}
+.municipio-select select{
+  padding:8px 10px;
+  border:1px solid var(--line);
+  border-radius:3px;
+  font-size:13px;
+  min-width:220px;
+  color:var(--navy);
+  font-weight:600;
+}
+.idf-card{
+  background:var(--pink);
+  color:#fff;
+  border-radius:4px;
+  padding:10px 18px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+.idf-card .lbl{font-weight:800;font-size:13px;}
+.idf-card .metric{text-align:center;}
+.idf-card .metric .n{font-size:20px;font-weight:800;}
+.idf-card .metric .t{font-size:9.5px;opacity:.85;}
+
+.select-boxes{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:14px;
+}
+.select-box{
+  background:var(--card);
+  border-radius:4px;
+  box-shadow:0 1px 3px rgba(20,30,60,.08);
+  padding:12px 16px;
+}
+.select-box .k{font-size:9.5px;font-weight:800;color:var(--muted);letter-spacing:.3px;}
+.select-box .v{font-size:17px;font-weight:800;color:var(--navy);margin-top:4px;}
+.select-box .badge{
+  display:inline-block;margin-top:6px;padding:3px 9px;border-radius:3px;
+  font-size:11px;font-weight:700;color:#fff;background:var(--orange);
+}
+
+.result-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--navy);
+  color:#fff;
+  padding:9px 14px;
+}
+.result-header .name{font-weight:700;font-size:13px;}
+.result-header .stats{display:flex;gap:10px;align-items:center;font-size:11.5px;}
+.result-header .stats .chip{background:rgba(255,255,255,.15);padding:3px 9px;border-radius:3px;}
+.result-header .stats .chip.pink{background:var(--pink);font-weight:700;}
+.result-header .stats .chip.green{background:var(--green-dk);font-weight:700;}
+
+.fin-grid{display:grid;grid-template-columns:2.6fr 1fr;gap:0;}
+.fin-grid .side{
+  border-left:1px solid var(--line);
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+.side .badge-orange{background:var(--orange);color:#fff;font-weight:800;font-size:22px;padding:10px 18px;border-radius:4px;margin-bottom:8px;}
+.side .cap{font-size:10.5px;color:var(--muted);font-weight:700;}
+.side .body{font-size:10.7px;color:#45506a;line-height:1.5;margin-top:8px;}
+.side .legend{margin-top:12px;font-size:10.5px;color:#45506a;text-align:left;width:100%;}
+.side .legend div{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.side .legend .dot{width:9px;height:9px;border-radius:2px;}
+
+.fin-table{padding:0;}
+.fin-table table{font-size:11px;}
+.fin-table td.varcell{font-size:9.6px;line-height:1.35;text-align:left;color:#556;}
+.fin-table td.varcell b{color:var(--navy);}
+
+.tendencia-table td.left{text-align:left;font-weight:600;}
+.trend-mini{
+  display:inline-block;width:60px;height:18px;
+  background:linear-gradient(90deg,transparent,transparent);
+}
+
+/* ================= CONSOLIDADO ================= */
+.consol-top{
+  display:grid;
+  grid-template-columns:1.1fr 1fr 1fr;
+  gap:12px;
+  margin-bottom:14px;
+}
+.stat-card{
+  background:var(--card);
+  border-radius:4px;
+  box-shadow:0 1px 3px rgba(20,30,60,.08);
+  padding:14px 16px;
+  text-align:center;
+}
+.stat-card .k{font-size:10px;color:var(--muted);font-weight:800;}
+.stat-card .v{font-size:22px;font-weight:800;color:var(--navy);margin-top:4px;}
+.stat-card .v.pink{color:var(--pink);}
+.stat-card .sub{font-size:10.5px;color:var(--muted);margin-top:2px;}
+
+.consol-layout{display:grid;grid-template-columns:1.7fr 1fr;gap:14px;}
+.tab-row{display:flex;gap:6px;padding:10px 14px;background:#f4f6fb;border-bottom:1px solid var(--line);}
+.tab-row button{
+  background:#fff;border:1px solid var(--line);padding:6px 14px;border-radius:3px;
+  font-size:11.5px;font-weight:700;color:var(--navy);cursor:pointer;
+}
+.tab-row button.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.dim-row td{background:#eef1f8;font-weight:800;color:var(--navy);}
+.rank-list{padding:6px 0;}
+.rank-list .row{
+  display:flex;justify-content:space-between;padding:5px 16px;font-size:11.5px;border-bottom:1px solid #f0f2f7;
+}
+.rank-list .row:nth-child(odd){background:#fafbfd;}
+.rank-list .row .nm{color:#2b3550;}
+.rank-list .row .vv{font-weight:800;color:var(--navy);}
+.rank-list .row.hl{background:#fde7f3;}
+.rank-list .row.hl .nm, .rank-list .row.hl .vv{color:var(--pink-2);}
+
+/* ================= DISTRIBUCION ================= */
+.dist-top{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;}
+.dist-filters{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px;}
+.dist-filters .f label{display:block;font-size:12px;color:var(--navy);font-weight:700;margin-bottom:4px;}
+.dist-filters .f select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:3px;font-size:12.5px;color:#37415a;}
+.dist-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;}
+.map-wrap{padding:10px;}
+.dist-bars{padding:14px 16px;}
+.dist-bars h4{margin:0 0 10px;color:var(--navy);font-size:12.5px;}
+.dist-bar-row{margin-bottom:12px;}
+.dist-bar-row .lbl{display:flex;justify-content:space-between;font-size:11px;color:#37415a;margin-bottom:4px;font-weight:600;}
+.dist-bar-row .track{background:#eef1f6;border-radius:3px;height:16px;overflow:hidden;}
+.dist-bar-row .fill{height:100%;border-radius:3px;}
+.dist-note{
+  background:#fdf3e2;border:1px solid #f2dfb0;color:#7a5b12;
+  font-size:11px;padding:10px 12px;border-radius:3px;margin-top:8px;line-height:1.5;
+}
+.map-legend{display:flex;flex-direction:column;gap:6px;padding:10px 4px 0;font-size:11.5px;color:#37415a;}
+.map-legend div{display:flex;align-items:center;gap:8px;}
+.map-legend .dot{width:11px;height:11px;border-radius:50%;}
+
+footer.foot{
+  display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);
+  padding:10px 14px;border-top:1px solid var(--line);
+}
+.src-note{font-size:9.5px;color:var(--muted);padding:6px 14px;text-align:right;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topnav">
+    <button class="active" data-page="instructivo">Instructivo</button>
+    <button data-page="ficha">Ficha Municipal IDF</button>
+    <button data-page="consolidado">Consolidado</button>
+    <button data-page="distribucion">Distribución IDF</button>
+  </div>
+
+  <!-- ================= PAGE 1: INSTRUCTIVO ================= -->
+  <div class="page active" id="page-instructivo">
+
+    <div class="hero">
+      <div class="hero-left">
+        <div class="hero-badge"></div>
+        <div class="hero-title">
+          <h1>Índice de<br>Desempeño<br>Fiscal — IDF</h1>
+          <p>Visor interactivo de municipios · Vigencia 2024</p>
+        </div>
+      </div>
+      <div class="hero-links">
+        <span>¿Qué mide el IDF?</span>
+        <span>Dimensiones y ponderación</span>
+        <span>Rangos de desempeño fiscal</span>
+        <span>Cómo usar este visor</span>
+      </div>
+      <div class="hero-logos">
+        <div class="logo-chip">Departamento<br>Nacional de<br>Planeación</div>
+        <div class="logo-chip">CIFFIT</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="intro-title">¿QUÉ MIDE EL IDF? PERMITE EVALUAR LA SOSTENIBILIDAD Y EFICIENCIA FISCAL DE LAS ET</div>
+      <div class="intro-text">
+        Mide el desempeño de la gestión fiscal y financiera de las entidades territoriales en función de la viabilidad fiscal, la capacidad de generación de recursos propios, el endeudamiento, los niveles de inversión y la capacidad de gestión financiera. El artículo 79 de la Ley 617 de 2000 ordena al DNP publicar los resultados de la evaluación al menos una vez al año.
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-bar navy">2.2 PROMEDIO PONDERADO DE LAS DIMENSIONES — 80% + 20%</div>
+      <div class="split80">
+        <div class="col left">
+          <div class="pct-row">
+            <div class="pct-num pink">80%</div>
+            <div class="big-pct">Resultados<span class="lbl">Fiscales</span></div>
+          </div>
+          <div class="pct-desc"><b>Resultados Fiscales:</b> dependencia de las transferencias, relevancia FBKF, endeudamiento contable, ahorro corriente y resultado fiscal; cada uno con un peso del 16%.</div>
+        </div>
+        <div class="col right">
+          <div class="pct-row">
+            <div class="pct-num navy">20%</div>
+            <div class="big-pct">Gestión<span class="lbl">Financiera Territorial</span></div>
+          </div>
+          <div class="pct-desc"><b>Gestión Financiera:</b> capacidad de programación y recaudo de ingresos, capacidad de ejecución de inversión y cumplimiento de límites de la Ley 617 de 2000; cada uno con peso del 6,66%, más bonificaciones por esfuerzo propio y catastro actualizado.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-bar navy">2.3 RANGOS DE DESEMPEÑO FISCAL</div>
+      <div class="rangos-wrap">
+        <div class="rango-card c1">
+          <div class="pts">&lt;40 pts</div>
+          <div class="name">1. Deterioro</div>
+          <div class="desc">Riesgo de déficit o alto endeudamiento. Alta dependencia de transferencias. Bajos niveles de inversión en FBKF.</div>
+        </div>
+        <div class="rango-card c2">
+          <div class="pts">40-60 pts</div>
+          <div class="name">2. Riesgo</div>
+          <div class="desc">Debilidades fiscales importantes, aunque en un nivel menos crítico que los municipios en deterioro.</div>
+        </div>
+        <div class="rango-card c3">
+          <div class="pts">60-70 pts</div>
+          <div class="name">3. Vulnerable</div>
+          <div class="desc">Pueden cumplir límites legales de deuda y gasto, pero aún presentan dependencia de transferencias.</div>
+        </div>
+        <div class="rango-card c4">
+          <div class="pts">70-80 pts</div>
+          <div class="name">4. Solvente</div>
+          <div class="desc">Finanzas saludables con oportunidades de mejora en algunos indicadores fiscales.</div>
+        </div>
+        <div class="rango-card c5">
+          <div class="pts">&gt;=80 pts</div>
+          <div class="name">5. Sostenible</div>
+          <div class="desc">Finanzas saludables, cumplimiento de límites, recursos propios y alto gasto en FBKF.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="intro-title">EVOLUCIÓN HISTÓRICA DEL IDF</div>
+      <table>
+        <thead>
+          <tr><th class="left">Año</th><th>IDF promedio</th><th>Var. (pp)</th><th>Municipios</th><th>Máximo</th><th>Mínimo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="left">2020</td><td>55,0</td><td>-</td><td>1.102</td><td>80,8</td><td>17,6</td></tr>
+          <tr><td class="left">2021</td><td>54,2</td><td class="neg">-0,7</td><td>1.102</td><td>85,8</td><td>21,0</td></tr>
+          <tr><td class="left">2022</td><td>55,8</td><td class="pos">+1,6</td><td>1.102</td><td>82,9</td><td>29,1</td></tr>
+          <tr><td class="left">2023</td><td>57,6</td><td class="pos">+1,8</td><td>1.102</td><td>90,1</td><td>6,0</td></tr>
+          <tr><td class="left">2024</td><td>55,9</td><td class="neg">-1,7</td><td>1.103</td><td>81,1</td><td>27,4</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Chart: por regiones -->
+    <div class="panel panel-body">
+      <div class="chart-title">Resultados IDF general por regiones</div>
+      <div class="chart-sub">Promedio municipal del IDF por región y vigencia</div>
+      <div id="chart-regiones"></div>
+    </div>
+
+    <!-- Chart: por categorias -->
+    <div class="panel panel-body">
+      <div class="chart-title">Resultados IDF general por categorías Ley 617 de 2000</div>
+      <div class="chart-sub">Promedio municipal por categoría fiscal y vigencia</div>
+      <div id="chart-categorias"></div>
+    </div>
+
+    <!-- Chart: por tipologia -->
+    <div class="panel panel-body">
+      <div class="chart-title">Resultados IDF general por tipología</div>
+      <div class="chart-sub">Promedio municipal por tipología y vigencia — años 2023 y 2024</div>
+      <div id="chart-tipologia"></div>
+    </div>
+
+    <!-- Chart: ranking capitales -->
+    <div class="panel panel-body">
+      <div class="chart-title">Ranking de las ciudades capitales IDF municipios 2024</div>
+      <div class="chart-sub">Las barras representan el IDF del año seleccionado y los rombos el resultado del año anterior</div>
+      <div id="chart-ranking"></div>
+      <div class="legend-row">
+        <span><span class="legend-dot" style="background:var(--green-dk)"></span>Sostenible</span>
+        <span><span class="legend-dot" style="background:#6fae37"></span>Solvente</span>
+        <span><span class="legend-dot" style="background:var(--purple)"></span>Vulnerable</span>
+        <span><span class="legend-dot" style="background:var(--orange)"></span>Riesgo</span>
+        <span><span class="legend-dot" style="background:var(--red)"></span>Deterioro</span>
+        <span>◆ IDF 2024 &nbsp; ◇ IDF 2023</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="intro-title">DISTRIBUCIÓN POR RANGOS DE DESEMPEÑO IDF — AÑO 2024</div>
+      <table class="dist-table">
+        <thead>
+          <tr><th class="left">Rango de desempeño</th><th>Cantidad</th><th>% del total</th><th>IDF prom.</th><th>Cant. año ant.</th><th>Var. cant.</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="range-name">1. Deterioro (&lt;40)</td><td>21</td><td>1,9%</td><td>36,5</td><td>43</td><td class="neg">-22</td></tr>
+          <tr><td class="range-name">2. Riesgo (&gt;=40 y &lt;60)</td><td>759</td><td>68,8%</td><td>52,6</td><td>575</td><td class="pos">+184</td></tr>
+          <tr><td class="range-name">3. Vulnerable (&gt;=60 y &lt;70)</td><td>287</td><td>26,0%</td><td>63,7</td><td>400</td><td class="neg">-113</td></tr>
+          <tr><td class="range-name">4. Solvente (&gt;=70 y &lt;80)</td><td>35</td><td>3,2%</td><td>73,5</td><td>80</td><td class="neg">-45</td></tr>
+          <tr><td class="range-name">5. Sostenible (&gt;=80)</td><td>1</td><td>0,1%</td><td>81,1</td><td>4</td><td class="neg">-3</td></tr>
+        </tbody>
+      </table>
+      <div class="src-note">Fuente: base IDF 2020-2024. Los promedios se calculan con la variable IDF disponible para cada municipio y vigencia.</div>
+    </div>
+
+  </div>
+
+  <!-- ================= PAGE 2: FICHA MUNICIPAL ================= -->
+  <div class="page" id="page-ficha">
+
+    <div class="ficha-header">
+      <div style="max-width:480px;">
+        <h2>Índice de Desempeño Fiscal — IDF — Vigencia 2024:</h2>
+        <p>El Índice de Desempeño Fiscal permite medir la gestión fiscal y financiera de las entidades territoriales, considerando variables como viabilidad fiscal, generación de recursos propios, endeudamiento, inversión y programación de los recursos.</p>
+      </div>
+      <div class="municipio-select">
+        <label>Municipio</label>
+        <select>
+          <option>Caldas - Supía</option>
+        </select>
+      </div>
+      <div class="idf-card">
+        <div class="lbl">IDF</div>
+        <div class="metric"><div class="n">61,1</div><div class="t">2023</div></div>
+        <div class="metric"><div class="n">59,3</div><div class="t">2024</div></div>
+        <div class="metric"><div class="n">-1,9</div><div class="t">δ</div></div>
+        <div class="metric"><div class="n">-3,0%</div><div class="t">%</div></div>
+      </div>
+    </div>
+
+    <div class="select-boxes">
+      <div class="select-box">
+        <div class="k">DEPARTAMENTO SELECCIONADO</div>
+        <div class="v">Caldas</div>
+      </div>
+      <div class="select-box">
+        <div class="k">MUNICIPIO SELECCIONADO</div>
+        <div class="v">Supía</div>
+      </div>
+      <div class="select-box">
+        <div class="k">RANGO IDF 2024</div>
+        <div class="v">59,3</div>
+        <span class="badge">2. Riesgo</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="result-header">
+        <div class="name">RESULTADOS FISCALES</div>
+        <div class="stats">
+          <span class="chip">2023 &nbsp;44,1</span>
+          <span class="chip pink">2024 &nbsp;39,3</span>
+          <span class="chip">% &nbsp;-10,9%</span>
+        </div>
+      </div>
+      <div class="fin-grid">
+        <div class="fin-table">
+          <table>
+            <thead>
+              <tr>
+                <th class="left" rowspan="2">INDICADOR</th>
+                <th colspan="2">VARIABLES</th>
+                <th colspan="2">RESULTADO</th>
+                <th colspan="2">CALIFICACIÓN</th>
+                <th rowspan="2">%</th>
+              </tr>
+              <tr><th>2023</th><th>2024</th><th>2023</th><th>2024</th><th>2023</th><th>2024</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="left"><b>Dependencia de las Transferencias</b></td>
+                <td class="varcell">SGP + otras transf. nac. $29.500<br>Ingresos totales $44.331</td>
+                <td class="varcell">SGP + otras transf. nac. $35.727<br>Ingresos totales $48.710</td>
+                <td>66,5</td><td>73,3</td><td>33,5</td><td class="neg">26,7</td><td class="neg">-20,3%</td>
+              </tr>
+              <tr>
+                <td class="left"><b>Relevancia FBKF</b></td>
+                <td class="varcell">FBKF (Con SGR) $6.028<br>Gastos de Capital $43.605</td>
+                <td class="varcell">FBKF (Con SGR) $4.244<br>Gastos de Capital $44.033</td>
+                <td>13,8</td><td>9,6</td><td>20,7</td><td class="neg">14,2</td><td class="neg">-31,6%</td>
+              </tr>
+              <tr>
+                <td class="left"><b>Endeudamiento</b></td>
+                <td class="varcell">Pasivos totales $15.145<br>Activos totales $52.663</td>
+                <td class="varcell">Pasivos totales $13.611<br>Activos totales $53.654</td>
+                <td>28,8</td><td>25,4</td><td>71,2</td><td class="pos">74,6</td><td class="pos">+4,8%</td>
+              </tr>
+              <tr>
+                <td class="left"><b>Ahorro Corriente</b></td>
+                <td class="varcell">Ahorro corriente $4.423<br>Ingresos Corrientes $9.635</td>
+                <td class="varcell">Ahorro corriente $4.853<br>Ingresos Corrientes $9.965</td>
+                <td>45,9</td><td>48,7</td><td>70,0</td><td>70,0</td><td>0,0%</td>
+              </tr>
+              <tr>
+                <td class="left"><b>Balance Fiscal Primario</b></td>
+                <td class="varcell">Déficit/superávit+intereses $3.453<br>Ing. totales+desembolsos $44.331</td>
+                <td class="varcell">Déficit/superávit+intereses $5.638<br>Ing. totales+desembolsos $48.710</td>
+                <td>7,8</td><td>11,6</td><td>80,0</td><td class="neg">60,0</td><td class="neg">-25,0%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="side">
+          <div class="cap">Máximo Tipología</div>
+          <div class="badge-orange">9,6</div>
+          <div class="body">Máximo de la tipología para el resultado FBKF: este valor sirve como referencia comparativa dentro de la tipología para interpretar la relevancia de la formación bruta de capital fijo dentro de la inversión.</div>
+          <div class="legend">
+            <div><span class="dot" style="background:var(--green-dk)"></span>Crece</div>
+            <div><span class="dot" style="background:var(--red)"></span>Disminuye</div>
+            <div><span class="dot" style="background:#bbb"></span>Igual</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-bar navy">ANÁLISIS DE LA TENDENCIA DE LOS INDICADORES FISCALES</div>
+      <table class="tendencia-table">
+        <thead><tr><th class="left">Indicador</th><th>2022</th><th>2023</th><th>2024</th><th>Prom.</th><th>Tendencia</th><th class="left">Interpretación</th></tr></thead>
+        <tbody>
+          <tr><td class="left">Dependencia de las Transferencias</td><td>34,9</td><td>33,5</td><td>26,7</td><td>31,7</td><td>↘</td><td class="left"></td></tr>
+          <tr><td class="left">Relevancia FBKF</td><td>13,4</td><td>20,7</td><td>14,2</td><td>16,1</td><td>↗↘</td><td class="left"></td></tr>
+          <tr><td class="left">Endeudamiento</td><td>72,4</td><td>71,2</td><td>74,6</td><td>72,8</td><td>↗</td><td class="left"></td></tr>
+          <tr><td class="left">Ahorro Corriente</td><td>70,0</td><td>70,0</td><td>70,0</td><td>70,0</td><td>→</td><td class="left"></td></tr>
+          <tr><td class="left">Balance Fiscal Primario</td><td>80,0</td><td>80,0</td><td>60,0</td><td>73,3</td><td>↘</td><td class="left"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="result-header">
+        <div class="name">RESULTADOS GESTIÓN FINANCIERA</div>
+        <div class="stats">
+          <span class="chip">2023 &nbsp;17,1</span>
+          <span class="chip pink">2024 &nbsp;20,0</span>
+          <span class="chip green">% &nbsp;+17,0%</span>
+        </div>
+      </div>
+      <div class="fin-grid">
+        <div class="fin-table">
+          <table>
+            <thead>
+              <tr>
+                <th class="left" rowspan="2">INDICADOR</th>
+                <th colspan="2">VARIABLES</th>
+                <th colspan="2">RESULTADO</th>
+                <th colspan="2">CALIFICACIÓN</th>
+                <th rowspan="2">%</th>
+              </tr>
+              <tr><th>2023</th><th>2024</th><th>2023</th><th>2024</th><th>2023</th><th>2024</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="left"><b>Holgura</b></td>
+                <td class="varcell">Límite Ley 617: 80,00<br>Gto. func./ICLD 54,86</td>
+                <td class="varcell">Límite Ley 617: 80,00<br>Gto. func./ICLD 49,44</td>
+                <td>25,1</td><td>30,6</td><td>95,6</td><td class="pos">100,0</td><td class="pos">+4,6%</td>
+              </tr>
+              <tr>
+                <td class="left"><b>Cap. Programación y Recaudo de Ingresos</b></td>
+                <td class="varcell">Recaudo $8.255<br>Presupuesto Inicial $5.883</td>
+                <td class="varcell">Recaudo $7.828<br>Presupuesto Inicial $6.589</td>
+                <td>140,3</td><td>118,8</td><td>60,0</td><td class="pos">100,0</td><td class="pos">+66,7%</td>
+              </tr>
+              <tr>
+                <td class="left"><b>Cap. de Ejecución de Inversión</b></td>
+                <td class="varcell">Pagos $42.452<br>Compromisos $43.063</td>
+                <td class="varcell">Pagos $39.481<br>Compromisos $40.866</td>
+                <td>98,6</td><td>96,6</td><td>100,0</td><td>100,0</td><td>0,0%</td>
+              </tr>
+              <tr>
+                <td class="left"><b>Bono Esfuerzo Propio</b></td>
+                <td class="varcell">—</td><td class="varcell">—</td>
+                <td colspan="2"></td><td>0,1</td><td class="neg">0,0</td><td class="neg">-100,0%</td>
+              </tr>
+              <tr>
+                <td class="left"><b>Bono Catastro</b></td>
+                <td class="varcell">—</td><td class="varcell">—</td>
+                <td colspan="2"></td><td>0,0</td><td>0,0</td><td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="side">
+          <div class="cap">Promedio Categoría</div>
+          <div class="badge-orange" style="background:var(--navy)">30,6</div>
+          <div class="body">Promedio de la categoría Ley 617 de 2000 para la calificación de Holgura: corresponde al promedio de Holgura Resultado de los municipios pertenecientes a la misma categoría Ley 617 del municipio seleccionado.</div>
+          <div class="legend">
+            <div><span class="dot" style="background:var(--green-dk)"></span>Crece</div>
+            <div><span class="dot" style="background:var(--red)"></span>Disminuye</div>
+            <div><span class="dot" style="background:#bbb"></span>Igual</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-bar navy">ANÁLISIS DE LA TENDENCIA DE LOS INDICADORES DE GESTIÓN FINANCIERA</div>
+      <table class="tendencia-table">
+        <thead><tr><th class="left">Indicador</th><th>2022</th><th>2023</th><th>2024</th><th>Prom.</th><th>Tendencia</th><th class="left">Interpretación</th></tr></thead>
+        <tbody>
+          <tr><td class="left">Holgura</td><td>95,9</td><td>95,6</td><td>100,0</td><td>97,2</td><td>↗</td><td class="left"></td></tr>
+          <tr><td class="left">Cap. Programación y Recaudo de Ingresos</td><td>70,0</td><td>60,0</td><td>100,0</td><td>76,7</td><td>↗</td><td class="left"></td></tr>
+          <tr><td class="left">Cap. de Ejecución de Inversión</td><td>100,0</td><td>100,0</td><td>100,0</td><td>100,0</td><td>→</td><td class="left"></td></tr>
+          <tr><td class="left">Bono Esfuerzo Propio</td><td>0,1</td><td>0,0</td><td>0,0</td><td>0,1</td><td>↘</td><td class="left"></td></tr>
+          <tr><td class="left">Bono Catastro</td><td>0,0</td><td>0,0</td><td>0,0</td><td>0,0</td><td>→</td><td class="left"></td></tr>
+        </tbody>
+      </table>
+      <div class="src-note" style="text-align:left;">https://ciffit.dnp.gov.co/ciffit/Default &nbsp;·&nbsp; fiscalterritorial@dnp.gov.co</div>
+    </div>
+
+  </div>
+
+  <!-- ================= PAGE 3: CONSOLIDADO ================= -->
+  <div class="page" id="page-consolidado">
+
+    <div class="panel panel-body">
+      <div class="chart-title">Comparación Territorial del Desempeño Fiscal 2024</div>
+      <div class="chart-sub">Comparación de los resultados de los indicadores de las dos dimensiones: fiscal y gestión financiera de la entidad territorial con el promedio de las entidades a nivel nacional, departamental y por tipologías.</div>
+    </div>
+
+    <div class="consol-top">
+      <div class="stat-card">
+        <div class="k">RANKING NACIONAL</div>
+        <div class="v pink">373 <span style="font-size:13px;color:var(--muted);">de 1.103</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="k">RANGO</div>
+        <div class="v" style="color:var(--orange);font-size:16px;">2. Riesgo (&gt;=40 y &lt;60)</div>
+      </div>
+      <div class="stat-card">
+        <div class="k">IDF · Supía vs Nacional</div>
+        <div class="v">59,3 <span style="font-size:13px;color:var(--muted);">/ 55,9</span></div>
+      </div>
+    </div>
+
+    <div class="consol-layout">
+      <div class="panel">
+        <div class="tab-row">
+          <button class="active">Departamento</button>
+          <button>Nacional</button>
+          <button>Tipología</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th class="left" rowspan="2">Indicador</th>
+              <th colspan="2">Supía</th>
+              <th colspan="2">Nacional</th>
+            </tr>
+            <tr><th>Resultado</th><th>Calificación</th><th>Resultado</th><th>Calificación</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="left">Dependencia de las Transferencias</td><td>73,3</td><td>26,7</td><td>74,3</td><td>25,7</td></tr>
+            <tr><td class="left">Relevancia FBKF</td><td>9,6</td><td>14,2</td><td>17,3</td><td>25,4</td></tr>
+            <tr><td class="left">Endeudamiento</td><td>25,4</td><td>74,6</td><td>25,4</td><td>74,7</td></tr>
+            <tr><td class="left">Ahorro Corriente</td><td>48,7</td><td>70,0</td><td>48,7</td><td>65,8</td></tr>
+            <tr><td class="left">Balance Fiscal Primario</td><td>11,6</td><td>60,0</td><td>12,7</td><td>54,9</td></tr>
+            <tr class="dim-row"><td class="left">Dimensión de Resultados Fiscales</td><td>49,1</td><td>39,3</td><td>49,3</td><td>39,5</td></tr>
+            <tr><td class="left">Holgura</td><td>30,6</td><td>100,0</td><td>27,9</td><td>82,5</td></tr>
+            <tr><td class="left">Cap. Programación y Recaudo de Ingresos</td><td>118,8</td><td>100,0</td><td>128,9</td><td>68,2</td></tr>
+            <tr><td class="left">Cap. Ejecución de Inversión</td><td>96,6</td><td>100,0</td><td>92,8</td><td>94,7</td></tr>
+            <tr><td class="left">Bono Esfuerzo Propio</td><td>0,0</td><td>0,0</td><td>0,0</td><td>0,0</td></tr>
+            <tr><td class="left">Bono Catastro</td><td>0,0</td><td>0,0</td><td>0,2</td><td>0,2</td></tr>
+            <tr class="dim-row"><td class="left">Dimensión de Gestión Financiera</td><td>100,0</td><td>20,0</td><td>81,8</td><td>16,4</td></tr>
+            <tr class="dim-row" style="background:#fde7f3;"><td class="left">IDF</td><td colspan="2">59,3</td><td colspan="2">55,9</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="intro-title">ÍNDICE DE DESEMPEÑO FISCAL — MUNICIPIOS DE NACIONAL</div>
+        <div class="rank-list" id="consol-rank-list"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= PAGE 4: DISTRIBUCIÓN IDF ================= -->
+  <div class="page" id="page-distribucion">
+
+    <div class="panel panel-body">
+      <div class="chart-title">Geografía y Distribución de Rangos IDF — Vigencia 2024</div>
+      <div class="chart-sub">Visualiza la distribución geográfica del desempeño fiscal de las entidades territoriales y la proporción de municipios en cada rango de calificación.</div>
+    </div>
+
+    <div class="dist-top">
+      <div class="stat-card">
+        <div class="v pink">55,86</div>
+        <div class="k" style="margin-top:6px;">IDF PROMEDIO 2024</div>
+        <div class="sub">-1,7 puntos frente a 2023</div>
+      </div>
+      <div class="stat-card">
+        <div class="v">1.103</div>
+        <div class="k" style="margin-top:6px;">MUNICIPIOS EVALUADOS</div>
+        <div class="sub">Vigencia 2024</div>
+      </div>
+      <div class="stat-card">
+        <div class="v" style="color:var(--orange);">68,8%</div>
+        <div class="k" style="margin-top:6px;">EN RANGO RIESGO</div>
+        <div class="sub">759 municipios</div>
+      </div>
+    </div>
+
+    <div class="panel panel-body">
+      <div class="dist-filters">
+        <div class="f"><label>Región</label><select><option>Todas</option></select></div>
+        <div class="f"><label>Departamento</label><select><option>Todas</option></select></div>
+        <div class="f"><label>Tipología</label><select><option>Todas</option></select></div>
+        <div class="f"><label>Categoría</label><select><option>Todas</option></select></div>
+      </div>
+    </div>
+
+    <div class="dist-layout">
+      <div class="panel map-wrap">
+        <svg id="colombia-map" viewBox="0 0 420 520" style="width:100%;height:auto;"></svg>
+        <div class="map-legend">
+          <div><span class="dot" style="background:var(--red)"></span>1. Deterioro (&lt;40)</div>
+          <div><span class="dot" style="background:var(--orange)"></span>2. Riesgo (&gt;=40 y &lt;60)</div>
+          <div><span class="dot" style="background:var(--purple)"></span>3. Vulnerable (&gt;=60 y &lt;70)</div>
+          <div><span class="dot" style="background:#6fae37"></span>4. Solvente (&gt;=70 y &lt;80)</div>
+          <div><span class="dot" style="background:var(--green-dk)"></span>5. Sostenible (&gt;=80)</div>
+        </div>
+      </div>
+      <div class="panel dist-bars">
+        <h4>Distribución Rangos IDF — % de Municipios en cada Categoría</h4>
+        <div class="dist-bar-row">
+          <div class="lbl"><span>2. Riesgo (≥40 y &lt;60)</span><span>68,8% · 759</span></div>
+          <div class="track"><div class="fill" style="width:68.8%;background:var(--orange);"></div></div>
+        </div>
+        <div class="dist-bar-row">
+          <div class="lbl"><span>3. Vulnerable (≥60 y &lt;70)</span><span>26,0% · 287</span></div>
+          <div class="track"><div class="fill" style="width:26%;background:var(--purple);"></div></div>
+        </div>
+        <div class="dist-bar-row">
+          <div class="lbl"><span>4. Solvente (≥70 y &lt;80)</span><span>3,2% · 35</span></div>
+          <div class="track"><div class="fill" style="width:3.2%;background:#6fae37;"></div></div>
+        </div>
+        <div class="dist-bar-row">
+          <div class="lbl"><span>1. Deterioro (&lt;40)</span><span>1,9% · 21</span></div>
+          <div class="track"><div class="fill" style="width:1.9%;background:var(--red);"></div></div>
+        </div>
+        <div class="dist-bar-row">
+          <div class="lbl"><span>5. Sostenible (≥80)</span><span>0,1% · 1</span></div>
+          <div class="track"><div class="fill" style="width:0.1%;background:var(--green-dk);"></div></div>
+        </div>
+        <div class="dist-note">En la selección actual, el rango con mayor concentración es 2. Riesgo (≥40 y &lt;60), con 759 municipios, equivalente al 68,8%. El IDF promedio 2024 es 55,86.</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+/* ---------- tab switching ---------- */
+document.querySelectorAll('.topnav button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.topnav button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('page-'+btn.dataset.page).classList.add('active');
+  });
+});
+document.querySelectorAll('.tab-row button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+/* ---------- helper to build grouped bar charts ---------- */
+function buildGroupedChart(container, groups, colors, maxVal){
+  const chartArea = document.createElement('div');
+  chartArea.className='chart-area';
+  const labels = document.createElement('div');
+  labels.className='chart-xlabels';
+  groups.forEach(g=>{
+    const bg = document.createElement('div');
+    bg.className='bar-group';
+    g.values.forEach((v,i)=>{
+      const bar=document.createElement('div');
+      bar.className='bar';
+      const h = Math.max(4,(v/maxVal)*100);
+      bar.style.height=h+'%';
+      bar.style.background=colors[i%colors.length];
+      const val=document.createElement('span');
+      val.className='val';
+      val.textContent=v.toFixed(2).replace('.',',');
+      bar.appendChild(val);
+      bg.appendChild(bar);
+    });
+    chartArea.appendChild(bg);
+    const xg=document.createElement('div');
+    xg.className='xg';
+    xg.textContent=g.label;
+    labels.appendChild(xg);
+  });
+  container.appendChild(chartArea);
+  container.appendChild(labels);
+}
+
+const yearColors = ['#9aa7c2','#4a5a8a','#152444','#e6007e']; // 2021..2024 style (muted->navy->pink)
+
+/* Regiones chart data (2021-2024) */
+const regionesData = [
+ {label:'Nacional', values:[54.23,55.78,57.57,55.86]},
+ {label:'Caribe', values:[51.52,53.43,53.59,55.17]},
+ {label:'Centro Oriente', values:[56.48,57.49,60.45,57.44]},
+ {label:'Centro Sur Amazonía', values:[51.93,54.21,54.24,54.13]},
+ {label:'Del Llano', values:[55.22,57.74,59.17,55.61]},
+ {label:'Eje Cafetero', values:[55.37,55.66,58.32,55.20]},
+ {label:'Pacífico', values:[52.51,55.27,56.81,55.23]},
+];
+buildGroupedChart(document.getElementById('chart-regiones'), regionesData, yearColors, 65);
+
+/* Categorias chart data */
+const categoriasData = [
+ {label:'Nacional', values:[54.23,55.78,57.57,55.86]},
+ {label:'E', values:[67.97,71.44,72.92,67.80]},
+ {label:'1', values:[60.89,62.23,65.82,63.02]},
+ {label:'2', values:[57.20,61.89,63.45,59.65]},
+ {label:'3', values:[61.00,60.98,61.96,60.00]},
+ {label:'4', values:[55.84,54.94,59.35,54.72]},
+ {label:'5', values:[58.58,60.01,61.23,60.71]},
+ {label:'6', values:[53.51,55.08,56.83,55.17]},
+];
+buildGroupedChart(document.getElementById('chart-categorias'), categoriasData, yearColors, 75);
+
+/* Tipologia chart data (2023, 2024 only) */
+const tipoColors=['#4a5a8a','#e6007e'];
+const tipologiaData = [
+ {label:'Nacional', values:[57.57,55.86]},
+ {label:'0', values:[64.36,63.44]},
+ {label:'1', values:[59.97,57.69]},
+ {label:'2', values:[56.88,54.88]},
+ {label:'3', values:[54.71,54.06]},
+ {label:'4', values:[54.64,52.79]},
+ {label:'5', values:[90.07,77.04]},
+ {label:'Bogotá', values:[69.49,65.96]},
+ {label:'Ciudades grandes', values:[66.20,62.90]},
+];
+buildGroupedChart(document.getElementById('chart-tipologia'), tipologiaData, tipoColors, 95);
+
+/* Ranking ciudades capitales */
+const rangoColor = v => v>=80?'#2e7d32':v>=70?'#6fae37':v>=60?'#8e3fa3':v>=40?'#f5821f':'#e0393e';
+const capitales = [
+ ['Bogotá D.C.',77.0,75.5],
+ ['Barranquilla, Distrito Especial, Ind. Y Portuario',75.5,72.6],
+ ['Medellín',69.7,68.5],
+ ['Montería',66.8,64.9],
+ ['Popayán',66.2,63.6],
+ ['Cartagena De Indias, Distrito Turístico Y Cultural',63.4,62.1],
+ ['Bucaramanga',62.9,61.4],
+ ['San José Del Guaviare',62.8,60.5],
+ ['Armenia',62.2,60.9],
+ ['Pereira',62.1,61.0],
+ ['Valledupar',62.0,60.2],
+ ['Santa Marta, Distrito Turístico, Cultural E Histórico',61.9,60.7],
+ ['San Juan De Pasto',61.9,60.4],
+ ['San Miguel De Mocoa',60.9,59.5],
+ ['Tunja',60.8,59.9],
+ ['Villavicencio',60.7,59.3],
+ ['San José De Cúcuta',60.3,58.8],
+ ['Yopal',59.7,58.1],
+ ['Manizales',59.6,58.4],
+ ['Santiago De Cali',58.3,57.0],
+ ['Quibdó',56.7,55.8],
+ ['Sincelejo',54.1,53.6],
+ ['Nuevo Belén De Bajirá',5.0,5.0],
+];
+const rankChart = document.getElementById('chart-ranking');
+const bars = document.createElement('div'); bars.className='rank-chart';
+const labs = document.createElement('div'); labs.className='rank-labels';
+const maxV = 100;
+capitales.forEach(c=>{
+  const [name,v24,v23]=c;
+  const wrap=document.createElement('div'); wrap.className='rank-bar-wrap';
+  const val=document.createElement('div'); val.className='val'; val.textContent=v24.toFixed(1).replace('.',',');
+  const bar=document.createElement('div'); bar.className='bar';
+  bar.style.height=Math.max(3,(v24/maxV)*100)+'%';
+  bar.style.background=rangoColor(v24);
+  const diamond=document.createElement('div'); diamond.className='diamond';
+  diamond.style.bottom=Math.max(3,(v23/maxV)*100)+'%';
+  wrap.appendChild(val); wrap.appendChild(diamond); wrap.appendChild(bar);
+  bars.appendChild(wrap);
+  const lab=document.createElement('div'); lab.className='lab'; lab.textContent=name;
+  labs.appendChild(lab);
+});
+rankChart.appendChild(bars);
+rankChart.appendChild(labs);
+
+/* Consolidado ranking list */
+const rankListData = [
+ ['Samacá',81.1],['Nariño',80.0],['Bogotá D.C.',77.0],['San Jerónimo',76.7],['Hato Nuevo',76.3],
+ ['Saravena',76.3],['Sogamoso',75.7],['Barranquilla, Distrito Especial, Ind…',75.5],['Cimitarra',75.5],
+ ['Copacabana',75.3],['Itagüí',75.1],['Rionegro',74.5],['Subachoque',74.3],['Sipí',74.2],
+ ['Zipaquirá',74.0],['Los Córdobas',73.7],['El Paso',73.7],['La Jagua De Ibirico',73.6],
+ ['El Rosal',73.5],['Becerril',73.3],['Tuta',73.1],['Sabaneta',73.1],['Socha',72.9],
+ ['El Retiro',72.3],['Santiago',72.3],['Yotoco',72.1],['Betulia',71.6],['Usiacurí',71.6],
+ ['Caldas - Supía',59.3],
+];
+const rl = document.getElementById('consol-rank-list');
+rankListData.forEach(([name,val])=>{
+  const row=document.createElement('div');
+  row.className='row'+(name==='Caldas - Supía'?' hl':'');
+  row.innerHTML = `<span class="nm">${name}</span><span class="vv">${val.toFixed(1).replace('.',',')}</span>`;
+  rl.appendChild(row);
+});
+
+/* Simplified Colombia map made of department-like blobs colored by rango, purely illustrative */
+const mapSvg = document.getElementById('colombia-map');
+const blobColors = ['#f5821f','#f5821f','#8e3fa3','#f5821f','#f5821f','#8e3fa3','#f5821f','#f5821f','#f5821f','#e0393e','#f5821f','#8e3fa3','#f5821f','#f5821f','#f5821f','#6fae37','#f5821f','#f5821f','#8e3fa3','#f5821f','#f5821f','#f5821f','#8e3fa3','#f5821f','#f5821f','#2e7d32','#f5821f','#8e3fa3'];
+let svgContent = '<rect x="0" y="0" width="420" height="520" fill="none"/>';
+// generate a rough colombia-like silhouette using layered rounded polygons (illustrative, not geographically precise)
+const rnd = (seed)=>{let x=Math.sin(seed)*10000;return x-Math.floor(x);};
+let i=0;
+for(let row=0; row<26; row++){
+  for(let col=0; col<20; col++){
+    const cx = 60 + col*16;
+    const cy = 20 + row*19;
+    // rough outline mask approximating Colombia's shape bounding
+    const nx=(cx-60)/(19*16), ny=(cy-20)/(25*19);
+    const inShape = ( ny<0.9 && nx>0.05 && nx<0.85 &&
+       !(nx<0.25 && ny<0.15) &&
+       !(nx>0.7 && ny<0.35) &&
+       !(nx<0.15 && ny>0.6) );
+    if(inShape && rnd(row*31+col*7)>0.15){
+      const c = blobColors[i%blobColors.length]; i++;
+      svgContent += `<rect x="${cx}" y="${cy}" width="15" height="18" rx="2" fill="${c}" opacity="0.92" stroke="#fff" stroke-width="0.6"/>`;
+    }
+  }
+}
+mapSvg.innerHTML = svgContent + '<text x="210" y="510" text-anchor="middle" font-size="10" fill="#8a93a8">Representación esquemática del territorio nacional por rango IDF</text>';
+</script>
+</body>
+</html>

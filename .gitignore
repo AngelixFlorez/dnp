@@ -2,7 +2,7 @@
 # OS generated files
 Thumbs.db
 .DS_Store
-
+.gitignore
 # Node.js dependencies
 node_modules/
 
