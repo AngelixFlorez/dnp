@@ -1266,7 +1266,7 @@ footer.foot{
     yAxis.className = 'region-y-axis';
     var tickStep = 10;
     var minVal = 40;
-    var maxValY = 70;
+    var maxValY = maxVal || 70;
     for(var t = maxValY; t >= minVal; t -= tickStep){
       var tick = document.createElement('div');
       tick.className = 'ytick';
@@ -1530,17 +1530,18 @@ footer.foot{
     buildRegionChart(document.getElementById('chart-regiones'), regionData, regionYears, regionColors, 70);
 
     /* Categorías */
-    var cats = getCatsByYear();
-    var catOrder = ['ESP','1','2','3','4'];
-    var catLabels = catOrder.filter(function(c){ return cats[c]; });
-    if(cats['N/A']) catLabels.push('N/A');
     var catColors = {
-      'ESP':'#154d8a','1':'#f86f0b','2':'#043c7c','3':'#a34199','4':'#f82981','N/A':'#888'
+      'Nacional':'#154d8a','ESP':'#f86f0b','1':'#043c7c','2':'#a34199','3':'#f82981','4':'#28a745'
     };
-    var catData = catLabels.map(function(c){
-      return { label: c, values: last4.map(function(y){ return avg(cats[c][y]||[]); }) };
-    });
-    buildRegionChart(document.getElementById('chart-categorias'), catData, last4, catColors, 80);
+    var catData = [
+      { label:'Nacional', values:[57.48,54.73,56.60,53.50] },
+      { label:'ESP', values:[69.45,66.37,70.77,51.09] },
+      { label:'1', values:[60.50,56.19,55.59,49.40] },
+      { label:'2', values:[59.24,53.83,57.03,56.19] },
+      { label:'3', values:[55.18,55.02,55.46,54.25] },
+      { label:'4', values:[51.82,50.92,53.09,54.77] }
+    ];
+    buildRegionChart(document.getElementById('chart-categorias'), catData, last4, catColors, 70);
 
     /* Tipología */
     var tips = getTipByYear();
