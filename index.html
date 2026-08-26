@@ -278,7 +278,7 @@ td.left, th.left{text-align:left;}
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  padding:20px 0 28px;
+  padding:20px 0 0;
   height:260px;
   flex-shrink:0;
 }
@@ -295,7 +295,7 @@ td.left, th.left{text-align:left;}
   align-items:flex-end;
   gap:0;
   height:260px;
-  padding:20px 6px 28px;
+  padding:20px 6px 0;
   border-bottom:1px solid var(--line);
   border-left:1px solid var(--line);
   position:relative;
@@ -307,7 +307,7 @@ td.left, th.left{text-align:left;}
   top:20px;
   left:0;
   right:0;
-  bottom:28px;
+  bottom:0;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
@@ -362,7 +362,7 @@ td.left, th.left{text-align:left;}
   width:100%;
   padding:0 14px;
   position:absolute;
-  bottom:-20px;
+  bottom:-10px;
   left:0;
 }
 .region-bar-group .bar-years span{
@@ -376,7 +376,7 @@ td.left, th.left{text-align:left;}
 .region-chart-labels{
   display:flex;
   gap:0;
-  padding:6px 6px 0;
+  padding:20px 6px 0;
   margin-left:12px;
 }
 .region-chart-labels .rlbl{
@@ -1273,6 +1273,10 @@ footer.foot{
       tick.textContent = t;
       yAxis.appendChild(tick);
     }
+    var emptyTick = document.createElement('div');
+    emptyTick.className = 'ytick';
+    emptyTick.style.visibility = 'hidden';
+    yAxis.appendChild(emptyTick);
     chartContainer.appendChild(yAxis);
 
     /* Chart area with gridlines */
@@ -1286,6 +1290,10 @@ footer.foot{
       line.className = 'gridline';
       grid.appendChild(line);
     }
+    var emptyLine = document.createElement('div');
+    emptyLine.className = 'gridline';
+    emptyLine.style.borderTop = 'none';
+    grid.appendChild(emptyLine);
     chartArea.appendChild(grid);
 
     regionData.forEach(function(rd){
@@ -1298,7 +1306,7 @@ footer.foot{
       rd.values.forEach(function(v, yi){
         var bar = document.createElement('div');
         bar.className = 'bar';
-        var h = Math.max(4, ((v - minVal) / (maxValY - minVal)) * 100);
+        var h = Math.max(4, ((v - (minVal - tickStep)) / (maxValY - (minVal - tickStep))) * 100);
         bar.style.height = h + '%';
         var alpha = 1 - yi * 0.18;
         alpha = Math.max(0.35, alpha);
