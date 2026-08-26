@@ -268,19 +268,140 @@ td.left, th.left{text-align:left;}
 }
 .legend-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle;}
 
-/* ranking chart (single bars per city) */
+/* region chart — redesigned for clarity */
+.region-chart-wrap{padding:4px 0 0;}
+.region-chart-container{
+  display:flex;
+  gap:0;
+}
+.region-y-axis{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:20px 0 28px;
+  height:260px;
+  flex-shrink:0;
+}
+.region-y-axis .ytick{
+  font-size:8px;
+  color:var(--muted);
+  font-weight:600;
+  text-align:right;
+  line-height:1;
+  padding-right:6px;
+}
+.region-chart-area{
+  display:flex;
+  align-items:flex-end;
+  gap:0;
+  height:260px;
+  padding:20px 6px 28px;
+  border-bottom:1px solid var(--line);
+  border-left:1px solid var(--line);
+  position:relative;
+  flex:1;
+  min-width:0;
+}
+.region-chart-grid{
+  position:absolute;
+  top:20px;
+  left:0;
+  right:0;
+  bottom:28px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  pointer-events:none;
+}
+.region-chart-grid .gridline{
+  width:100%;
+  border-top:1px dashed var(--line);
+  height:0;
+}
+.region-bar-group{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  flex:1 1 0;
+  min-width:0;
+  height:100%;
+  position:relative;
+}
+.region-bar-group .bars-row{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:4px;
+  flex:1 1 0;
+  width:100%;
+  padding:0 2px;
+}
+.region-bar-group .bar{
+  flex:1 1 0;
+  max-width:28px;
+  min-width:8px;
+  border-radius:3px 3px 0 0;
+  position:relative;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+}
+.region-bar-group .bar .val{
+  position:absolute;
+  top:-20px;
+  font-size:8.5px;
+  color:var(--navy);
+  font-weight:700;
+  white-space:nowrap;
+  text-align:center;
+  line-height:1;
+}
+.region-bar-group .bar-years{
+  display:flex;
+  gap:0;
+  width:100%;
+  padding:0 14px;
+  position:absolute;
+  bottom:-20px;
+  left:0;
+}
+.region-bar-group .bar-years span{
+  flex:1 1 0;
+  text-align:center;
+  font-size:7.5px;
+  color:var(--muted);
+  font-weight:600;
+  overflow:hidden;
+}
+.region-chart-labels{
+  display:flex;
+  gap:0;
+  padding:6px 6px 0;
+  margin-left:12px;
+}
+.region-chart-labels .rlbl{
+  flex:1 1 0;
+  text-align:center;
+  font-size:10.5px;
+  color:var(--navy);
+  font-weight:700;
+  line-height:1.25;
+}
+
+/* ranking chart — horizontal bars with diamonds */
 .rank-chart{
   display:flex;
   align-items:flex-end;
-  gap:8px;
-  height:230px;
+  gap:0;
+  height:260px;
   padding:20px 6px 4px;
   overflow-x:auto;
   border-bottom:1px solid var(--line);
 }
 .rank-bar-wrap{
-  flex:0 0 auto;
-  width:34px;
+  flex:1 1 0;
+  min-width:18px;
+  max-width:40px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -295,25 +416,38 @@ td.left, th.left{text-align:left;}
   transform:rotate(45deg);
   left:50%;
   margin-left:-4px;
+  z-index:1;
 }
-.rank-bar-wrap .val{font-size:9.5px;font-weight:700;color:var(--navy);margin-bottom:3px;}
-.rank-bar-wrap .bar{width:20px;border-radius:2px 2px 0 0;}
+.rank-bar-wrap .val{
+  font-size:8.5px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:3px;
+  white-space:nowrap;
+}
+.rank-bar-wrap .bar{
+  width:70%;
+  max-width:24px;
+  border-radius:3px 3px 0 0;
+}
 .rank-labels{
   display:flex;
-  gap:8px;
+  gap:0;
   padding:6px 6px 0;
   overflow-x:auto;
 }
 .rank-labels .lab{
-  flex:0 0 auto;
-  width:34px;
-  font-size:8.7px;
+  flex:1 1 0;
+  min-width:18px;
+  max-width:40px;
+  font-size:7.5px;
   color:var(--navy);
   writing-mode:vertical-rl;
   transform:rotate(180deg);
   text-align:right;
-  height:110px;
+  height:100px;
   overflow:hidden;
+  font-weight:600;
 }
 
 /* distribution table bottom */
@@ -334,13 +468,13 @@ td.left, th.left{text-align:left;}
 }
 .ficha-header h2{margin:0 0 2px;color:var(--navy);font-size:16px;}
 .ficha-header p{margin:0;color:var(--muted);font-size:11.5px;max-width:640px;line-height:1.5;}
-.municipio-select{
+.departamento-select{
   display:flex;
   flex-direction:column;
   gap:4px;
 }
-.municipio-select label{font-size:11px;color:var(--muted);font-weight:700;}
-.municipio-select select{
+.departamento-select label{font-size:11px;color:var(--muted);font-weight:700;}
+.departamento-select select{
   padding:8px 10px;
   border:1px solid var(--line);
   border-radius:3px;
@@ -564,7 +698,7 @@ footer.foot{
         <div class="rango-card c2">
           <div class="pts">40-60 pts</div>
           <div class="name">2. Riesgo</div>
-          <div class="desc">Debilidades fiscales importantes, aunque en un nivel menos crítico que los municipios en deterioro.</div>
+          <div class="desc">Debilidades fiscales importantes, aunque en un nivel menos crítico que los departamentos en deterioro.</div>
         </div>
         <div class="rango-card c3">
           <div class="pts">60-70 pts</div>
@@ -599,14 +733,14 @@ footer.foot{
       <div class="intro-title">EVOLUCIÓN HISTÓRICA DEL IDF</div>
       <table>
         <thead>
-          <tr><th class="left">Año</th><th>IDF promedio</th><th>Var. (pp)</th><th>Municipios</th><th>Máximo</th><th>Mínimo</th></tr>
+          <tr><th class="left">Año</th><th>IDF promedio</th><th>Var. (pp)</th><th>Departamentos</th><th>Máximo</th><th>Mínimo</th></tr>
         </thead>
         <tbody>
-          <tr><td class="left">2020</td><td>55,0</td><td>-</td><td>1.102</td><td>80,8</td><td>17,6</td></tr>
-          <tr><td class="left">2021</td><td>54,2</td><td class="neg">-0,7</td><td>1.102</td><td>85,8</td><td>21,0</td></tr>
-          <tr><td class="left">2022</td><td>55,8</td><td class="pos">+1,6</td><td>1.102</td><td>82,9</td><td>29,1</td></tr>
-          <tr><td class="left">2023</td><td>57,6</td><td class="pos">+1,8</td><td>1.102</td><td>90,1</td><td>6,0</td></tr>
-          <tr><td class="left">2024</td><td>55,9</td><td class="neg">-1,7</td><td>1.103</td><td>81,1</td><td>27,4</td></tr>
+          <tr><td class="left">2020</td><td>54,1</td><td>-</td><td>32</td><td>73,6</td><td>38,9</td></tr>
+          <tr><td class="left">2021</td><td>57,5</td><td class="pos">+3,4</td><td>32</td><td>76,0</td><td>40,3</td></tr>
+          <tr><td class="left">2022</td><td>54,7</td><td class="neg">-2,8</td><td>32</td><td>75,0</td><td>40,2</td></tr>
+          <tr><td class="left">2023</td><td>56,6</td><td class="pos">+1,9</td><td>32</td><td>73,0</td><td>42,1</td></tr>
+          <tr><td class="left">2024</td><td>53,5</td><td class="neg">-3,1</td><td>32</td><td>70,9</td><td>38,1</td></tr>
         </tbody>
       </table>
     </div>
@@ -614,36 +748,36 @@ footer.foot{
     <!-- Chart: por regiones -->
     <div class="panel panel-body">
       <div class="chart-title">Resultados IDF general por regiones</div>
-      <div class="chart-sub">Promedio municipal del IDF por región y vigencia</div>
+      <div class="chart-sub">Promedio departamental del IDF por región y vigencia</div>
       <div id="chart-regiones"></div>
     </div>
 
     <!-- Chart: por categorias -->
     <div class="panel panel-body">
       <div class="chart-title">Resultados IDF general por categorías Ley 617 de 2000</div>
-      <div class="chart-sub">Promedio municipal por categoría fiscal y vigencia</div>
+      <div class="chart-sub">Promedio departamental por categoría fiscal y vigencia</div>
       <div id="chart-categorias"></div>
     </div>
 
     <!-- Chart: por tipologia -->
     <div class="panel panel-body">
       <div class="chart-title">Resultados IDF general por tipología</div>
-      <div class="chart-sub">Promedio municipal por tipología y vigencia — años 2023 y 2024</div>
+      <div class="chart-sub">Promedio departamental por tipología y vigencia — años 2023 y 2024</div>
       <div id="chart-tipologia"></div>
     </div>
 
     <!-- Chart: ranking capitales -->
     <div class="panel panel-body">
-      <div class="chart-title">Ranking de las ciudades capitales IDF municipios 2024</div>
+      <div class="chart-title">Ranking de departamentos IDF 2024</div>
       <div class="chart-sub">Las barras representan el IDF del año seleccionado y los rombos el resultado del año anterior</div>
       <div id="chart-ranking"></div>
-      <div class="legend-row">
-        <span><span class="legend-dot" style="background:var(--green-dk)"></span>Sostenible</span>
-        <span><span class="legend-dot" style="background:#35bb5a"></span>Solvente</span>
-        <span><span class="legend-dot" style="background:var(--purple)"></span>Vulnerable</span>
-        <span><span class="legend-dot" style="background:var(--orange)"></span>Riesgo</span>
-        <span><span class="legend-dot" style="background:var(--red)"></span>Deterioro</span>
-        <span>◆ IDF 2024 &nbsp; ◇ IDF 2023</span>
+      <div class="region-legend" style="padding-top:12px;">
+        <span class="rl"><span class="rdot" style="background:#1c7b2c"></span>Sostenible</span>
+        <span class="rl"><span class="rdot" style="background:#35bb5a"></span>Solvente</span>
+        <span class="rl"><span class="rdot" style="background:#ab2493"></span>Vulnerable</span>
+        <span class="rl"><span class="rdot" style="background:#ee8e16"></span>Riesgo</span>
+        <span class="rl"><span class="rdot" style="background:#f4443c"></span>Deterioro</span>
+        <span class="rl"><span class="rdot" style="background:var(--orange);width:8px;height:8px;transform:rotate(45deg);border-radius:1px;"></span>IDF 2023</span>
       </div>
     </div>
 
@@ -661,7 +795,7 @@ footer.foot{
           <tr><td class="range-name">5. Sostenible (&gt;=80)</td><td>1</td><td>0,1%</td><td>81,1</td><td>4</td><td class="neg">-3</td></tr>
         </tbody>
       </table>
-      <div class="src-note">Fuente: base IDF 2020-2024. Los promedios se calculan con la variable IDF disponible para cada municipio y vigencia.</div>
+      <div class="src-note">Fuente: base IDF 2020-2024. Los promedios se calculan con la variable IDF disponible para cada departamento y vigencia.</div>
     </div>
 
   </div>
@@ -674,8 +808,8 @@ footer.foot{
         <h2>Índice de Desempeño Fiscal — IDF — Vigencia 2024:</h2>
         <p>El Índice de Desempeño Fiscal permite medir la gestión fiscal y financiera de las entidades territoriales, considerando variables como viabilidad fiscal, generación de recursos propios, endeudamiento, inversión y programación de los recursos.</p>
       </div>
-      <div class="municipio-select">
-        <label>Municipio</label>
+      <div class="departamento-select">
+        <label>Departamento</label>
         <select>
           <option>Caldas - Supía</option>
         </select>
@@ -845,7 +979,7 @@ footer.foot{
         <div class="side">
           <div class="cap">Promedio Categoría</div>
           <div class="badge-orange" style="background:var(--navy)">30,6</div>
-          <div class="body">Promedio de la categoría Ley 617 de 2000 para la calificación de Holgura: corresponde al promedio de Holgura Resultado de los municipios pertenecientes a la misma categoría Ley 617 del municipio seleccionado.</div>
+          <div class="body">Promedio de la categoría Ley 617 de 2000 para la calificación de Holgura: corresponde al promedio de Holgura Resultado de los departamentos pertenecientes a la misma categoría Ley 617 del departamento seleccionado.</div>
           <div class="legend">
             <div><span class="dot" style="background:var(--green-dk)"></span>Crece</div>
             <div><span class="dot" style="background:var(--red)"></span>Disminuye</div>
@@ -942,7 +1076,7 @@ footer.foot{
 
     <div class="panel panel-body">
       <div class="chart-title">Geografía y Distribución de Rangos IDF — Vigencia 2024</div>
-      <div class="chart-sub">Visualiza la distribución geográfica del desempeño fiscal de las entidades territoriales y la proporción de municipios en cada rango de calificación.</div>
+      <div class="chart-sub">Visualiza la distribución geográfica del desempeño fiscal de las entidades territoriales y la proporción de departamentos en cada rango de calificación.</div>
     </div>
 
     <div class="dist-top">
@@ -959,7 +1093,7 @@ footer.foot{
       <div class="stat-card">
         <div class="v" style="color:var(--orange);">68,8%</div>
         <div class="k" style="margin-top:6px;">EN RANGO RIESGO</div>
-        <div class="sub">759 municipios</div>
+        <div class="sub">759 departamentos</div>
       </div>
     </div>
 
@@ -984,7 +1118,7 @@ footer.foot{
         </div>
       </div>
       <div class="panel dist-bars">
-        <h4>Distribución Rangos IDF — % de Municipios en cada Categoría</h4>
+        <h4>Distribución Rangos IDF — % de Departamentos en cada Categoría</h4>
         <div class="dist-bar-row">
           <div class="lbl"><span>2. Riesgo (≥40 y &lt;60)</span><span>68,8% · 759</span></div>
           <div class="track"><div class="fill" style="width:68.8%;background:var(--orange);"></div></div>
@@ -1005,7 +1139,7 @@ footer.foot{
           <div class="lbl"><span>5. Sostenible (≥80)</span><span>0,1% · 1</span></div>
           <div class="track"><div class="fill" style="width:0.1%;background:var(--green-dk);"></div></div>
         </div>
-        <div class="dist-note">En la selección actual, el rango con mayor concentración es 2. Riesgo (≥40 y &lt;60), con 759 municipios, equivalente al 68,8%. El IDF promedio 2024 es 55,86.</div>
+        <div class="dist-note">En la selección actual, el rango con mayor concentración es 2. Riesgo (≥40 y &lt;60), con 759 departamentos, equivalente al 68,8%. El IDF promedio 2024 es 55,86.</div>
       </div>
     </div>
 
@@ -1042,7 +1176,7 @@ footer.foot{
     const m={Deterioro:'Deterioro (<40)',Riesgo:'Riesgo (≥40 y <60)',Vulnerable:'Vulnerable (≥60 y <70)',Solvente:'Solvente (≥70 y <80)',Sostenible:'Sostenible (≥80)'};
     return m[r]||r||'N/A';
   }
-  function fmt(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':n.toFixed(2).replace('.',','); }
+  function fmt(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':n.toFixed(1).replace('.',','); }
   function fmtPct(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':n.toFixed(1).replace('.',',')+'%'; }
   function fmtInt(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':Math.round(n).toLocaleString('es-CO'); }
 
@@ -1116,11 +1250,115 @@ footer.foot{
   }
 
   /* ================================================================
+     REGION CHART — grouped bars with per-region colors
+     ================================================================ */
+  function buildRegionChart(container, regionData, years, regionColors, maxVal){
+    container.innerHTML = '';
+
+    var wrap = document.createElement('div');
+    wrap.className = 'region-chart-wrap';
+
+    var chartContainer = document.createElement('div');
+    chartContainer.className = 'region-chart-container';
+
+    /* Y-axis */
+    var yAxis = document.createElement('div');
+    yAxis.className = 'region-y-axis';
+    var tickStep = 10;
+    var minVal = 40;
+    var maxValY = 70;
+    for(var t = maxValY; t >= minVal; t -= tickStep){
+      var tick = document.createElement('div');
+      tick.className = 'ytick';
+      tick.textContent = t;
+      yAxis.appendChild(tick);
+    }
+    chartContainer.appendChild(yAxis);
+
+    /* Chart area with gridlines */
+    var chartArea = document.createElement('div');
+    chartArea.className = 'region-chart-area';
+
+    var grid = document.createElement('div');
+    grid.className = 'region-chart-grid';
+    for(var g = maxValY; g >= minVal; g -= tickStep){
+      var line = document.createElement('div');
+      line.className = 'gridline';
+      grid.appendChild(line);
+    }
+    chartArea.appendChild(grid);
+
+    regionData.forEach(function(rd){
+      var grp = document.createElement('div');
+      grp.className = 'region-bar-group';
+
+      var barsRow = document.createElement('div');
+      barsRow.className = 'bars-row';
+
+      rd.values.forEach(function(v, yi){
+        var bar = document.createElement('div');
+        bar.className = 'bar';
+        var h = Math.max(4, ((v - minVal) / (maxValY - minVal)) * 100);
+        bar.style.height = h + '%';
+        var alpha = 1 - yi * 0.18;
+        alpha = Math.max(0.35, alpha);
+        var hex = regionColors[rd.label] || '#4a5a8a';
+        var r = parseInt(hex.slice(1,3),16);
+        var g2 = parseInt(hex.slice(3,5),16);
+        var b = parseInt(hex.slice(5,7),16);
+        bar.style.background = 'rgba('+r+','+g2+','+b+','+alpha+')';
+        var val = document.createElement('span');
+        val.className = 'val';
+        val.textContent = fmt(v);
+        bar.appendChild(val);
+        barsRow.appendChild(bar);
+      });
+      grp.appendChild(barsRow);
+
+      var barYears = document.createElement('div');
+      barYears.className = 'bar-years';
+      years.forEach(function(y){
+        var sp = document.createElement('span');
+        sp.textContent = y;
+        barYears.appendChild(sp);
+      });
+      grp.appendChild(barYears);
+
+      chartArea.appendChild(grp);
+    });
+    chartContainer.appendChild(chartArea);
+    wrap.appendChild(chartContainer);
+
+    var labels = document.createElement('div');
+    labels.className = 'region-chart-labels';
+    regionData.forEach(function(rd){
+      var lbl = document.createElement('div');
+      lbl.className = 'rlbl';
+      lbl.textContent = rd.label;
+      labels.appendChild(lbl);
+    });
+    wrap.appendChild(labels);
+
+    container.appendChild(wrap);
+  }
+
+  /* ================================================================
      RANKING CHART — horizontal bars with diamonds
      ================================================================ */
   function buildRankingChart(container, data){
     container.innerHTML = '';
-    var rangoColor = function(v){ return v>=80?'#1c7b2c':v>=70?'#35bb5a':v>=60?'#ab2493':v>=40?'#ee8e16':'#f4443c'; };
+    var rangoColors = {
+      'Sostenible':'#1c7b2c','Solvente':'#35bb5a','Vulnerable':'#ab2493',
+      'Riesgo':'#ee8e16','Deterioro':'#f4443c'
+    };
+    var rangoColor = function(v){
+      var key = v>=80?'Sostenible':v>=70?'Solvente':v>=60?'Vulnerable':v>=40?'Riesgo':'Deterioro';
+      var hex = rangoColors[key];
+      var r = parseInt(hex.slice(1,3),16);
+      var g = parseInt(hex.slice(3,5),16);
+      var b = parseInt(hex.slice(5,7),16);
+      return 'rgba('+r+','+g+','+b+',0.85)';
+    };
     var barsDiv = document.createElement('div'); barsDiv.className='rank-chart';
     var labsDiv = document.createElement('div'); labsDiv.className='rank-labels';
     var maxV = 100;
@@ -1239,20 +1477,13 @@ footer.foot{
     var tbody = document.querySelector('#page-instructivo table tbody');
     if(!tbody) return;
     tbody.innerHTML = '';
-    var anios = idfData.meta.anios;
-    var prevAvg = null;
-    anios.forEach(function(y){
-      var scores = getAllScores(y);
-      var a = avg(scores);
-      var mx = scores.length ? Math.max.apply(null,scores) : 0;
-      var mn = scores.length ? Math.min.apply(null,scores) : 0;
-      var delta = prevAvg!==null ? (a - prevAvg) : null;
-      var deltaStr = delta!==null ? (delta>=0?'+':'')+fmt(delta) : '-';
-      var cls = delta!==null ? (delta>=0?'pos':'neg') : '';
+    var evo = idfData.dashboard ? idfData.dashboard.evolucion_historica : [];
+    evo.forEach(function(item){
+      var varStr = item.var_pp !== null ? (item.var_pp >= 0 ? '+' : '') + fmt(item.var_pp) : '-';
+      var cls = item.var_pp !== null ? (item.var_pp >= 0 ? 'pos' : 'neg') : '';
       var tr = document.createElement('tr');
-      tr.innerHTML='<td class="left">'+y+'</td><td>'+fmt(a)+'</td><td class="'+cls+'">'+deltaStr+'</td><td>'+scores.length+'</td><td>'+fmt(mx)+'</td><td>'+fmt(mn)+'</td>';
+      tr.innerHTML='<td class="left">'+item.anio+'</td><td>'+fmt(item.idf_promedio)+'</td><td class="'+cls+'">'+varStr+'</td><td>'+item.deptos+'</td><td>'+fmt(item.maximo)+'</td><td>'+fmt(item.minimo)+'</td>';
       tbody.appendChild(tr);
-      prevAvg = a;
     });
   }
 
@@ -1264,46 +1495,66 @@ footer.foot{
     var anios = idfData.meta.anios;
     var last4 = anios.slice(-4);
 
-    /* Regiones */
-    var regions = getRegionsByYear();
-    var regionLabels = Object.keys(regions).sort();
-    var regionData = regionLabels.map(function(r){
-      return { label: r, values: last4.map(function(y){ return avg(regions[r][y]||[]); }) };
+    /* Regiones — datos exactos del Excel hoja Tendencias col E-G filas 37-64 */
+    var regionYears = ['2021','2022','2023','2024'];
+    var regionNames = ['Nacional','Caribe','Centro Oriente','Centro Sur Amazonía','Del Llano','Cafetera','Pacífico'];
+    var regionExcelData = {
+      'Nacional':           [57.48, 54.73, 56.60, 53.50],
+      'Caribe':             [58.83, 56.74, 58.11, 53.10],
+      'Centro Oriente':     [60.93, 55.64, 60.17, 49.33],
+      'Centro Sur Amazonía':[53.31, 53.56, 54.88, 52.60],
+      'Del Llano':          [54.74, 54.42, 54.00, 57.84],
+      'Cafetera':           [62.33, 53.97, 56.78, 53.90],
+      'Pacífico':           [56.49, 52.21, 56.48, 51.24]
+    };
+    var regionColors = {
+      'Nacional':           '#154d8a',
+      'Caribe':             '#f86f0b',
+      'Centro Oriente':     '#043c7c',
+      'Centro Sur Amazonía':'#a34199',
+      'Del Llano':          '#f82981',
+      'Cafetera':           '#088456',
+      'Pacífico':           '#28a745'
+    };
+    var regionData = regionNames.map(function(r){
+      return { label: r, values: regionExcelData[r] };
     });
-    buildGroupedChart(document.getElementById('chart-regiones'), regionData, yearColors, 80);
+    buildRegionChart(document.getElementById('chart-regiones'), regionData, regionYears, regionColors, 70);
 
     /* Categorías */
     var cats = getCatsByYear();
     var catOrder = ['ESP','1','2','3','4'];
     var catLabels = catOrder.filter(function(c){ return cats[c]; });
     if(cats['N/A']) catLabels.push('N/A');
+    var catColors = {
+      'ESP':'#154d8a','1':'#f86f0b','2':'#043c7c','3':'#a34199','4':'#f82981','N/A':'#888'
+    };
     var catData = catLabels.map(function(c){
       return { label: c, values: last4.map(function(y){ return avg(cats[c][y]||[]); }) };
     });
-    buildGroupedChart(document.getElementById('chart-categorias'), catData, yearColors, 80);
+    buildRegionChart(document.getElementById('chart-categorias'), catData, last4, catColors, 80);
 
     /* Tipología */
     var tips = getTipByYear();
     var tipLabels = Object.keys(tips).sort();
-    var tipoColors=['#4a5a8a','#e6007e'];
+    var tipColors = {};
+    var tipPalette = ['#154d8a','#f86f0b','#043c7c','#a34199','#f82981'];
+    tipLabels.forEach(function(t, i){ tipColors[t] = tipPalette[i % tipPalette.length]; });
     var useYears = anios.slice(-2);
     var tipData = tipLabels.map(function(t){
       return { label: t, values: useYears.map(function(y){ return avg(tips[t][y]||[]); }) };
     });
-    buildGroupedChart(document.getElementById('chart-tipologia'), tipData, tipoColors, 90);
+    buildRegionChart(document.getElementById('chart-tipologia'), tipData, useYears, tipColors, 90);
   }
 
   /* ================================================================
      POPULATE INSTRUCTIVO — Ranking (Top departamentos)
      ================================================================ */
   function populateInstructivoRanking(){
-    var yd = idfData.records[selectedYear] || {};
-    var sorted = Object.entries(yd)
-      .filter(function(e){ return e[1].idf!=null; })
-      .sort(function(a,b){ return b[1].idf - a[1].idf; });
-    var rankData = sorted.map(function(e){
-      var name = e[0];
-      var v24 = e[1].idf;
+    var top10 = idfData.dashboard ? idfData.dashboard.top10_departamentos : [];
+    var rankData = top10.map(function(item){
+      var name = item.departamento;
+      var v24 = item.idf;
       var prevDept = (idfData.records[String(parseInt(selectedYear)-1)]||{})[name];
       var v23 = prevDept ? prevDept.idf : v24;
       return [name.length>28 ? name.slice(0,27)+'…' : name, v24, v23];
@@ -1318,24 +1569,14 @@ footer.foot{
     var tbody = document.querySelector('#page-instructivo .dist-table tbody');
     if(!tbody) return;
     tbody.innerHTML = '';
-    var yd = idfData.records[selectedYear] || {};
-    var all = Object.values(yd);
-    var total = all.length;
-    var prevYd = idfData.records[String(parseInt(selectedYear)-1)] || {};
-    var prevAll = Object.values(prevYd);
-    var ranges = ['Deterioro','Riesgo','Vulnerable','Solvente','Sostenible'];
-    var rangeDefs = [{name:'1. Deterioro (<40)',max:40},{name:'2. Riesgo (≥40 y <60)',max:60},{name:'3. Vulnerable (≥60 y <70)',max:70},{name:'4. Solvente (≥70 y <80)',max:80},{name:'5. Sostenible (≥80)',max:999}];
-
-    rangeDefs.forEach(function(rd, idx){
-      var count = all.filter(function(d){ return d.idf!=null && getRango(d.idf)===ranges[idx]; }).length;
-      var avgScore = avg(all.filter(function(d){ return d.idf!=null && getRango(d.idf)===ranges[idx]; }).map(function(d){return d.idf;}));
-      var prevCount = prevAll.filter(function(d){ return d.idf!=null && getRango(d.idf)===ranges[idx]; }).length;
-      var diff = count - prevCount;
-      var pct = total>0 ? ((count/total)*100).toFixed(1) : '0';
-      var cls = diff>0?'pos':diff<0?'neg':'';
-      var sign = diff>0?'+':'';
+    var dist = idfData.dashboard ? idfData.dashboard.distribucion_rangos : [];
+    dist.forEach(function(item){
+      var cls = '';
+      var sign = '';
       var tr = document.createElement('tr');
-      tr.innerHTML='<td class="range-name">'+rd.name+'</td><td>'+count+'</td><td>'+fmtPct(pct)+'</td><td>'+fmt(avgScore)+'</td><td>'+prevCount+'</td><td class="'+cls+'">'+sign+diff+'</td>';
+      var idfStr = item.idf_promedio !== null ? fmt(item.idf_promedio) : '-';
+      var pctStr = item.porcentaje > 0 ? fmtPct(item.porcentaje) : '0%';
+      tr.innerHTML='<td class="range-name">'+item.rango+'</td><td>'+item.cantidad+'</td><td>'+pctStr+'</td><td>'+idfStr+'</td><td>-</td><td class="'+cls+'">'+sign+'</td>';
       tbody.appendChild(tr);
     });
   }
@@ -1833,7 +2074,7 @@ footer.foot{
         if(deptName){
           selectedDept = deptName;
           /* Update ficha selector */
-          var munSel = document.querySelector('#page-ficha .municipio-select select');
+          var munSel = document.querySelector('#page-ficha .departamento-select select');
           if(munSel) munSel.value = deptName;
           /* Update distribucion dept filter */
           var distDepts = document.querySelectorAll('#page-distribucion .dist-filters select');
@@ -1855,7 +2096,7 @@ footer.foot{
      FICHA — Departamento selector
      ================================================================ */
   function setupFichaSelector(){
-    var sel = document.querySelector('#page-ficha .municipio-select select');
+    var sel = document.querySelector('#page-ficha .departamento-select select');
     if(!sel) return;
     sel.innerHTML = '';
     getDeptList().forEach(function(d){

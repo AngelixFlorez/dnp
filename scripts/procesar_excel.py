@@ -1,6 +1,43 @@
 import pandas as pd
 import json
 import os
+import math
+
+def redondear_1d(valor):
+    """Redondea a 1 decimal. Retorna None si no es valido."""
+    if valor is None or valor == '' or valor == '-' or valor == '—':
+        return None
+    try:
+        v = float(valor)
+        if math.isnan(v) or math.isinf(v):
+            return None
+        return round(v, 1)
+    except:
+        return None
+
+def fmt_signo(valor):
+    """Formatea un valor con signo y 1 decimal. Retorna None si no es valido."""
+    if valor is None or valor == '' or valor == '-' or valor == '—':
+        return None
+    try:
+        v = float(valor)
+        if math.isnan(v) or math.isinf(v):
+            return None
+        return round(v, 1)
+    except:
+        return None
+
+def limpiar_nan(obj):
+    """Reemplaza NaN/Inf por None recursivamente en estructuras anidadas."""
+    if isinstance(obj, float):
+        if math.isnan(obj) or math.isinf(obj):
+            return None
+        return obj
+    elif isinstance(obj, dict):
+        return {k: limpiar_nan(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [limpiar_nan(item) for item in obj]
+    return obj
 
 def clean_data():
     archivo_excel = "Desempeño Fiscal departamentos 2020-2024.xlsx"
@@ -188,8 +225,176 @@ def clean_data():
             }
         }
         
-    # Guardar como JSON en datos_idf.json
-    nombre_json = "datos_idf.json"
+    # ============================================================
+    # EXTRAER DASHBOARD IDF desde la hoja "Dashboard IDF"
+    # ============================================================
+    print("Extrayendo datos del Dashboard IDF...")
+    df_dash = pd.read_excel(archivo_excel, sheet_name='Dashboard IDF', header=None)
+    
+    dashboard = {}
+    
+    # --- Evolucion historica (rows 9-13, cols 0-5) ---
+    evolucion = []
+    for i in range(9, 14):
+        row = df_dash.iloc[i]
+        anio = int(row[0]) if pd.notna(row[0]) else None
+        idf_prom = redondear_1d(row[1])
+        var_pp = fmt_signo(row[2]) if str(row[2]).strip() != '-' else None
+        deptos = int(row[3]) if pd.notna(row[3]) else None
+        maximo = redondear_1d(row[4])
+        minimo = redondear_1d(row[5])
+        evolucion.append({
+            "anio": anio,
+            "idf_promedio": idf_prom,
+            "var_pp": var_pp,
+            "deptos": deptos,
+            "maximo": maximo,
+            "minimo": minimo
+        })
+    dashboard["evolucion_historica"] = evolucion
+    
+    # --- Distribucion por rangos (rows 9-13, cols 8-11) ---
+    dist_rangos = []
+    for i in range(9, 14):
+        row = df_dash.iloc[i]
+        nombre = str(row[8]).strip() if pd.notna(row[8]) else ""
+        cantidad = int(row[9]) if pd.notna(row[9]) else 0
+        pct_raw = row[10] if pd.notna(row[10]) else 0
+        try:
+            pct = round(float(pct_raw) * 100, 1)
+        except:
+            pct = 0.0
+        idf_prom_r = redondear_1d(row[11])
+        dist_rangos.append({
+            "rango": nombre,
+            "cantidad": cantidad,
+            "porcentaje": pct,
+            "idf_promedio": idf_prom_r
+        })
+    dashboard["distribucion_rangos"] = dist_rangos
+    
+    # --- Componente Resultados (rows 17-22, cols 0-6) ---
+    comps_resultados = []
+    for i in range(17, 23):
+        row = df_dash.iloc[i]
+        nombre = str(row[0]).strip().replace('\n', ' ') if pd.notna(row[0]) else ""
+        comps_resultados.append({
+            "indicador": nombre,
+            "resultado_promedio": redondear_1d(row[1]),
+            "calificacion_promedio": redondear_1d(row[2]),
+            "resultado_anio_anterior": redondear_1d(row[3]),
+            "calificacion_anio_anterior": redondear_1d(row[4]),
+            "var_resultado": fmt_signo(row[5]),
+            "var_calificacion": fmt_signo(row[6])
+        })
+    dashboard["componente_resultados"] = comps_resultados
+    
+    # --- Top 10 Departamentos (rows 17-26, cols 8-11) ---
+    top10 = []
+    for i in range(17, 27):
+        row = df_dash.iloc[i]
+        ranking = int(row[8]) if pd.notna(row[8]) else None
+        depto = str(row[9]).strip() if pd.notna(row[9]) else ""
+        idf_val = redondear_1d(row[10])
+        rango = str(row[11]).strip() if pd.notna(row[11]) else ""
+        if ranking is not None and depto:
+            top10.append({
+                "ranking": ranking,
+                "departamento": depto,
+                "idf": idf_val,
+                "rango": rango
+            })
+    dashboard["top10_departamentos"] = top10
+    
+    # --- Componente Gestion (rows 30-34, cols 0-6) ---
+    comps_gestion = []
+    for i in range(30, 35):
+        row = df_dash.iloc[i]
+        nombre = str(row[0]).strip().replace('\n', ' ') if pd.notna(row[0]) else ""
+        comps_gestion.append({
+            "indicador": nombre,
+            "resultado_promedio": redondear_1d(row[1]),
+            "calificacion_promedio": redondear_1d(row[2]),
+            "resultado_anio_anterior": redondear_1d(row[3]),
+            "calificacion_anio_anterior": redondear_1d(row[4]),
+            "var_resultado": fmt_signo(row[5]),
+            "var_calificacion": fmt_signo(row[6])
+        })
+    dashboard["componente_gestion"] = comps_gestion
+    
+    # --- Consulta por Tipologia (rows 61-63, cols 0-5) ---
+    tipologia = []
+    for i in range(61, 64):
+        row = df_dash.iloc[i]
+        nombre = str(row[0]).strip() if pd.notna(row[0]) else ""
+        idf_sel = redondear_1d(row[1])
+        idf_ant = redondear_1d(row[2])
+        var_val = fmt_signo(row[3])
+        deptos = int(row[4]) if pd.notna(row[4]) else 0
+        pct_raw = row[5] if pd.notna(row[5]) else 0
+        try:
+            pct = round(float(pct_raw) * 100, 1)
+        except:
+            pct = 0.0
+        tipologia.append({
+            "tipologia": nombre,
+            "idf_anio_seleccionado": idf_sel,
+            "idf_anio_anterior": idf_ant,
+            "var_pp": var_val,
+            "deptos": deptos,
+            "porcentaje": pct
+        })
+    dashboard["tipologia"] = tipologia
+    
+    # --- Distribucion por tipologia (rows 61-63, cols 8-11) ---
+    dist_tipologia = []
+    for i in range(61, 64):
+        row = df_dash.iloc[i]
+        nombre = str(row[8]).strip() if pd.notna(row[8]) else ""
+        deterioro = int(row[9]) if pd.notna(row[9]) else 0
+        riesgo = int(row[10]) if pd.notna(row[10]) else 0
+        vulnerable = int(row[11]) if pd.notna(row[11]) else 0
+        dist_tipologia.append({
+            "tipologia": nombre,
+            "deterioro": deterioro,
+            "riesgo": riesgo,
+            "vulnerable": vulnerable
+        })
+    dashboard["distribucion_tipologia"] = dist_tipologia
+    
+    # --- Distribucion por categoria (rows 69-73, cols 0-7) ---
+    dist_categoria = []
+    for i in range(69, 74):
+        row = df_dash.iloc[i]
+        nombre = str(row[0]).strip() if pd.notna(row[0]) else ""
+        deterioro = int(row[1]) if pd.notna(row[1]) else 0
+        riesgo = int(row[2]) if pd.notna(row[2]) else 0
+        vulnerable = int(row[3]) if pd.notna(row[3]) else 0
+        solvente = int(row[4]) if pd.notna(row[4]) else 0
+        sostenible = int(row[5]) if pd.notna(row[5]) else 0
+        total = int(row[6]) if pd.notna(row[6]) else 0
+        idf_prom = redondear_1d(row[7])
+        dist_categoria.append({
+            "categoria": nombre,
+            "deterioro": deterioro,
+            "riesgo": riesgo,
+            "vulnerable": vulnerable,
+            "solvente": solvente,
+            "sostenible": sostenible,
+            "total": total,
+            "idf_promedio": idf_prom
+        })
+    dashboard["distribucion_categoria"] = dist_categoria
+    
+    # Agregar dashboard al JSON principal
+    datos["dashboard"] = dashboard
+    
+    # Limpiar todos los NaN/Inf del JSON antes de guardar
+    datos = limpiar_nan(datos)
+    print(f"Dashboard IDF extraido correctamente.")
+    
+    # Guardar como JSON en data/datos_idf.json
+    nombre_json = os.path.join("data", "datos_idf.json")
     with open(nombre_json, 'w', encoding='utf-8') as f:
         json.dump(datos, f, ensure_ascii=False, indent=4)
         

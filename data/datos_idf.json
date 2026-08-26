@@ -16245,5 +16245,344 @@
                 }
             }
         }
+    },
+    "dashboard": {
+        "evolucion_historica": [
+            {
+                "anio": 2020,
+                "idf_promedio": 54.1,
+                "var_pp": null,
+                "deptos": 32,
+                "maximo": 73.6,
+                "minimo": 38.9
+            },
+            {
+                "anio": 2021,
+                "idf_promedio": 57.5,
+                "var_pp": 3.4,
+                "deptos": 32,
+                "maximo": 76.0,
+                "minimo": 40.3
+            },
+            {
+                "anio": 2022,
+                "idf_promedio": 54.7,
+                "var_pp": -2.8,
+                "deptos": 32,
+                "maximo": 75.0,
+                "minimo": 40.2
+            },
+            {
+                "anio": 2023,
+                "idf_promedio": 56.6,
+                "var_pp": 1.9,
+                "deptos": 32,
+                "maximo": 73.0,
+                "minimo": 42.1
+            },
+            {
+                "anio": 2024,
+                "idf_promedio": 53.5,
+                "var_pp": -3.1,
+                "deptos": 32,
+                "maximo": 70.9,
+                "minimo": 38.1
+            }
+        ],
+        "distribucion_rangos": [
+            {
+                "rango": "1. Deterioro (<40)",
+                "cantidad": 0,
+                "porcentaje": 0.0,
+                "idf_promedio": null
+            },
+            {
+                "rango": "2. Riesgo (>=40 y <60)",
+                "cantidad": 21,
+                "porcentaje": 65.6,
+                "idf_promedio": 48.9
+            },
+            {
+                "rango": "3. Vulnerable (>=60 y <70)",
+                "cantidad": 9,
+                "porcentaje": 28.1,
+                "idf_promedio": 64.3
+            },
+            {
+                "rango": "4. Solvente (>=70 y <80)",
+                "cantidad": 2,
+                "porcentaje": 6.2,
+                "idf_promedio": 73.4
+            },
+            {
+                "rango": "5. Sostenible (>=80)",
+                "cantidad": 0,
+                "porcentaje": 0.0,
+                "idf_promedio": null
+            }
+        ],
+        "componente_resultados": [
+            {
+                "indicador": "Dependencia Transferencias",
+                "resultado_promedio": 27.8,
+                "calificacion_promedio": 72.2,
+                "resultado_anio_anterior": 36.4,
+                "calificacion_anio_anterior": 63.6,
+                "var_resultado": -8.6,
+                "var_calificacion": 8.6
+            },
+            {
+                "indicador": "Relevancia FBKF",
+                "resultado_promedio": 11.0,
+                "calificacion_promedio": 72.2,
+                "resultado_anio_anterior": 32.0,
+                "calificacion_anio_anterior": 63.6,
+                "var_resultado": -21.0,
+                "var_calificacion": 8.6
+            },
+            {
+                "indicador": "Endeudamiento",
+                "resultado_promedio": 49.8,
+                "calificacion_promedio": 50.2,
+                "resultado_anio_anterior": 43.3,
+                "calificacion_anio_anterior": 56.7,
+                "var_resultado": 6.5,
+                "var_calificacion": -6.5
+            },
+            {
+                "indicador": "Ahorro Corriente",
+                "resultado_promedio": 64.7,
+                "calificacion_promedio": 80.0,
+                "resultado_anio_anterior": 71.7,
+                "calificacion_anio_anterior": 100.0,
+                "var_resultado": -7.0,
+                "var_calificacion": -20.0
+            },
+            {
+                "indicador": "Balance Fiscal Primario",
+                "resultado_promedio": -3.8,
+                "calificacion_promedio": 100.0,
+                "resultado_anio_anterior": -11.3,
+                "calificacion_anio_anterior": 60.0,
+                "var_resultado": 7.5,
+                "var_calificacion": 40.0
+            },
+            {
+                "indicador": "TOTAL RESULTADOS",
+                "resultado_promedio": 71.1,
+                "calificacion_promedio": 56.9,
+                "resultado_anio_anterior": 75.0,
+                "calificacion_anio_anterior": 60.0,
+                "var_resultado": -3.8,
+                "var_calificacion": -3.0
+            }
+        ],
+        "top10_departamentos": [
+            {
+                "ranking": 1,
+                "departamento": "ATLANTICO",
+                "idf": 75.0,
+                "rango": "4. Solvente (>=70 y <80)"
+            },
+            {
+                "ranking": 2,
+                "departamento": "CUNDINAMARCA",
+                "idf": 71.9,
+                "rango": "4. Solvente (>=70 y <80)"
+            },
+            {
+                "ranking": 3,
+                "departamento": "SUCRE",
+                "idf": 68.2,
+                "rango": "3. Vulnerable (>=60 y <70)"
+            },
+            {
+                "ranking": 4,
+                "departamento": "META",
+                "idf": 68.2,
+                "rango": "3. Vulnerable (>=60 y <70)"
+            },
+            {
+                "ranking": 5,
+                "departamento": "HUILA",
+                "idf": 66.2,
+                "rango": "3. Vulnerable (>=60 y <70)"
+            },
+            {
+                "ranking": 6,
+                "departamento": "GUAVIARE",
+                "idf": 65.5,
+                "rango": "3. Vulnerable (>=60 y <70)"
+            },
+            {
+                "ranking": 7,
+                "departamento": "ANTIOQUIA",
+                "idf": 63.7,
+                "rango": "3. Vulnerable (>=60 y <70)"
+            },
+            {
+                "ranking": 8,
+                "departamento": "VALLE DEL CAUCA",
+                "idf": 63.5,
+                "rango": "3. Vulnerable (>=60 y <70)"
+            },
+            {
+                "ranking": 9,
+                "departamento": "CESAR",
+                "idf": 62.1,
+                "rango": "3. Vulnerable (>=60 y <70)"
+            },
+            {
+                "ranking": 10,
+                "departamento": "CALDAS",
+                "idf": 60.5,
+                "rango": "3. Vulnerable (>=60 y <70)"
+            }
+        ],
+        "componente_gestion": [
+            {
+                "indicador": "Holgura",
+                "resultado_promedio": 32.1,
+                "calificacion_promedio": 100.0,
+                "resultado_anio_anterior": 18.9,
+                "calificacion_anio_anterior": 100.0,
+                "var_resultado": 13.1,
+                "var_calificacion": 0.0
+            },
+            {
+                "indicador": "Cap. Prog. y Recaudo Ingresos",
+                "resultado_promedio": 108.2,
+                "calificacion_promedio": 100.0,
+                "resultado_anio_anterior": 122.2,
+                "calificacion_anio_anterior": 70.0,
+                "var_resultado": -14.0,
+                "var_calificacion": 30.0
+            },
+            {
+                "indicador": "Cap. Ejecución Inversión",
+                "resultado_promedio": 70.3,
+                "calificacion_promedio": 70.0,
+                "resultado_anio_anterior": 74.0,
+                "calificacion_anio_anterior": 70.0,
+                "var_resultado": -3.6,
+                "var_calificacion": 0.0
+            },
+            {
+                "indicador": "Bonif. Esfuerzo Propio",
+                "resultado_promedio": null,
+                "calificacion_promedio": 0.2,
+                "resultado_anio_anterior": null,
+                "calificacion_anio_anterior": 0.0,
+                "var_resultado": null,
+                "var_calificacion": 0.2
+            },
+            {
+                "indicador": "TOTAL GESTIÓN (con bonos)",
+                "resultado_promedio": 90.2,
+                "calificacion_promedio": 18.0,
+                "resultado_anio_anterior": 80.0,
+                "calificacion_anio_anterior": 16.0,
+                "var_resultado": 10.2,
+                "var_calificacion": 2.0
+            }
+        ],
+        "tipologia": [
+            {
+                "tipologia": "Tipología 1",
+                "idf_anio_seleccionado": null,
+                "idf_anio_anterior": null,
+                "var_pp": null,
+                "deptos": 0,
+                "porcentaje": 0.0
+            },
+            {
+                "tipologia": "Tipología 2",
+                "idf_anio_seleccionado": null,
+                "idf_anio_anterior": null,
+                "var_pp": null,
+                "deptos": 0,
+                "porcentaje": 0.0
+            },
+            {
+                "tipologia": "Tipología 3",
+                "idf_anio_seleccionado": null,
+                "idf_anio_anterior": null,
+                "var_pp": null,
+                "deptos": 0,
+                "porcentaje": 0.0
+            }
+        ],
+        "distribucion_tipologia": [
+            {
+                "tipologia": "Tipología 1",
+                "deterioro": 0,
+                "riesgo": 0,
+                "vulnerable": 0
+            },
+            {
+                "tipologia": "Tipología 2",
+                "deterioro": 0,
+                "riesgo": 0,
+                "vulnerable": 0
+            },
+            {
+                "tipologia": "Tipología 3",
+                "deterioro": 0,
+                "riesgo": 0,
+                "vulnerable": 0
+            }
+        ],
+        "distribucion_categoria": [
+            {
+                "categoria": "Especial (E)",
+                "deterioro": 0,
+                "riesgo": 0,
+                "vulnerable": 2,
+                "solvente": 1,
+                "sostenible": 0,
+                "total": 3,
+                "idf_promedio": 66.4
+            },
+            {
+                "categoria": "Primera (1)",
+                "deterioro": 0,
+                "riesgo": 3,
+                "vulnerable": 1,
+                "solvente": 1,
+                "sostenible": 0,
+                "total": 5,
+                "idf_promedio": 56.2
+            },
+            {
+                "categoria": "Segunda (2)",
+                "deterioro": 0,
+                "riesgo": 5,
+                "vulnerable": 2,
+                "solvente": 0,
+                "sostenible": 0,
+                "total": 7,
+                "idf_promedio": 53.8
+            },
+            {
+                "categoria": "Tercera (3)",
+                "deterioro": 0,
+                "riesgo": 4,
+                "vulnerable": 3,
+                "solvente": 0,
+                "sostenible": 0,
+                "total": 7,
+                "idf_promedio": 55.0
+            },
+            {
+                "categoria": "Cuarta (4)",
+                "deterioro": 0,
+                "riesgo": 9,
+                "vulnerable": 1,
+                "solvente": 0,
+                "sostenible": 0,
+                "total": 10,
+                "idf_promedio": 50.9
+            }
+        ]
     }
 }
