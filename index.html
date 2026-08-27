@@ -451,6 +451,9 @@ td.left, th.left{text-align:left;}
 }
 
 /* distribution table bottom */
+.dist-table{border-collapse:collapse;width:100%;}
+.dist-table th{background:var(--navy);color:#fff;padding:8px 10px;font-size:11px;text-align:center;}
+.dist-table td{padding:7px 10px;font-size:11.5px;text-align:center;border-bottom:1px solid var(--line);}
 .dist-table td.range-name{text-align:left;font-weight:600;}
 
 /* ================= FICHA MUNICIPAL ================= */
@@ -788,8 +791,8 @@ footer.foot{
 
     <!-- Chart: por tipologia -->
     <div class="panel panel-body">
-      <div class="chart-title" style="text-align:center;font-size:22px;font-weight:900;">Resultados IDF general por tipología</div>
-      <div class="chart-sub" style="text-align:center;">Promedio departamental por tipología y vigencia — años 2023 y 2024</div>
+      <div class="chart-title" id="tipologia-title" style="text-align:center;font-size:22px;font-weight:900;">IDF Promedio por tipología</div>
+      <div class="chart-sub" id="tipologia-sub" style="text-align:center;"></div>
       <div id="chart-tipologia"></div>
     </div>
 
@@ -1544,18 +1547,85 @@ footer.foot{
       { label:'4', values:[51.82,50.92,53.09,54.77] }
     ];
     buildRegionChart(document.getElementById('chart-categorias'), catData, last4, catColors, 70);
+  }
 
-    /* Tipología */
-    var tips = getTipByYear();
-    var tipLabels = Object.keys(tips).sort();
-    var tipColors = {};
-    var tipPalette = ['#154d8a','#f86f0b','#043c7c','#a34199','#f82981'];
-    tipLabels.forEach(function(t, i){ tipColors[t] = tipPalette[i % tipPalette.length]; });
-    var useYears = anios.slice(-2);
-    var tipData = tipLabels.map(function(t){
-      return { label: t, values: useYears.map(function(y){ return avg(tips[t][y]||[]); }) };
+  /* ================================================================
+     POPULATE INSTRUCTIVO — Tipología Table
+     ================================================================ */
+  function populateTipologiaTable(){
+    var container = document.getElementById('chart-tipologia');
+    var subEl = document.getElementById('tipologia-sub');
+    if(!container) return;
+    var prevYear = String(parseInt(selectedYear)-1);
+    if(subEl) subEl.textContent = 'Año seleccionado: '+selectedYear+' vs. Año anterior: '+prevYear;
+
+    var yd = idfData.records[selectedYear] || {};
+    var prevYd = idfData.records[prevYear] || {};
+
+    /* Collect tipología data for selected year */
+    var tipsSel = {};
+    var tipsPrev = {};
+    var totalSel = 0, totalPrev = 0;
+    Object.keys(yd).forEach(function(k){
+      var t = yd[k].tipologia;
+      if(t && t!=='N/A' && t!==null){
+        var tk = 'Tipología '+Math.round(t);
+        if(!tipsSel[tk]) tipsSel[tk] = {sum:0, count:0};
+        if(yd[k].idf!=null){ tipsSel[tk].sum += yd[k].idf; tipsSel[tk].count++; totalSel++; }
+      }
     });
-    buildRegionChart(document.getElementById('chart-tipologia'), tipData, useYears, tipColors, 90);
+    Object.keys(prevYd).forEach(function(k){
+      var t = prevYd[k].tipologia;
+      if(t && t!=='N/A' && t!==null){
+        var tk = 'Tipología '+Math.round(t);
+        if(!tipsPrev[tk]) tipsPrev[tk] = {sum:0, count:0};
+        if(prevYd[k].idf!=null){ tipsPrev[tk].sum += prevYd[k].idf; tipsPrev[tk].count++; totalPrev++; }
+      }
+    });
+
+    var tipKeys = Object.keys(tipsSel).sort();
+    if(tipKeys.length === 0){
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">No hay datos de tipología disponibles para '+selectedYear+'. Las tipologías solo están asignadas a partir de 2024.</div>';
+      return;
+    }
+
+    var html = '<table class="dist-table" style="width:100%;"><thead><tr>';
+    html += '<th class="left">Tipología</th><th>IDF '+selectedYear+'</th><th>IDF '+prevYear+'</th><th>Var. (pp)</th><th>Deptos.</th><th>% del Total</th>';
+    html += '</tr></thead><tbody>';
+    var totalDeptos = 0;
+    tipKeys.forEach(function(tk){
+      var selAvg = tipsSel[tk].count>0 ? tipsSel[tk].sum/tipsSel[tk].count : null;
+      var prevAvg = tipsPrev[tk] && tipsPrev[tk].count>0 ? tipsPrev[tk].sum/tipsPrev[tk].count : null;
+      var deptos = tipsSel[tk].count;
+      totalDeptos += deptos;
+      var varPP = (selAvg!=null && prevAvg!=null) ? selAvg-prevAvg : null;
+      var varCls = varPP!=null ? (varPP>=0?'pos':'neg') : '';
+      var varStr = varPP!=null ? (varPP>=0?'+':'')+fmt(varPP) : '-';
+      html += '<tr>';
+      html += '<td class="range-name">'+tk+'</td>';
+      html += '<td>'+fmt(selAvg)+'</td>';
+      html += '<td>'+(prevAvg!=null?fmt(prevAvg):'-')+'</td>';
+      html += '<td class="'+varCls+'">'+varStr+'</td>';
+      html += '<td>'+deptos+'</td>';
+      html += '<td>'+(totalSel>0?fmtPct(deptos/totalSel*100):'-')+'</td>';
+      html += '</tr>';
+    });
+    /* Total row */
+    var allSelAvg = totalSel>0 ? tipKeys.reduce(function(s,tk){ return s+(tipsSel[tk].sum||0); },0)/totalSel : null;
+    var allPrevAvg = totalPrev>0 ? tipKeys.reduce(function(s,tk){ return s+(tipsPrev[tk]?tipsPrev[tk].sum:0); },0)/totalPrev : null;
+    var totalVar = (allSelAvg!=null && allPrevAvg!=null) ? allSelAvg-allPrevAvg : null;
+    var totalVarCls = totalVar!=null ? (totalVar>=0?'pos':'neg') : '';
+    var totalVarStr = totalVar!=null ? (totalVar>=0?'+':'')+fmt(totalVar) : '-';
+    html += '<tr style="font-weight:700;border-top:2px solid var(--line);">';
+    html += '<td class="range-name">TOTAL</td>';
+    html += '<td>'+fmt(allSelAvg)+'</td>';
+    html += '<td>'+(allPrevAvg!=null?fmt(allPrevAvg):'-')+'</td>';
+    html += '<td class="'+totalVarCls+'">'+totalVarStr+'</td>';
+    html += '<td>'+totalSel+'</td>';
+    html += '<td>100%</td>';
+    html += '</tr>';
+    html += '</tbody></table>';
+    container.innerHTML = html;
   }
 
   /* ================================================================
@@ -1634,6 +1704,7 @@ footer.foot{
     });
     sel.addEventListener('change', function(){
       selectedYear = this.value;
+      populateTipologiaTable();
       populateInstructivoRanking();
       populateDistTableInstructivo();
     });
@@ -2270,6 +2341,7 @@ footer.foot{
       /* Instructivo */
       populateEvoTable();
       populateInstructivoCharts();
+      populateTipologiaTable();
       populateInstructivoRanking();
       populateDistTableInstructivo();
       setupInstructivoYearFilter();
