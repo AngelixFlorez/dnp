@@ -16289,38 +16289,168 @@
                 "minimo": 38.1
             }
         ],
-        "distribucion_rangos": [
-            {
-                "rango": "1. Deterioro (<40)",
-                "cantidad": 0,
-                "porcentaje": 0.0,
-                "idf_promedio": null
-            },
-            {
-                "rango": "2. Riesgo (>=40 y <60)",
-                "cantidad": 21,
-                "porcentaje": 65.6,
-                "idf_promedio": 48.9
-            },
-            {
-                "rango": "3. Vulnerable (>=60 y <70)",
-                "cantidad": 9,
-                "porcentaje": 28.1,
-                "idf_promedio": 64.3
-            },
-            {
-                "rango": "4. Solvente (>=70 y <80)",
-                "cantidad": 2,
-                "porcentaje": 6.2,
-                "idf_promedio": 73.4
-            },
-            {
-                "rango": "5. Sostenible (>=80)",
-                "cantidad": 0,
-                "porcentaje": 0.0,
-                "idf_promedio": null
-            }
-        ],
+        "distribucion_rangos": {
+            "2020": [
+                {
+                    "rango": "1. Deterioro (<40)",
+                    "cantidad": 2,
+                    "porcentaje": 6.2,
+                    "idf_promedio": 39.4
+                },
+                {
+                    "rango": "2. Riesgo (>=40 y <60)",
+                    "cantidad": 19,
+                    "porcentaje": 59.4,
+                    "idf_promedio": 48.9
+                },
+                {
+                    "rango": "3. Vulnerable (>=60 y <70)",
+                    "cantidad": 10,
+                    "porcentaje": 31.2,
+                    "idf_promedio": 64.9
+                },
+                {
+                    "rango": "4. Solvente (>=70 y <80)",
+                    "cantidad": 1,
+                    "porcentaje": 3.1,
+                    "idf_promedio": 73.6
+                },
+                {
+                    "rango": "5. Sostenible (>=80)",
+                    "cantidad": 0,
+                    "porcentaje": 0.0,
+                    "idf_promedio": null
+                }
+            ],
+            "2021": [
+                {
+                    "rango": "1. Deterioro (<40)",
+                    "cantidad": 0,
+                    "porcentaje": 0.0,
+                    "idf_promedio": null
+                },
+                {
+                    "rango": "2. Riesgo (>=40 y <60)",
+                    "cantidad": 21,
+                    "porcentaje": 65.6,
+                    "idf_promedio": 52.1
+                },
+                {
+                    "rango": "3. Vulnerable (>=60 y <70)",
+                    "cantidad": 8,
+                    "porcentaje": 25.0,
+                    "idf_promedio": 65.9
+                },
+                {
+                    "rango": "4. Solvente (>=70 y <80)",
+                    "cantidad": 3,
+                    "porcentaje": 9.4,
+                    "idf_promedio": 72.6
+                },
+                {
+                    "rango": "5. Sostenible (>=80)",
+                    "cantidad": 0,
+                    "porcentaje": 0.0,
+                    "idf_promedio": null
+                }
+            ],
+            "2022": [
+                {
+                    "rango": "1. Deterioro (<40)",
+                    "cantidad": 0,
+                    "porcentaje": 0.0,
+                    "idf_promedio": null
+                },
+                {
+                    "rango": "2. Riesgo (>=40 y <60)",
+                    "cantidad": 21,
+                    "porcentaje": 65.6,
+                    "idf_promedio": 48.9
+                },
+                {
+                    "rango": "3. Vulnerable (>=60 y <70)",
+                    "cantidad": 9,
+                    "porcentaje": 28.1,
+                    "idf_promedio": 64.3
+                },
+                {
+                    "rango": "4. Solvente (>=70 y <80)",
+                    "cantidad": 2,
+                    "porcentaje": 6.2,
+                    "idf_promedio": 73.4
+                },
+                {
+                    "rango": "5. Sostenible (>=80)",
+                    "cantidad": 0,
+                    "porcentaje": 0.0,
+                    "idf_promedio": null
+                }
+            ],
+            "2023": [
+                {
+                    "rango": "1. Deterioro (<40)",
+                    "cantidad": 0,
+                    "porcentaje": 0.0,
+                    "idf_promedio": null
+                },
+                {
+                    "rango": "2. Riesgo (>=40 y <60)",
+                    "cantidad": 22,
+                    "porcentaje": 68.8,
+                    "idf_promedio": 52.1
+                },
+                {
+                    "rango": "3. Vulnerable (>=60 y <70)",
+                    "cantidad": 7,
+                    "porcentaje": 21.9,
+                    "idf_promedio": 64.0
+                },
+                {
+                    "rango": "4. Solvente (>=70 y <80)",
+                    "cantidad": 3,
+                    "porcentaje": 9.4,
+                    "idf_promedio": 72.2
+                },
+                {
+                    "rango": "5. Sostenible (>=80)",
+                    "cantidad": 0,
+                    "porcentaje": 0.0,
+                    "idf_promedio": null
+                }
+            ],
+            "2024": [
+                {
+                    "rango": "1. Deterioro (<40)",
+                    "cantidad": 1,
+                    "porcentaje": 3.1,
+                    "idf_promedio": 38.1
+                },
+                {
+                    "rango": "2. Riesgo (>=40 y <60)",
+                    "cantidad": 26,
+                    "porcentaje": 81.2,
+                    "idf_promedio": 51.9
+                },
+                {
+                    "rango": "3. Vulnerable (>=60 y <70)",
+                    "cantidad": 4,
+                    "porcentaje": 12.5,
+                    "idf_promedio": 63.0
+                },
+                {
+                    "rango": "4. Solvente (>=70 y <80)",
+                    "cantidad": 1,
+                    "porcentaje": 3.1,
+                    "idf_promedio": 70.9
+                },
+                {
+                    "rango": "5. Sostenible (>=80)",
+                    "cantidad": 0,
+                    "porcentaje": 0.0,
+                    "idf_promedio": null
+                }
+            ]
+        },
         "componente_resultados": [
             {
                 "indicador": "Dependencia Transferencias",
@@ -16486,103 +16616,403 @@
                 "var_calificacion": 2.0
             }
         ],
-        "tipologia": [
-            {
-                "tipologia": "Tipología 1",
-                "idf_anio_seleccionado": null,
-                "idf_anio_anterior": null,
-                "var_pp": null,
-                "deptos": 0,
-                "porcentaje": 0.0
-            },
-            {
-                "tipologia": "Tipología 2",
-                "idf_anio_seleccionado": null,
-                "idf_anio_anterior": null,
-                "var_pp": null,
-                "deptos": 0,
-                "porcentaje": 0.0
-            },
-            {
-                "tipologia": "Tipología 3",
-                "idf_anio_seleccionado": null,
-                "idf_anio_anterior": null,
-                "var_pp": null,
-                "deptos": 0,
-                "porcentaje": 0.0
-            }
-        ],
-        "distribucion_tipologia": [
-            {
-                "tipologia": "Tipología 1",
-                "deterioro": 0,
-                "riesgo": 0,
-                "vulnerable": 0
-            },
-            {
-                "tipologia": "Tipología 2",
-                "deterioro": 0,
-                "riesgo": 0,
-                "vulnerable": 0
-            },
-            {
-                "tipologia": "Tipología 3",
-                "deterioro": 0,
-                "riesgo": 0,
-                "vulnerable": 0
-            }
-        ],
-        "distribucion_categoria": [
-            {
-                "categoria": "Especial (E)",
-                "deterioro": 0,
-                "riesgo": 0,
-                "vulnerable": 2,
-                "solvente": 1,
-                "sostenible": 0,
-                "total": 3,
-                "idf_promedio": 66.4
-            },
-            {
-                "categoria": "Primera (1)",
-                "deterioro": 0,
-                "riesgo": 3,
-                "vulnerable": 1,
-                "solvente": 1,
-                "sostenible": 0,
-                "total": 5,
-                "idf_promedio": 56.2
-            },
-            {
-                "categoria": "Segunda (2)",
-                "deterioro": 0,
-                "riesgo": 5,
-                "vulnerable": 2,
-                "solvente": 0,
-                "sostenible": 0,
-                "total": 7,
-                "idf_promedio": 53.8
-            },
-            {
-                "categoria": "Tercera (3)",
-                "deterioro": 0,
-                "riesgo": 4,
-                "vulnerable": 3,
-                "solvente": 0,
-                "sostenible": 0,
-                "total": 7,
-                "idf_promedio": 55.0
-            },
-            {
-                "categoria": "Cuarta (4)",
-                "deterioro": 0,
-                "riesgo": 9,
-                "vulnerable": 1,
-                "solvente": 0,
-                "sostenible": 0,
-                "total": 10,
-                "idf_promedio": 50.9
-            }
-        ]
+        "tipologia": {
+            "2020": [
+                {
+                    "tipologia": "N/A",
+                    "idf_anio_seleccionado": 54.1,
+                    "idf_anio_anterior": null,
+                    "var_pp": null,
+                    "deptos": 32,
+                    "porcentaje": 100.0
+                }
+            ],
+            "2021": [
+                {
+                    "tipologia": "N/A",
+                    "idf_anio_seleccionado": 57.5,
+                    "idf_anio_anterior": 54.1,
+                    "var_pp": 3.4,
+                    "deptos": 32,
+                    "porcentaje": 100.0
+                }
+            ],
+            "2022": [
+                {
+                    "tipologia": "N/A",
+                    "idf_anio_seleccionado": 54.7,
+                    "idf_anio_anterior": 57.5,
+                    "var_pp": -2.8,
+                    "deptos": 32,
+                    "porcentaje": 100.0
+                }
+            ],
+            "2023": [
+                {
+                    "tipologia": "N/A",
+                    "idf_anio_seleccionado": 56.6,
+                    "idf_anio_anterior": 54.7,
+                    "var_pp": 1.9,
+                    "deptos": 32,
+                    "porcentaje": 100.0
+                }
+            ],
+            "2024": [
+                {
+                    "tipologia": "Tipología 1",
+                    "idf_anio_seleccionado": 54.8,
+                    "idf_anio_anterior": null,
+                    "var_pp": null,
+                    "deptos": 14,
+                    "porcentaje": 43.8
+                },
+                {
+                    "tipologia": "Tipología 2",
+                    "idf_anio_seleccionado": 50.6,
+                    "idf_anio_anterior": null,
+                    "var_pp": null,
+                    "deptos": 9,
+                    "porcentaje": 28.1
+                },
+                {
+                    "tipologia": "Tipología 3",
+                    "idf_anio_seleccionado": 54.2,
+                    "idf_anio_anterior": null,
+                    "var_pp": null,
+                    "deptos": 9,
+                    "porcentaje": 28.1
+                }
+            ]
+        },
+        "distribucion_tipologia": {
+            "2020": [
+                {
+                    "tipologia": "N/A",
+                    "deterioro": 2,
+                    "riesgo": 19,
+                    "vulnerable": 10,
+                    "solvente": 1,
+                    "sostenible": 0
+                }
+            ],
+            "2021": [
+                {
+                    "tipologia": "N/A",
+                    "deterioro": 0,
+                    "riesgo": 21,
+                    "vulnerable": 8,
+                    "solvente": 3,
+                    "sostenible": 0
+                }
+            ],
+            "2022": [
+                {
+                    "tipologia": "N/A",
+                    "deterioro": 0,
+                    "riesgo": 21,
+                    "vulnerable": 9,
+                    "solvente": 2,
+                    "sostenible": 0
+                }
+            ],
+            "2023": [
+                {
+                    "tipologia": "N/A",
+                    "deterioro": 0,
+                    "riesgo": 22,
+                    "vulnerable": 7,
+                    "solvente": 3,
+                    "sostenible": 0
+                }
+            ],
+            "2024": [
+                {
+                    "tipologia": "Tipología 1",
+                    "deterioro": 0,
+                    "riesgo": 10,
+                    "vulnerable": 4,
+                    "solvente": 0,
+                    "sostenible": 0
+                },
+                {
+                    "tipologia": "Tipología 2",
+                    "deterioro": 1,
+                    "riesgo": 7,
+                    "vulnerable": 0,
+                    "solvente": 1,
+                    "sostenible": 0
+                },
+                {
+                    "tipologia": "Tipología 3",
+                    "deterioro": 0,
+                    "riesgo": 9,
+                    "vulnerable": 0,
+                    "solvente": 0,
+                    "sostenible": 0
+                }
+            ]
+        },
+        "distribucion_categoria": {
+            "2020": [
+                {
+                    "categoria": "Primera (1)",
+                    "deterioro": 1,
+                    "riesgo": 3,
+                    "vulnerable": 2,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 6,
+                    "idf_promedio": 52.2
+                },
+                {
+                    "categoria": "Segunda (2)",
+                    "deterioro": 0,
+                    "riesgo": 4,
+                    "vulnerable": 4,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 8,
+                    "idf_promedio": 57.5
+                },
+                {
+                    "categoria": "Tercera (3)",
+                    "deterioro": 1,
+                    "riesgo": 3,
+                    "vulnerable": 1,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 5,
+                    "idf_promedio": 51.0
+                },
+                {
+                    "categoria": "Cuarta (4)",
+                    "deterioro": 0,
+                    "riesgo": 9,
+                    "vulnerable": 1,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 10,
+                    "idf_promedio": 50.0
+                },
+                {
+                    "categoria": "Especial (E)",
+                    "deterioro": 0,
+                    "riesgo": 0,
+                    "vulnerable": 2,
+                    "solvente": 1,
+                    "sostenible": 0,
+                    "total": 3,
+                    "idf_promedio": 67.5
+                }
+            ],
+            "2021": [
+                {
+                    "categoria": "Primera (1)",
+                    "deterioro": 0,
+                    "riesgo": 4,
+                    "vulnerable": 1,
+                    "solvente": 1,
+                    "sostenible": 0,
+                    "total": 6,
+                    "idf_promedio": 60.5
+                },
+                {
+                    "categoria": "Segunda (2)",
+                    "deterioro": 0,
+                    "riesgo": 5,
+                    "vulnerable": 3,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 8,
+                    "idf_promedio": 59.2
+                },
+                {
+                    "categoria": "Tercera (3)",
+                    "deterioro": 0,
+                    "riesgo": 3,
+                    "vulnerable": 1,
+                    "solvente": 1,
+                    "sostenible": 0,
+                    "total": 5,
+                    "idf_promedio": 55.2
+                },
+                {
+                    "categoria": "Cuarta (4)",
+                    "deterioro": 0,
+                    "riesgo": 9,
+                    "vulnerable": 1,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 10,
+                    "idf_promedio": 51.8
+                },
+                {
+                    "categoria": "Especial (E)",
+                    "deterioro": 0,
+                    "riesgo": 0,
+                    "vulnerable": 2,
+                    "solvente": 1,
+                    "sostenible": 0,
+                    "total": 3,
+                    "idf_promedio": 69.5
+                }
+            ],
+            "2022": [
+                {
+                    "categoria": "Primera (1)",
+                    "deterioro": 0,
+                    "riesgo": 3,
+                    "vulnerable": 1,
+                    "solvente": 1,
+                    "sostenible": 0,
+                    "total": 5,
+                    "idf_promedio": 56.2
+                },
+                {
+                    "categoria": "Segunda (2)",
+                    "deterioro": 0,
+                    "riesgo": 5,
+                    "vulnerable": 2,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 7,
+                    "idf_promedio": 53.8
+                },
+                {
+                    "categoria": "Tercera (3)",
+                    "deterioro": 0,
+                    "riesgo": 4,
+                    "vulnerable": 3,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 7,
+                    "idf_promedio": 55.0
+                },
+                {
+                    "categoria": "Cuarta (4)",
+                    "deterioro": 0,
+                    "riesgo": 9,
+                    "vulnerable": 1,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 10,
+                    "idf_promedio": 50.9
+                },
+                {
+                    "categoria": "Especial (E)",
+                    "deterioro": 0,
+                    "riesgo": 0,
+                    "vulnerable": 2,
+                    "solvente": 1,
+                    "sostenible": 0,
+                    "total": 3,
+                    "idf_promedio": 66.4
+                }
+            ],
+            "2023": [
+                {
+                    "categoria": "Primera (1)",
+                    "deterioro": 0,
+                    "riesgo": 6,
+                    "vulnerable": 1,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 7,
+                    "idf_promedio": 55.6
+                },
+                {
+                    "categoria": "Segunda (2)",
+                    "deterioro": 0,
+                    "riesgo": 5,
+                    "vulnerable": 1,
+                    "solvente": 1,
+                    "sostenible": 0,
+                    "total": 7,
+                    "idf_promedio": 57.0
+                },
+                {
+                    "categoria": "Tercera (3)",
+                    "deterioro": 0,
+                    "riesgo": 4,
+                    "vulnerable": 2,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 6,
+                    "idf_promedio": 55.5
+                },
+                {
+                    "categoria": "Cuarta (4)",
+                    "deterioro": 0,
+                    "riesgo": 7,
+                    "vulnerable": 2,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 9,
+                    "idf_promedio": 53.1
+                },
+                {
+                    "categoria": "Especial (E)",
+                    "deterioro": 0,
+                    "riesgo": 0,
+                    "vulnerable": 1,
+                    "solvente": 2,
+                    "sostenible": 0,
+                    "total": 3,
+                    "idf_promedio": 70.8
+                }
+            ],
+            "2024": [
+                {
+                    "categoria": "Primera (1)",
+                    "deterioro": 0,
+                    "riesgo": 6,
+                    "vulnerable": 1,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 7,
+                    "idf_promedio": 49.4
+                },
+                {
+                    "categoria": "Segunda (2)",
+                    "deterioro": 0,
+                    "riesgo": 5,
+                    "vulnerable": 2,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 7,
+                    "idf_promedio": 56.2
+                },
+                {
+                    "categoria": "Tercera (3)",
+                    "deterioro": 1,
+                    "riesgo": 3,
+                    "vulnerable": 1,
+                    "solvente": 1,
+                    "sostenible": 0,
+                    "total": 6,
+                    "idf_promedio": 54.3
+                },
+                {
+                    "categoria": "Cuarta (4)",
+                    "deterioro": 0,
+                    "riesgo": 9,
+                    "vulnerable": 0,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 9,
+                    "idf_promedio": 54.8
+                },
+                {
+                    "categoria": "Especial (E)",
+                    "deterioro": 0,
+                    "riesgo": 3,
+                    "vulnerable": 0,
+                    "solvente": 0,
+                    "sostenible": 0,
+                    "total": 3,
+                    "idf_promedio": 51.1
+                }
+            ]
+        }
     }
 }
