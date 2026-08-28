@@ -628,9 +628,9 @@ footer.foot{
 @media print{
   *{-webkit-print-color-adjust:exact !important;color-adjust:exact !important;print-color-adjust:exact !important;}
   body{background:#fff !important;margin:0;padding:10px !important;font-size:11px !important;}
-  .topnav,#inst-year-filter,#inst-print-btn,.map-wrap button,.foot,.src-note{display:none !important;}
+  .topnav,#inst-year-filter,#inst-print-btn,.map-wrap button,.foot,.src-note,.print-modal{display:none !important;}
   .page{display:none !important;}
-  #page-instructivo{display:block !important;}
+  .page.print-show{display:block !important;}
   .panel{break-inside:avoid;page-break-inside:avoid;border:1px solid #ddd !important;margin-bottom:8px !important;}
   .panel-body{padding:10px !important;}
   .chart-title{font-size:16px !important;}
@@ -642,6 +642,18 @@ footer.foot{
   .intro-title{font-size:13px !important;}
   .section-bar{font-size:12px !important;}
 }
+
+/* Print selection modal */
+.print-modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:9999;}
+.print-modal-box{background:#fff;border-radius:8px;padding:22px 24px;width:340px;max-width:90vw;box-shadow:0 10px 40px rgba(0,0,0,.25);}
+.print-modal-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:14px;}
+.print-opt{display:flex;align-items:center;gap:9px;padding:8px 6px;font-size:13.5px;color:#37415a;border-radius:4px;cursor:pointer;}
+.print-opt:hover{background:#f1f5fb;}
+.print-opt input{width:16px;height:16px;cursor:pointer;}
+.print-opt-all{border-bottom:1px solid var(--line);margin-bottom:4px;padding-bottom:10px;}
+.print-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+.print-cancel{padding:8px 16px;background:#eef1f6;border:none;border-radius:4px;font-size:13px;font-weight:600;color:#475569;cursor:pointer;}
+.print-go{padding:8px 18px;background:var(--navy);border:none;border-radius:4px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -694,7 +706,7 @@ footer.foot{
         <label style="font-size:12px;font-weight:700;color:var(--navy);">Seleccionar año:</label>
         <select id="inst-year-filter" style="padding:7px 10px;border:1px solid var(--line);border-radius:3px;font-size:12.5px;color:#37415a;"></select>
       </div>
-      <button id="inst-print-btn" onclick="window.print();" style="padding:7px 16px;background:var(--navy);color:#fff;border:none;border-radius:3px;font-size:12px;font-weight:700;cursor:pointer;">🖨 Imprimir vista</button>
+      <button id="inst-print-btn" onclick="openPrintModal();" style="padding:7px 16px;background:var(--navy);color:#fff;border:none;border-radius:3px;font-size:12px;font-weight:700;cursor:pointer;">Imprimir vistas</button>
     </div>
 
     <div class="panel" id="sec-dimensiones">
@@ -834,7 +846,7 @@ footer.foot{
 
     <div class="ficha-header">
       <div style="max-width:480px;">
-        <h2>Índice de Desempeño Fiscal — IDF — Vigencia 2024:</h2>
+        <h2 id="ficha-title-vigencia">Índice de Desempeño Fiscal — IDF — Vigencia 2024:</h2>
         <p>El Índice de Desempeño Fiscal permite medir la gestión fiscal y financiera de las entidades territoriales, considerando variables como viabilidad fiscal, generación de recursos propios, endeudamiento, inversión y programación de los recursos.</p>
       </div>
       <div class="departamento-select">
@@ -858,7 +870,7 @@ footer.foot{
         <div class="v">Caldas</div>
       </div>
       <div class="select-box">
-        <div class="k">MUNICIPIO SELECCIONADO</div>
+        <div class="k" id="ficha-subdept-lbl">REGIÓN</div>
         <div class="v">Supía</div>
       </div>
       <div class="select-box">
@@ -1030,7 +1042,7 @@ footer.foot{
           <tr><td class="left">Bono Catastro</td><td>0,0</td><td>0,0</td><td>0,0</td><td>0,0</td><td>→</td><td class="left"></td></tr>
         </tbody>
       </table>
-      <div class="src-note" style="text-align:left;">https://ciffit.dnp.gov.co/ciffit/Default &nbsp;·&nbsp; fiscalterritorial@dnp.gov.co</div>
+
     </div>
 
   </div>
@@ -1039,7 +1051,7 @@ footer.foot{
   <div class="page" id="page-consolidado">
 
     <div class="panel panel-body">
-      <div class="chart-title">Comparación Territorial del Desempeño Fiscal 2024</div>
+      <div class="chart-title" id="consol-chart-title">Comparación Territorial del Desempeño Fiscal 2024</div>
       <div class="chart-sub">Comparación de los resultados de los indicadores de las dos dimensiones: fiscal y gestión financiera de la entidad territorial con el promedio de las entidades a nivel nacional, departamental y por tipologías.</div>
     </div>
 
@@ -1053,24 +1065,24 @@ footer.foot{
         <div class="v" style="color:var(--orange);font-size:16px;">2. Riesgo (&gt;=40 y &lt;60)</div>
       </div>
       <div class="stat-card">
-        <div class="k">IDF · Supía vs Nacional</div>
+        <div class="k" id="consol-title-vs">IDF · Supía vs Nacional</div>
         <div class="v">59,3 <span style="font-size:13px;color:var(--muted);">/ 55,9</span></div>
       </div>
     </div>
 
     <div class="consol-layout">
       <div class="panel">
-        <div class="tab-row">
-          <button class="active">Departamento</button>
-          <button>Nacional</button>
-          <button>Tipología</button>
+        <div class="tab-row" id="consol-comparison-tabs">
+          <button class="active" data-mode="categoria">Categoría</button>
+          <button data-mode="nacional">Nacional</button>
+          <button data-mode="tipologia">Tipología</button>
         </div>
         <table>
           <thead>
             <tr>
               <th class="left" rowspan="2">Indicador</th>
-              <th colspan="2">Supía</th>
-              <th colspan="2">Nacional</th>
+              <th colspan="2" id="consol-table-dept-header">Supía</th>
+              <th colspan="2" id="consol-table-comp-header">Nacional</th>
             </tr>
             <tr><th>Resultado</th><th>Calificación</th><th>Resultado</th><th>Calificación</th></tr>
           </thead>
@@ -1093,7 +1105,7 @@ footer.foot{
       </div>
 
       <div class="panel">
-        <div class="intro-title">ÍNDICE DE DESEMPEÑO FISCAL — MUNICIPIOS DE NACIONAL</div>
+        <div class="intro-title" id="consol-rank-title">ÍNDICE DE DESEMPEÑO FISCAL — RANKING NACIONAL</div>
         <div class="rank-list" id="consol-rank-list"></div>
       </div>
     </div>
@@ -1111,13 +1123,13 @@ footer.foot{
     <div class="dist-top">
       <div class="stat-card">
         <div class="v pink">55,86</div>
-        <div class="k" style="margin-top:6px;">IDF PROMEDIO 2024</div>
+        <div class="k" style="margin-top:6px;">IDF PROMEDIO <span class="lbl-year">2024</span></div>
         <div class="sub">-1,7 puntos frente a 2023</div>
       </div>
       <div class="stat-card">
         <div class="v">1.103</div>
-        <div class="k" style="margin-top:6px;">MUNICIPIOS EVALUADOS</div>
-        <div class="sub">Vigencia 2024</div>
+        <div class="k" style="margin-top:6px;">DEPARTAMENTOS EVALUADOS</div>
+        <div class="sub">Vigencia <span class="lbl-year">2024</span></div>
       </div>
       <div class="stat-card">
         <div class="v" style="color:var(--orange);">68,8%</div>
@@ -1206,6 +1218,34 @@ footer.foot{
   /* ================================================================
      PAGE NAVIGATION
      ================================================================ */
+  function updatePage(pageId){
+    if(!idfData) return;
+    if(pageId === 'instructivo'){
+      var instSel = document.getElementById('inst-year-filter');
+      if(instSel) instSel.value = selectedYear;
+      populateTipologiaTable();
+      populateInstructivoRanking();
+      populateDistTableInstructivo();
+    } else if(pageId === 'ficha'){
+      var fichaSel = document.querySelector('#page-ficha .departamento-select select');
+      if(fichaSel){
+        if(!selectedDept) selectedDept = getDeptList()[0];
+        fichaSel.value = selectedDept;
+      }
+      populateFicha(selectedDept);
+    } else if(pageId === 'consolidado'){
+      if(!selectedDept) selectedDept = getDeptList()[0];
+      populateConsolidado(selectedDept);
+    } else if(pageId === 'distribucion'){
+      var yearSel = document.getElementById('dist-year-filter');
+      if(yearSel) yearSel.value = selectedYear;
+      var deptSel = document.getElementById('dist-dept-filter');
+      if(deptSel) deptSel.value = selectedDept || 'Todos';
+      populateDistribucion();
+      renderMap(geoData);
+    }
+  }
+
   document.querySelectorAll('.topnav button').forEach(function(btn){
     btn.addEventListener('click', function(){
       document.querySelectorAll('.topnav button').forEach(function(b){ b.classList.remove('active'); });
@@ -1213,12 +1253,20 @@ footer.foot{
       btn.classList.add('active');
       var pg = document.getElementById('page-'+btn.dataset.page);
       if(pg) pg.classList.add('active');
+      updatePage(btn.dataset.page);
     });
   });
   document.querySelectorAll('.tab-row button').forEach(function(btn){
     btn.addEventListener('click', function(){
       btn.parentElement.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
       btn.classList.add('active');
+    });
+  });
+  document.querySelectorAll('#consol-comparison-tabs button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btn.parentElement.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      if(selectedDept) populateConsolidado(selectedDept);
     });
   });
 
@@ -1704,9 +1752,7 @@ footer.foot{
     });
     sel.addEventListener('change', function(){
       selectedYear = this.value;
-      populateTipologiaTable();
-      populateInstructivoRanking();
-      populateDistTableInstructivo();
+      updatePage('instructivo');
     });
   }
 
@@ -1723,14 +1769,15 @@ footer.foot{
     var prevD = (idfData.records[prevY]||{})[dept];
 
     /* Header */
-    var h2 = document.querySelector('#page-ficha .ficha-header h2');
+    var h2 = document.getElementById('ficha-title-vigencia');
     if(h2) h2.textContent = 'Índice de Desempeño Fiscal — IDF — Vigencia '+selectedYear+':';
 
     /* Select boxes */
     var boxes = document.querySelectorAll('#page-ficha .select-box');
     if(boxes[0]) boxes[0].querySelector('.v').textContent = dept;
-    if(boxes[1]) boxes[1].querySelector('.v').textContent = dept;
+    if(boxes[1]) boxes[1].querySelector('.v').textContent = d.region || 'N/A';
     if(boxes[2]){
+      boxes[2].querySelector('.k').textContent = 'RANGO IDF ' + selectedYear;
       boxes[2].querySelector('.v').textContent = fmt(d.idf);
       var badge = boxes[2].querySelector('.badge');
       if(badge) badge.textContent = d.rango_completo || getRango(d.idf);
@@ -1901,6 +1948,10 @@ footer.foot{
     var d = yd[dept];
     if(!d) return;
 
+    var consolMode = 'categoria'; // Default active mode
+    var activeBtn = document.querySelector('#consol-comparison-tabs button.active');
+    if(activeBtn) consolMode = activeBtn.dataset.mode || 'categoria';
+
     /* Stat cards */
     var statCards = document.querySelectorAll('#page-consolidado .stat-card');
     var allDepts = Object.entries(yd).filter(function(e){return e[1].idf!=null;}).sort(function(a,b){return b[1].idf-a[1].idf;});
@@ -1912,74 +1963,115 @@ footer.foot{
     if(statCards[1]) statCards[1].querySelector('.v').innerHTML='<span style="color:var(--orange);font-size:16px;">'+d.rango_completo+'</span>';
     if(statCards[2]) statCards[2].querySelector('.v').innerHTML=fmt(d.idf)+' <span style="font-size:13px;color:var(--muted);">/ '+fmt(nacAvg)+'</span>';
 
+    // Update dynamic titles
+    var vsTitle = document.getElementById('consol-title-vs');
+    var tableDeptHeader = document.getElementById('consol-table-dept-header');
+    var tableCompHeader = document.getElementById('consol-table-comp-header');
+    var consolChartTitle = document.getElementById('consol-chart-title');
+
+    if(consolChartTitle) consolChartTitle.textContent = 'Comparación Territorial del Desempeño Fiscal ' + selectedYear;
+    if(tableDeptHeader) tableDeptHeader.textContent = dept;
+
+    var compDepts = Object.values(yd);
+    var compLabel = 'Nacional';
+    if(consolMode === 'categoria'){
+      compDepts = Object.values(yd).filter(function(dd){ return dd.categoria === d.categoria; });
+      compLabel = 'Categoría ' + d.categoria;
+    } else if(consolMode === 'tipologia'){
+      compDepts = Object.values(yd).filter(function(dd){ return dd.tipologia === d.tipologia; });
+      compLabel = 'Tipología ' + (d.tipologia ? Math.round(d.tipologia) : 'N/A');
+    }
+
+    if(tableCompHeader) tableCompHeader.textContent = compLabel;
+    if(vsTitle) vsTitle.innerHTML = 'IDF · ' + dept + ' vs ' + compLabel;
+
     /* Comparison table */
     var compTbody = document.querySelector('#page-consolidado table tbody');
     if(compTbody){
       compTbody.innerHTML = '';
-      /* Calculate national averages for each indicator */
-      var natAvgInds = {};
+      /* Calculate comparison averages for each indicator */
+      var compAvgInds = {};
       ['dependencia_transferencias','relevancia_fbkf','endeudamiento','ahorro_corriente','balance_fiscal_primario'].forEach(function(k){
         var sum=0, cnt=0;
-        Object.values(yd).forEach(function(dd){
+        compDepts.forEach(function(dd){
           if(dd.resultados && dd.resultados.indicadores && dd.resultados.indicadores[k]){
             sum += dd.resultados.indicadores[k].calificacion;
             cnt++;
           }
         });
-        natAvgInds[k] = cnt?sum/cnt:0;
+        compAvgInds[k] = cnt?sum/cnt:0;
       });
-      var natResScore = avg(Object.values(yd).map(function(dd){return dd.resultados?dd.resultados.calificacion:0;}).filter(function(v){return v>0;}));
+      var compResScore = avg(compDepts.map(function(dd){return dd.resultados?dd.resultados.calificacion:0;}).filter(function(v){return v>0;}));
 
       var compInds = ['dependencia_transferencias','relevancia_fbkf','endeudamiento','ahorro_corriente','balance_fiscal_primario'];
       var compNames = ['Dependencia de las Transferencias','Relevancia FBKF','Endeudamiento','Ahorro Corriente','Balance Fiscal Primario'];
       compInds.forEach(function(k, i){
         var cur = d.resultados.indicadores[k];
-        var natCal = natAvgInds[k];
+        var compCal = compAvgInds[k];
         var tr = document.createElement('tr');
-        tr.innerHTML='<td class="left">'+compNames[i]+'</td><td>'+fmt(cur.calificacion)+'</td><td></td><td>'+fmt(natCal)+'</td><td></td>';
+        tr.innerHTML='<td class="left">'+compNames[i]+'</td><td>'+fmt(cur.calificacion)+'</td><td></td><td>'+fmt(compCal)+'</td><td></td>';
         compTbody.appendChild(tr);
       });
       var trDR = document.createElement('tr'); trDR.className='dim-row';
-      trDR.innerHTML='<td class="left">Dimensión de Resultados Fiscales</td><td colspan="2">'+fmt(d.resultados.calificacion)+'</td><td colspan="2">'+fmt(natResScore)+'</td>';
+      trDR.innerHTML='<td class="left">Dimensión de Resultados Fiscales</td><td colspan="2">'+fmt(d.resultados.calificacion)+'</td><td colspan="2">'+fmt(compResScore)+'</td>';
       compTbody.appendChild(trDR);
 
-      var natGestInds = {};
+      var compGestInds = {};
       ['holgura','capacidad_programacion_recaudo','capacidad_ejecucion_inversion','bonificacion_esfuerzo_propio'].forEach(function(k){
         var sum=0, cnt=0;
-        Object.values(yd).forEach(function(dd){
+        compDepts.forEach(function(dd){
           if(dd.gestion && dd.gestion.indicadores && dd.gestion.indicadores[k]){
             sum += dd.gestion.indicadores[k].calificacion;
             cnt++;
           }
         });
-        natGestInds[k] = cnt?sum/cnt:0;
+        compGestInds[k] = cnt?sum/cnt:0;
       });
-      var natGestScore = avg(Object.values(yd).map(function(dd){return dd.gestion?dd.gestion.calificacion:0;}).filter(function(v){return v>0;}));
+      var compGestScore = avg(compDepts.map(function(dd){return dd.gestion?dd.gestion.calificacion:0;}).filter(function(v){return v>0;}));
 
       var gestKeys = ['holgura','capacidad_programacion_recaudo','capacidad_ejecucion_inversion','bonificacion_esfuerzo_propio'];
       var gestNames = ['Holgura','Cap. Programación y Recaudo de Ingresos','Cap. Ejecución de Inversión','Bono Esfuerzo Propio'];
       gestKeys.forEach(function(k, i){
         var cur = d.gestion.indicadores[k];
-        var natCal = natGestInds[k];
+        var compCal = compGestInds[k];
         var tr = document.createElement('tr');
-        tr.innerHTML='<td class="left">'+gestNames[i]+'</td><td>'+fmt(cur.calificacion)+'</td><td></td><td>'+fmt(natCal)+'</td><td></td>';
+        tr.innerHTML='<td class="left">'+gestNames[i]+'</td><td>'+fmt(cur.calificacion)+'</td><td></td><td>'+fmt(compCal)+'</td><td></td>';
         compTbody.appendChild(tr);
       });
       var trDG = document.createElement('tr'); trDG.className='dim-row';
-      trDG.innerHTML='<td class="left">Dimensión de Gestión Financiera</td><td colspan="2">'+fmt(d.gestion.calificacion)+'</td><td colspan="2">'+fmt(natGestScore)+'</td>';
+      trDG.innerHTML='<td class="left">Dimensión de Gestión Financiera</td><td colspan="2">'+fmt(d.gestion.calificacion)+'</td><td colspan="2">'+fmt(compGestScore)+'</td>';
       compTbody.appendChild(trDG);
 
+      var compIDFScore = avg(compDepts.map(function(dd){return dd.idf;}).filter(function(v){return v!=null;}));
       var trIDF = document.createElement('tr'); trIDF.className='dim-row';
       trIDF.style.background='#fde7f3';
-      trIDF.innerHTML='<td class="left">IDF</td><td colspan="2">'+fmt(d.idf)+'</td><td colspan="2">'+fmt(nacAvg)+'</td>';
+      trIDF.innerHTML='<td class="left">IDF</td><td colspan="2">'+fmt(d.idf)+'</td><td colspan="2">'+fmt(compIDFScore)+'</td>';
       compTbody.appendChild(trIDF);
     }
 
-    /* Ranking list */
+    /* Ranking list filtered by comparison mode */
     var rl = document.getElementById('consol-rank-list');
     if(rl){
-      var rankData = allDepts.map(function(e){ return [e[0], e[1].idf]; });
+      var rankDepts = allDepts;
+      if(consolMode === 'categoria'){
+        rankDepts = allDepts.filter(function(e){ return e[1].categoria === d.categoria; });
+      } else if(consolMode === 'tipologia'){
+        rankDepts = allDepts.filter(function(e){ return e[1].tipologia === d.tipologia; });
+      }
+      var rankData = rankDepts.map(function(e){ return [e[0], e[1].idf]; });
       buildRankList(rl, rankData, dept);
+    }
+
+    /* Ranking title */
+    var rankTitle = document.getElementById('consol-rank-title');
+    if(rankTitle){
+      if(consolMode === 'nacional'){
+        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — RANKING NACIONAL';
+      } else if(consolMode === 'categoria'){
+        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — RANKING CATEGORÍA ' + (d.categoria || 'N/A');
+      } else if(consolMode === 'tipologia'){
+        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — RANKING TIPOLOGÍA ' + (d.tipologia ? Math.round(d.tipologia) : 'N/A');
+      }
     }
   }
 
@@ -2012,6 +2104,10 @@ footer.foot{
     var titleEl = document.getElementById('dist-title');
     var titleSuffix = selectedDept ? ' — '+selectedDept : '';
     if(titleEl) titleEl.textContent = 'Geografía y Distribución de Rangos IDF — Vigencia '+selectedYear+titleSuffix;
+
+    document.querySelectorAll('#page-distribucion .lbl-year').forEach(function(el){
+      el.textContent = selectedYear;
+    });
 
     /* Stat cards */
     var statCards = document.querySelectorAll('#page-distribucion .stat-card');
@@ -2114,15 +2210,13 @@ footer.foot{
     if(yearSel){
       yearSel.addEventListener('change', function(){
         selectedYear = this.value;
-        populateDistribucion();
-        renderMap(geoData);
+        updatePage('distribucion');
       });
     }
     if(deptSel){
       deptSel.addEventListener('change', function(){
         selectedDept = this.value === 'Todos' ? null : this.value;
-        populateDistribucion();
-        renderMap(geoData);
+        updatePage('distribucion');
       });
     }
   }
@@ -2153,8 +2247,7 @@ footer.foot{
       if(ySel) ySel.value = selectedYear;
       resetBars();
       setTimeout(function(){
-        populateDistribucion();
-        renderMap(geoData);
+        updatePage('distribucion');
       }, 50);
       btn.innerHTML = '&#9646;&#9646; Pausar';
       playInterval = setInterval(function(){
@@ -2170,8 +2263,7 @@ footer.foot{
         if(ySel2) ySel2.value = selectedYear;
         resetBars();
         setTimeout(function(){
-          populateDistribucion();
-          renderMap(geoData);
+          updatePage('distribucion');
         }, 50);
       }, 1200);
     });
@@ -2316,8 +2408,7 @@ footer.foot{
     else if(getDeptList().length) sel.value = getDeptList()[0];
     sel.addEventListener('change', function(){
       selectedDept = sel.value;
-      populateFicha(selectedDept);
-      populateConsolidado(selectedDept);
+      updatePage('ficha');
     });
   }
 
@@ -2366,8 +2457,62 @@ footer.foot{
     }
   }
 
+  // ---- Print section selection ----
+  window.openPrintModal=function(){
+    document.getElementById('print-modal').style.display='flex';
+  };
+  window.closePrintModal=function(){
+    document.getElementById('print-modal').style.display='none';
+  };
+  window.togglePrintAll=function(src){
+    var secs=document.querySelectorAll('.print-sec');
+    secs.forEach(function(c){ c.checked=src.checked; c.disabled=src.checked; });
+  };
+  window.syncPrintAll=function(){
+    var all=document.getElementById('print-all');
+    var secs=Array.prototype.slice.call(document.querySelectorAll('.print-sec'));
+    all.checked=secs.every(function(c){ return c.checked; });
+    all.disabled=false;
+  };
+  window.doPrint=function(){
+    var secs=Array.prototype.slice.call(document.querySelectorAll('.print-sec')).filter(function(c){ return c.checked; });
+    var pages=document.querySelectorAll('.page');
+    pages.forEach(function(p){ p.classList.remove('print-show'); });
+    if(secs.length===0){ closePrintModal(); return; }
+    secs.forEach(function(c){ var pg=document.getElementById(c.value); if(pg) pg.classList.add('print-show'); });
+    closePrintModal();
+    window.print();
+  };
+
   init();
 })();
 </script>
+
+<!-- Print selection modal -->
+<div class="print-modal" id="print-modal" onclick="if(event.target===this)closePrintModal();">
+  <div class="print-modal-box">
+    <div class="print-modal-title">Selecciona las secciones a imprimir</div>
+    <label class="print-opt print-opt-all">
+      <input type="checkbox" id="print-all" onchange="togglePrintAll(this);" checked> <b>Todas las secciones</b>
+    </label>
+    <label class="print-opt">
+      <input type="checkbox" class="print-sec" value="page-instructivo" onchange="syncPrintAll();"> Instructivo
+    </label>
+    <label class="print-opt">
+      <input type="checkbox" class="print-sec" value="page-ficha" onchange="syncPrintAll();"> Ficha Departamental IDF
+    </label>
+    <label class="print-opt">
+      <input type="checkbox" class="print-sec" value="page-consolidado" onchange="syncPrintAll();"> Consolidado
+    </label>
+    <label class="print-opt">
+      <input type="checkbox" class="print-sec" value="page-distribucion" onchange="syncPrintAll();"> Distribución IDF
+    </label>
+    <div class="print-modal-actions">
+      <button class="print-cancel" onclick="closePrintModal();">Cancelar</button>
+      <button class="print-go" onclick="doPrint();">Imprimir</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
