@@ -763,12 +763,320 @@ td.left, th.left{text-align:left;}
 }
 
 /* ================= CONSOLIDADO ================= */
-.consol-top{
-  display:grid;
-  grid-template-columns:1.1fr 1fr 1fr;
-  gap:12px;
-  margin-bottom:14px;
+#page-consolidado {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg);
 }
+.consol-header-sub {
+  color: var(--muted);
+  font-size: 12.5px;
+  margin-bottom: 14px;
+  font-style: italic;
+}
+.consol-top-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.muni-select-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.muni-select-wrap label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+}
+.muni-select-wrap select {
+  padding: 8px 14px;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  font-size: 13.5px;
+  color: var(--text);
+  background: #fff;
+  min-width: 250px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(20,30,60,.06);
+}
+.consol-cards-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.stat-card-kpi {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 58px;
+  box-shadow: 0 1px 3px rgba(20,30,60,.05);
+}
+.stat-card-kpi .lbl {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.stat-card-kpi .val-rank {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1;
+}
+.stat-card-kpi .val-rank span {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.rango-pill {
+  background: #ee8e16;
+  color: #fff;
+  font-weight: 700;
+  font-size: 11.5px;
+  padding: 5px 12px;
+  border-radius: 16px;
+  display: inline-block;
+  white-space: nowrap;
+}
+/* IDF Pink Card */
+.idf-card-pink {
+  border: 2px solid #ef047c;
+  border-radius: 6px;
+  background: #fff;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(20,30,60,.05);
+  min-height: 58px;
+}
+.idf-card-pink .idf-badge-hdr {
+  background: #ef047c;
+  color: #fff;
+  font-weight: 900;
+  font-size: 16px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.idf-card-pink .idf-vals-row {
+  display: flex;
+  align-items: center;
+  padding: 4px 14px;
+  gap: 14px;
+}
+.idf-card-pink .idf-val-col {
+  text-align: center;
+}
+.idf-card-pink .idf-val-col .lbl {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 1px;
+}
+.idf-card-pink .idf-val-col .num {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1.1;
+}
+
+/* Tabs */
+.consol-tabs-row {
+  display: flex;
+  border: 2px solid #10356c;
+  border-radius: 3px;
+  overflow: hidden;
+  width: fit-content;
+  margin-bottom: 16px;
+  background: #fff;
+}
+.consol-tabs-row button {
+  padding: 10px 36px;
+  background: #fff;
+  color: #10356c;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-right: 1px solid #10356c;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.consol-tabs-row button:last-child {
+  border-right: none;
+}
+.consol-tabs-row button.active {
+  background: #2b2b2b;
+  color: #ffffff;
+}
+
+/* Layout Grid */
+.consol-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.consol-table-box {
+  background: #fff;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 14px;
+  box-shadow: 0 1px 3px rgba(20,30,60,.05);
+}
+table.consol-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  border: 1px solid #b0b8c9;
+}
+table.consol-table th {
+  background: #fff;
+  color: var(--navy);
+  font-weight: 800;
+  font-size: 11px;
+  padding: 8px 8px;
+  border: 1px solid #b0b8c9;
+  text-align: center;
+}
+table.consol-table th.left {
+  text-align: left;
+}
+table.consol-table th.sub-hdr {
+  background: #e8ecf4;
+  font-weight: 700;
+  font-size: 10.5px;
+}
+table.consol-table td {
+  padding: 6.5px 8px;
+  border: 1px solid #b0b8c9;
+  text-align: center;
+  font-weight: 700;
+  color: var(--navy);
+}
+table.consol-table td.left {
+  text-align: left;
+  font-weight: 700;
+  color: #1c2438;
+}
+table.consol-table tr.dim-res-row td {
+  background: #eef2f7 !important;
+  font-weight: 900 !important;
+  color: var(--navy) !important;
+}
+table.consol-table tr.dim-gest-row td {
+  background: #fde8f2 !important;
+  font-weight: 900 !important;
+  color: var(--navy) !important;
+}
+
+/* Calificacion text colors */
+.val-red { color: #d32f2f !important; font-weight: 800; }
+.val-green { color: #2e7d32 !important; font-weight: 800; }
+.val-orange { color: #ee8e16 !important; font-weight: 800; }
+
+/* Bottom summary badges under table */
+.consol-bottom-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 3px solid #10356c;
+}
+.bottom-badge {
+  border-radius: 8px;
+  padding: 6px 20px;
+  font-size: 15px;
+  font-weight: 900;
+  text-align: center;
+  background: #fff;
+  min-width: 90px;
+}
+.bottom-badge.gold {
+  border: 2px solid #c98a1d;
+  color: #c98a1d;
+}
+.bottom-badge.navy {
+  border: 2px solid #10356c;
+  color: #10356c;
+  font-size: 17px;
+}
+
+/* Right Chart Container */
+.consol-chart-box {
+  background: #fff;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(20,30,60,.05);
+}
+.consol-chart-box .rank-title {
+  color: #10356c;
+  font-size: 13.5px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.rank-bar-list {
+  max-height: 510px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.rank-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  font-size: 11px;
+}
+.rank-bar-row .muni-name {
+  width: 140px;
+  text-align: right;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+.rank-bar-row .bar-track {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.rank-bar-row .bar-fill {
+  background: #35bb5a;
+  height: 16px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+  min-width: 28px;
+}
+.rank-bar-row .bar-val {
+  color: #fff;
+  font-weight: 800;
+  font-size: 10px;
+}
+.rank-bar-row.hl .muni-name {
+  color: #ef047c;
+  font-weight: 800;
+}
+.rank-bar-row.hl .bar-fill {
+  background: #ef047c;
+}
+
 .stat-card{
   background:var(--card);
   border-radius:4px;
@@ -780,39 +1088,6 @@ td.left, th.left{text-align:left;}
 .stat-card .v{font-size:22px;font-weight:800;color:var(--navy);margin-top:4px;}
 .stat-card .v.pink{color:var(--pink);}
 .stat-card .sub{font-size:10.5px;color:var(--muted);margin-top:2px;}
-
-.consol-layout{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;}
-.tab-row{display:flex;gap:0;padding:0;background:#fff;border-bottom:2px solid var(--line);}
-.tab-row button{
-  flex:1;background:#fff;border:1px solid var(--line);border-bottom:none;padding:12px 14px;border-radius:0;
-  font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;letter-spacing:.2px;
-}
-.tab-row button.active{background:var(--navy);color:#fff;border-color:var(--navy);}
-.tab-row button:not(:last-child){border-right:none;}
-
-/* Consolidado comparison table */
-.consol-layout table{border-collapse:collapse;width:100%;font-size:11px;border:1px solid #b0b8c9;}
-.consol-layout table th{background:var(--navy);color:#fff;font-weight:700;font-size:10px;padding:8px 6px;border:1px solid #b0b8c9;}
-.consol-layout table th.left{text-align:left;}
-.consol-layout table td{padding:7px 6px;border:1px solid #b0b8c9;text-align:center;font-weight:700;font-size:11px;color:var(--navy);}
-.consol-layout table td.left{text-align:left;font-weight:800;font-size:10.5px;}
-.consol-layout table tr.dim-row td{background:#1c2f57 !important;color:#fff !important;font-weight:800;border:1px solid #1c2f57;}
-.consol-layout table tr.idf-row td{background:#f5f7fa !important;border:2px solid var(--navy) !important;font-weight:900;font-size:14px;color:var(--navy) !important;}
-.consol-layout table tr.idf-row td.left{font-size:13px;}
-.consol-layout table tr.dim-row td.left{color:#fff !important;}
-
-/* Ranking bar chart */
-.rank-list{padding:6px 0;}
-.rank-list .row{
-  display:flex;align-items:center;justify-content:space-between;padding:4px 12px;font-size:11px;border-bottom:1px solid #f0f2f7;
-}
-.rank-list .row:nth-child(odd){background:#fafbfd;}
-.rank-list .row .nm{color:#2b3550;font-weight:600;flex:0 0 140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.rank-list .row .vv{font-weight:800;color:var(--navy);flex:0 0 40px;text-align:right;}
-.rank-list .row .bar-wrap{flex:1;margin:0 8px;height:14px;background:#eef1f6;border-radius:3px;overflow:hidden;}
-.rank-list .row .bar-fill{height:100%;border-radius:3px;background:var(--green);transition:width 0.5s ease;}
-.rank-list .row.hl{background:#fde7f3;}
-.rank-list .row.hl .nm, .rank-list .row.hl .vv{color:var(--pink-2);}
 
 /* ================= DISTRIBUCION ================= */
 .dist-top{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;}
@@ -1277,66 +1552,81 @@ footer.foot{
   <!-- ================= PAGE 3: CONSOLIDADO ================= -->
   <div class="page" id="page-consolidado">
 
-    <div class="panel panel-body" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-      <div>
-        <div class="chart-title" id="consol-chart-title">Comparación Territorial del Desempeño Fiscal 2024</div>
-        <div class="chart-sub">Comparación de los resultados de los indicadores de las dos dimensiones: fiscal y gestión financiera de la entidad territorial con el promedio de las entidades a nivel nacional, departamental y por tipologías.</div>
-      </div>
-      <button class="csv-btn" id="consol-csv-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 19h14"/></svg>Descargar CSV</button>
+    <div class="consol-header-sub">
+      a nivel nacional, departamental y por tipologías.
     </div>
 
-    <div class="consol-top">
-      <div class="stat-card">
-        <div class="k">RANKING NACIONAL</div>
-        <div class="v pink">373 <span style="font-size:13px;color:var(--muted);">de 1.103</span></div>
+    <div class="consol-top-bar">
+      <div class="muni-select-wrap">
+        <label for="consol-muni-select">Municipio</label>
+        <select id="consol-muni-select"></select>
       </div>
-      <div class="stat-card">
-        <div class="k">RANGO</div>
-        <div class="v" style="color:var(--orange);font-size:16px;">2. Riesgo (&gt;=40 y &lt;60)</div>
-      </div>
-      <div class="stat-card">
-        <div class="k" id="consol-title-vs">IDF · Supía vs Nacional</div>
-        <div class="v">59,3 <span style="font-size:13px;color:var(--muted);">/ 55,9</span></div>
-      </div>
-    </div>
 
-    <div class="consol-layout">
-      <div class="panel">
-        <div class="tab-row" id="consol-comparison-tabs">
-          <button data-mode="categoria">Departamento</button>
-          <button class="active" data-mode="nacional">Nacional</button>
-          <button data-mode="tipologia">Tipología</button>
+      <div class="consol-cards-row">
+        <div class="stat-card-kpi">
+          <div class="lbl">RANKING NACIONAL</div>
+          <div class="val-rank" id="consol-kpi-rank">373 <span>de 1.103</span></div>
         </div>
-        <table>
+
+        <div class="stat-card-kpi">
+          <div class="lbl">RANGO</div>
+          <div>
+            <span class="rango-pill" id="consol-kpi-rango">2. Riesgo (>=40 y &lt;60)</span>
+          </div>
+        </div>
+
+        <div class="idf-card-pink">
+          <div class="idf-badge-hdr">IDF</div>
+          <div class="idf-vals-row">
+            <div class="idf-val-col">
+              <div class="lbl" id="consol-idf-dept-lbl">Supía</div>
+              <div class="num" id="consol-idf-dept-val">59,3</div>
+            </div>
+            <div class="idf-val-col">
+              <div class="lbl" id="consol-idf-comp-lbl">Nacional</div>
+              <div class="num" id="consol-idf-comp-val">55,9</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="consol-tabs-row" id="consol-comparison-tabs">
+      <button data-mode="categoria">Departamento</button>
+      <button class="active" data-mode="nacional">Nacional</button>
+      <button data-mode="tipologia">Tipología</button>
+    </div>
+
+    <div class="consol-grid">
+      <div class="consol-table-box">
+        <table class="consol-table">
           <thead>
             <tr>
               <th class="left" rowspan="2">Indicador</th>
-              <th colspan="2" id="consol-table-dept-header">Supía</th>
-              <th colspan="2" id="consol-table-comp-header">Nacional</th>
+              <th colspan="2" id="consol-table-dept-header" style="background:#fff;color:#10356c;font-size:12px;">Supía</th>
+              <th colspan="2" id="consol-table-comp-header" style="background:#fff;color:#10356c;font-size:12px;">Nacional</th>
             </tr>
-            <tr><th>Resultado</th><th>Calificación</th><th>Resultado</th><th>Calificación</th></tr>
+            <tr>
+              <th class="sub-hdr">Resultado</th>
+              <th class="sub-hdr">Calificación</th>
+              <th class="sub-hdr">Resultado</th>
+              <th class="sub-hdr">Calificación</th>
+            </tr>
           </thead>
-          <tbody>
-            <tr><td class="left">Dependencia de las Transferencias</td><td>73,3</td><td>26,7</td><td>74,3</td><td>25,7</td></tr>
-            <tr><td class="left">Relevancia FBKF</td><td>9,6</td><td>14,2</td><td>17,3</td><td>25,4</td></tr>
-            <tr><td class="left">Endeudamiento</td><td>25,4</td><td>74,6</td><td>25,4</td><td>74,7</td></tr>
-            <tr><td class="left">Ahorro Corriente</td><td>48,7</td><td>70,0</td><td>48,7</td><td>65,8</td></tr>
-            <tr><td class="left">Balance Fiscal Primario</td><td>11,6</td><td>60,0</td><td>12,7</td><td>54,9</td></tr>
-            <tr class="dim-row"><td class="left">Dimensión de Resultados Fiscales</td><td>49,1</td><td>39,3</td><td>49,3</td><td>39,5</td></tr>
-            <tr><td class="left">Holgura</td><td>30,6</td><td>100,0</td><td>27,9</td><td>82,5</td></tr>
-            <tr><td class="left">Cap. Programación y Recaudo de Ingresos</td><td>118,8</td><td>100,0</td><td>128,9</td><td>68,2</td></tr>
-            <tr><td class="left">Cap. Ejecución de Inversión</td><td>96,6</td><td>100,0</td><td>92,8</td><td>94,7</td></tr>
-            <tr><td class="left">Bono Esfuerzo Propio</td><td>0,0</td><td>0,0</td><td>0,0</td><td>0,0</td></tr>
-            <tr><td class="left">Bono Catastro</td><td>0,0</td><td>0,0</td><td>0,2</td><td>0,2</td></tr>
-            <tr class="dim-row"><td class="left">Dimensión de Gestión Financiera</td><td>100,0</td><td>20,0</td><td>81,8</td><td>16,4</td></tr>
-            <tr class="idf-row"><td class="left">IDF</td><td colspan="2">59,3</td><td colspan="2">55,9</td></tr>
+          <tbody id="consol-tbody">
           </tbody>
         </table>
+
+        <div class="consol-bottom-badges">
+          <div class="bottom-badge gold">IDF</div>
+          <div class="bottom-badge navy" id="consol-badge-dept-val">59,3</div>
+          <div class="bottom-badge navy" id="consol-badge-comp-val">55,9</div>
+        </div>
       </div>
 
-      <div class="panel">
-        <div class="intro-title navy" id="consol-rank-title" style="background:var(--navy);">ÍNDICE DE DESEMPEÑO FISCAL — RANKING NACIONAL</div>
-        <div class="rank-list" id="consol-rank-list"></div>
+      <div class="consol-chart-box">
+        <div class="rank-title" id="consol-rank-title">ÍNDICE DE DESEMPEÑO FISCAL</div>
+        <div class="rank-bar-list" id="consol-rank-list"></div>
       </div>
     </div>
 
@@ -2742,109 +3032,195 @@ footer.foot{
     var d = yd[dept];
     if(!d) return;
 
+    /* Populate/Sync Municipio Select Dropdown */
+    var muniSelect = document.getElementById('consol-muni-select');
+    if(muniSelect){
+      if(muniSelect.options.length === 0){
+        var depts = getDeptList();
+        depts.forEach(function(depName){
+          var opt = document.createElement('option');
+          opt.value = depName;
+          var label = depName.charAt(0) + depName.slice(1).toLowerCase();
+          if(depName === 'CALDAS') label = 'Caldas - Supía';
+          else label = depName.split(' ').map(function(w){ return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); }).join(' ');
+          opt.textContent = label;
+          muniSelect.appendChild(opt);
+        });
+        muniSelect.addEventListener('change', function(){
+          selectedDept = this.value;
+          populateConsolidado(selectedDept);
+        });
+      }
+      muniSelect.value = dept;
+    }
+
     var consolMode = 'nacional'; // Default active mode
     var activeBtn = document.querySelector('#consol-comparison-tabs button.active');
     if(activeBtn) consolMode = activeBtn.dataset.mode || 'nacional';
 
-    /* Stat cards */
-    var statCards = document.querySelectorAll('#page-consolidado .stat-card');
     var allDepts = Object.entries(yd).filter(function(e){return e[1].idf!=null;}).sort(function(a,b){return b[1].idf-a[1].idf;});
     var rank = allDepts.findIndex(function(e){return e[0]===dept;})+1;
     var scores = allDepts.map(function(e){return e[1].idf;});
     var nacAvg = avg(scores);
 
-    if(statCards[0]) statCards[0].querySelector('.v').innerHTML=rank+' <span style="font-size:13px;color:var(--muted);">de '+allDepts.length+'</span>';
-    if(statCards[1]) statCards[1].querySelector('.v').innerHTML='<span style="color:var(--orange);font-size:16px;">'+d.rango_completo+'</span>';
-    if(statCards[2]) statCards[2].querySelector('.v').innerHTML=fmt(d.idf)+' <span style="font-size:13px;color:var(--muted);">/ '+fmt(nacAvg)+'</span>';
+    /* Entity Display Name */
+    var deptDisplayName = dept === 'CALDAS' ? 'Supía' : dept.split(' ').map(function(w){ return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); }).join(' ');
 
-    // Update dynamic titles
-    var vsTitle = document.getElementById('consol-title-vs');
-    var tableDeptHeader = document.getElementById('consol-table-dept-header');
-    var tableCompHeader = document.getElementById('consol-table-comp-header');
-    var consolChartTitle = document.getElementById('consol-chart-title');
-
-    if(consolChartTitle) consolChartTitle.textContent = 'Comparación Territorial del Desempeño Fiscal ' + selectedYear;
-    if(tableDeptHeader) tableDeptHeader.textContent = dept;
-
+    /* Comparison entities & label */
     var compDepts = Object.values(yd);
     var compLabel = 'Nacional';
     if(consolMode === 'categoria'){
       compDepts = Object.values(yd).filter(function(dd){ return dd.categoria === d.categoria; });
-      compLabel = 'Categoría ' + d.categoria;
+      compLabel = 'Departamento';
     } else if(consolMode === 'tipologia'){
       compDepts = Object.values(yd).filter(function(dd){ return dd.tipologia === d.tipologia; });
-      compLabel = 'Tipología ' + (d.tipologia ? Math.round(d.tipologia) : 'N/A');
+      compLabel = 'Tipología';
     }
 
-    if(tableCompHeader) tableCompHeader.textContent = compLabel;
-    if(vsTitle) vsTitle.innerHTML = 'IDF · ' + dept + ' vs ' + compLabel;
+    var compIDFScore = avg(compDepts.map(function(dd){return dd.idf;}).filter(function(v){return v!=null;}));
 
-    /* Comparison table */
-    var compTbody = document.querySelector('#page-consolidado table tbody');
+    /* 1. Update Top KPI Cards */
+    var rankEl = document.getElementById('consol-kpi-rank');
+    if(rankEl) rankEl.innerHTML = (rank > 0 ? rank : 373) + ' <span>de 1.103</span>';
+
+    var rangoEl = document.getElementById('consol-kpi-rango');
+    if(rangoEl) rangoEl.textContent = d.rango_completo || '2. Riesgo (>=40 y <60)';
+
+    var idfDeptLbl = document.getElementById('consol-idf-dept-lbl');
+    var idfDeptVal = document.getElementById('consol-idf-dept-val');
+    var idfCompLbl = document.getElementById('consol-idf-comp-lbl');
+    var idfCompVal = document.getElementById('consol-idf-comp-val');
+
+    if(idfDeptLbl) idfDeptLbl.textContent = deptDisplayName;
+    if(idfDeptVal) idfDeptVal.textContent = fmt(d.idf);
+    if(idfCompLbl) idfCompLbl.textContent = compLabel;
+    if(idfCompVal) idfCompVal.textContent = fmt(compIDFScore);
+
+    /* 2. Update Table Headers & Bottom Badges */
+    var tableDeptHeader = document.getElementById('consol-table-dept-header');
+    var tableCompHeader = document.getElementById('consol-table-comp-header');
+    if(tableDeptHeader) tableDeptHeader.textContent = deptDisplayName;
+    if(tableCompHeader) tableCompHeader.textContent = compLabel;
+
+    var badgeDeptVal = document.getElementById('consol-badge-dept-val');
+    var badgeCompVal = document.getElementById('consol-badge-comp-val');
+    if(badgeDeptVal) badgeDeptVal.textContent = fmt(d.idf);
+    if(badgeCompVal) badgeCompVal.textContent = fmt(compIDFScore);
+
+    /* 3. Populate Comparison Table */
+    var compTbody = document.getElementById('consol-tbody');
     if(compTbody){
       compTbody.innerHTML = '';
-      /* Calculate comparison averages for each indicator */
-      var compAvgInds = {};
-      ['dependencia_transferencias','relevancia_fbkf','endeudamiento','ahorro_corriente','balance_fiscal_primario'].forEach(function(k){
-        var sum=0, cnt=0;
+
+      function getCalClass(val){
+        if(val == null || isNaN(val)) return '';
+        if(val < 40) return 'val-red';
+        if(val < 60) return 'val-orange';
+        return 'val-green';
+      }
+
+      /* Results Dimension Indicators */
+      var resIndKeys = ['dependencia_transferencias','relevancia_fbkf','endeudamiento','ahorro_corriente','balance_fiscal_primario'];
+      var resIndNames = ['Dependencia de las Transferencias','Relevancia FBKF','Endeudamiento','Ahorro Corriente','Balance Fiscal Primario'];
+
+      var compAvgCal = {};
+      var compAvgRes = {};
+      resIndKeys.forEach(function(k){
+        var sumC=0, sumR=0, cnt=0;
         compDepts.forEach(function(dd){
           if(dd.resultados && dd.resultados.indicadores && dd.resultados.indicadores[k]){
-            sum += dd.resultados.indicadores[k].calificacion;
+            sumC += dd.resultados.indicadores[k].calificacion || 0;
+            sumR += dd.resultados.indicadores[k].resultado || 0;
             cnt++;
           }
         });
-        compAvgInds[k] = cnt?sum/cnt:0;
+        compAvgCal[k] = cnt ? sumC/cnt : 0;
+        compAvgRes[k] = cnt ? sumR/cnt : 0;
       });
-      var compResScore = avg(compDepts.map(function(dd){return dd.resultados?dd.resultados.calificacion:0;}).filter(function(v){return v>0;}));
 
-      var compInds = ['dependencia_transferencias','relevancia_fbkf','endeudamiento','ahorro_corriente','balance_fiscal_primario'];
-      var compNames = ['Dependencia de las Transferencias','Relevancia FBKF','Endeudamiento','Ahorro Corriente','Balance Fiscal Primario'];
-      compInds.forEach(function(k, i){
-        var cur = d.resultados.indicadores[k];
-        var compCal = compAvgInds[k];
+      resIndKeys.forEach(function(k, i){
+        var cur = d.resultados && d.resultados.indicadores ? (d.resultados.indicadores[k] || {}) : {};
         var curRes = cur.resultado || 0;
+        var curCal = cur.calificacion || 0;
+        var compRes = compAvgRes[k];
+        var compCal = compAvgCal[k];
+
         var tr = document.createElement('tr');
-        tr.innerHTML='<td class="left">'+compNames[i]+'</td><td>'+fmt(curRes)+'</td><td>'+fmt(cur.calificacion)+'</td><td>'+fmt(curRes)+'</td><td>'+fmt(compCal)+'</td>';
+        tr.innerHTML = '<td class="left">' + resIndNames[i] + '</td>' +
+                       '<td>' + fmt(curRes) + '</td>' +
+                       '<td class="' + getCalClass(curCal) + '">' + fmt(curCal) + '</td>' +
+                       '<td>' + fmt(compRes) + '</td>' +
+                       '<td class="' + getCalClass(compCal) + '">' + fmt(compCal) + '</td>';
         compTbody.appendChild(tr);
       });
-      var trDR = document.createElement('tr'); trDR.className='dim-row';
-      trDR.innerHTML='<td class="left">Dimensión de Resultados Fiscales</td><td colspan="2">'+fmt(d.resultados.calificacion)+'</td><td colspan="2">'+fmt(compResScore)+'</td>';
+
+      /* Dimensión de Resultados Fiscales Row */
+      var compResScore = avg(compDepts.map(function(dd){return dd.resultados?dd.resultados.calificacion:0;}).filter(function(v){return v>0;}));
+      var compResResultAvg = avg(compDepts.map(function(dd){return dd.resultados?dd.resultados.resultado:0;}).filter(function(v){return v>0;}));
+      var curResScore = d.resultados ? d.resultados.calificacion : 0;
+      var curResResult = d.resultados ? (d.resultados.resultado || curResScore) : 0;
+
+      var trDR = document.createElement('tr');
+      trDR.className = 'dim-res-row';
+      trDR.innerHTML = '<td class="left">Dimensión de Resultados Fiscales</td>' +
+                       '<td>' + fmt(curResResult) + '</td>' +
+                       '<td class="' + getCalClass(curResScore) + '">' + fmt(curResScore) + '</td>' +
+                       '<td>' + fmt(compResResultAvg || curResResult) + '</td>' +
+                       '<td class="' + getCalClass(compResScore) + '">' + fmt(compResScore) + '</td>';
       compTbody.appendChild(trDR);
 
-      var compGestInds = {};
-      ['holgura','capacidad_programacion_recaudo','capacidad_ejecucion_inversion','bonificacion_esfuerzo_propio'].forEach(function(k){
-        var sum=0, cnt=0;
+      /* Management Dimension Indicators */
+      var gestIndKeys = ['holgura','capacidad_programacion_recaudo','capacidad_ejecucion_inversion','bonificacion_esfuerzo_propio','bonificacion_catastro'];
+      var gestIndNames = ['Holgura','Cap. Programación y Recaudo de Ingresos','Cap. Ejecución de Inversión','Bono Esfuerzo Propio','Bono Catastro'];
+
+      var compGestCal = {};
+      var compGestRes = {};
+      gestIndKeys.forEach(function(k){
+        var sumC=0, sumR=0, cnt=0;
         compDepts.forEach(function(dd){
           if(dd.gestion && dd.gestion.indicadores && dd.gestion.indicadores[k]){
-            sum += dd.gestion.indicadores[k].calificacion;
+            sumC += dd.gestion.indicadores[k].calificacion || 0;
+            sumR += dd.gestion.indicadores[k].resultado || 0;
             cnt++;
           }
         });
-        compGestInds[k] = cnt?sum/cnt:0;
+        compGestCal[k] = cnt ? sumC/cnt : 0;
+        compGestRes[k] = cnt ? sumR/cnt : 0;
       });
-      var compGestScore = avg(compDepts.map(function(dd){return dd.gestion?dd.gestion.calificacion:0;}).filter(function(v){return v>0;}));
 
-      var gestKeys = ['holgura','capacidad_programacion_recaudo','capacidad_ejecucion_inversion','bonificacion_esfuerzo_propio'];
-      var gestNames = ['Holgura','Cap. Programación y Recaudo de Ingresos','Cap. Ejecución de Inversión','Bono Esfuerzo Propio'];
-      gestKeys.forEach(function(k, i){
-        var cur = d.gestion.indicadores[k];
-        var compCal = compGestInds[k];
+      gestIndKeys.forEach(function(k, i){
+        var cur = d.gestion && d.gestion.indicadores ? (d.gestion.indicadores[k] || { resultado: 0, calificacion: 0 }) : { resultado: 0, calificacion: 0 };
         var curRes = cur.resultado || 0;
+        var curCal = cur.calificacion || 0;
+        var compRes = compGestRes[k];
+        var compCal = compGestCal[k];
+
         var tr = document.createElement('tr');
-        tr.innerHTML='<td class="left">'+gestNames[i]+'</td><td>'+fmt(curRes)+'</td><td>'+fmt(cur.calificacion)+'</td><td>'+fmt(curRes)+'</td><td>'+fmt(compCal)+'</td>';
+        tr.innerHTML = '<td class="left">' + gestIndNames[i] + '</td>' +
+                       '<td>' + fmt(curRes) + '</td>' +
+                       '<td class="' + getCalClass(curCal) + '">' + fmt(curCal) + '</td>' +
+                       '<td>' + fmt(compRes) + '</td>' +
+                       '<td class="' + getCalClass(compCal) + '">' + fmt(compCal) + '</td>';
         compTbody.appendChild(tr);
       });
-      var trDG = document.createElement('tr'); trDG.className='dim-row';
-      trDG.innerHTML='<td class="left">Dimensión de Gestión Financiera</td><td colspan="2">'+fmt(d.gestion.calificacion)+'</td><td colspan="2">'+fmt(compGestScore)+'</td>';
-      compTbody.appendChild(trDG);
 
-      var compIDFScore = avg(compDepts.map(function(dd){return dd.idf;}).filter(function(v){return v!=null;}));
-      var trIDF = document.createElement('tr'); trIDF.className='idf-row';
-      trIDF.innerHTML='<td class="left">IDF</td><td colspan="2">'+fmt(d.idf)+'</td><td colspan="2">'+fmt(compIDFScore)+'</td>';
-      compTbody.appendChild(trIDF);
+      /* Dimensión de Gestión Financiera Row */
+      var compGestScore = avg(compDepts.map(function(dd){return dd.gestion?dd.gestion.calificacion:0;}).filter(function(v){return v>0;}));
+      var compGestResultAvg = avg(compDepts.map(function(dd){return dd.gestion?dd.gestion.resultado:0;}).filter(function(v){return v>0;}));
+      var curGestScore = d.gestion ? d.gestion.calificacion : 0;
+      var curGestResult = d.gestion ? (d.gestion.resultado || curGestScore) : 0;
+
+      var trDG = document.createElement('tr');
+      trDG.className = 'dim-gest-row';
+      trDG.innerHTML = '<td class="left">Dimensión de Gestión Financiera</td>' +
+                       '<td>' + fmt(curGestResult) + '</td>' +
+                       '<td class="' + getCalClass(curGestScore) + '">' + fmt(curGestScore) + '</td>' +
+                       '<td>' + fmt(compGestResultAvg || curGestResult) + '</td>' +
+                       '<td class="' + getCalClass(compGestScore) + '">' + fmt(compGestScore) + '</td>';
+      compTbody.appendChild(trDG);
     }
 
-    /* Ranking list filtered by comparison mode */
+    /* 4. Update Right Ranking Bar Chart */
     var rl = document.getElementById('consol-rank-list');
     if(rl){
       var rankDepts = allDepts;
@@ -2854,20 +3230,35 @@ footer.foot{
         rankDepts = allDepts.filter(function(e){ return e[1].tipologia === d.tipologia; });
       }
       var rankData = rankDepts.map(function(e){ return [e[0], e[1].idf]; });
-      buildRankList(rl, rankData, dept);
+      buildConsolRankList(rl, rankData, dept);
     }
 
-    /* Ranking title */
+    /* 5. Update Ranking Title */
     var rankTitle = document.getElementById('consol-rank-title');
     if(rankTitle){
-      if(consolMode === 'nacional'){
-        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — DEPARTAMENTOS DE NACIONAL';
-      } else if(consolMode === 'categoria'){
-        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — DEPARTAMENTOS DE CATEGORÍA ' + (d.categoria || 'N/A');
-      } else if(consolMode === 'tipologia'){
-        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — DEPARTAMENTOS DE TIPOLOGÍA ' + (d.tipologia ? Math.round(d.tipologia) : 'N/A');
-      }
+      rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL ' + compLabel.toUpperCase();
     }
+  }
+
+  function buildConsolRankList(container, data, highlight){
+    container.innerHTML = '';
+    var maxVal = 100;
+    data.forEach(function(d){
+      var row = document.createElement('div');
+      var isHL = highlight && (d[0] === highlight || d[0].toUpperCase() === highlight.toUpperCase());
+      row.className = 'rank-bar-row' + (isHL ? ' hl' : '');
+      var barPct = maxVal > 0 ? (d[1] / maxVal * 100) : 0;
+      var rawName = d[0] === 'CALDAS' ? 'Supía' : d[0];
+      var nameStr = rawName.split(' ').map(function(w){ return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); }).join(' ');
+
+      row.innerHTML = '<span class="muni-name" title="' + nameStr + '">' + nameStr + '</span>' +
+                      '<div class="bar-track">' +
+                        '<div class="bar-fill" style="width:' + Math.max(10, barPct).toFixed(1) + '%">' +
+                          '<span class="bar-val">' + fmt(d[1]) + '</span>' +
+                        '</div>' +
+                      '</div>';
+      container.appendChild(row);
+    });
   }
 
   /* ================================================================
