@@ -570,10 +570,22 @@ td.left, th.left{text-align:left;}
 
 
 /* distribution table bottom */
-.dist-table{border-collapse:collapse;width:100%;}
-.dist-table th{background:#10356c;color:#fff;padding:8px 10px;font-size:11px;text-align:center;}
-.dist-table td{padding:7px 10px;font-size:11.5px;text-align:center;border-bottom:1px solid var(--line);}
-.dist-table td.range-name{text-align:left;font-weight:600;}
+.dist-table{border-collapse:collapse;width:100%;border:1px solid #d0d0d0;}
+.dist-table th{color:#fff;padding:10px 12px;font-size:11.5px;text-align:center;font-weight:700;border:1px solid #d0d0d0;}
+.dist-table th.th-green{background:#e0e0e0;color:#333;}
+.dist-table th.th-purple{background:#ab2493;}
+.dist-table td{padding:8px 12px;font-size:12px;text-align:center;border:1px solid #d0d0d0;background:#fff;}
+.dist-table td.range-name{text-align:left;font-weight:700;}
+.dist-table td.col-ant{background:#fff;}
+.dist-table td.col-var{background:#fff;}
+.dist-table .range-deterioro{color:#e8530e;}
+.dist-table .range-riesgo{color:#d4a017;}
+.dist-table .range-vulnerable{color:#7b3fa0;}
+.dist-table .range-solvente{color:#1565c0;}
+.dist-table .range-sostenible{color:#1b8a3e;}
+/* tipología table */
+.tipologia-table th{background:#154d8a;}
+.tipologia-table td.tip-val{font-weight:700;color:var(--navy);}
 /* CSV download buttons */
 .csv-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:linear-gradient(135deg,#1c7b2c,#35bb5a);color:#fff;border:none;border-radius:4px;font-size:11.5px;font-weight:700;cursor:pointer;letter-spacing:.2px;box-shadow:0 2px 5px rgba(28,123,44,.25);transition:filter .15s,transform .1s;}
 .csv-btn:hover{filter:brightness(1.1);transform:translateY(-1px);}
@@ -631,19 +643,36 @@ td.left, th.left{text-align:left;}
   box-shadow:0 1px 2px rgba(0,0,0,0.04);
 }
 .idf-card{
+  display:flex;
+  align-items:stretch;
+  border:2px solid var(--pink);
+  border-radius:6px;
+  overflow:hidden;
+}
+.idf-card .idf-label{
   background:var(--pink);
   color:#fff;
-  border-radius:6px;
-  padding:10px 18px;
+  font-weight:900;
+  font-size:15px;
+  letter-spacing:.5px;
+  padding:10px 16px;
   display:flex;
   align-items:center;
-  gap:16px;
-  box-shadow:0 2px 8px rgba(239,4,124,.22);
 }
-.idf-card .lbl{font-weight:900;font-size:15px;letter-spacing:.5px;padding-right:10px;border-right:1px solid rgba(255,255,255,.3);}
-.idf-card .metric{text-align:center;}
-.idf-card .metric .n{font-size:20px;font-weight:900;line-height:1.1;}
-.idf-card .metric .t{font-size:9.5px;opacity:.9;margin-top:2px;font-weight:600;}
+.idf-card .idf-metrics{
+  display:flex;
+  align-items:stretch;
+}
+.idf-card .idf-metric{
+  text-align:center;
+  padding:10px 18px;
+  border-left:2px solid var(--pink);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.idf-card .idf-metric .n{font-size:20px;font-weight:900;line-height:1.1;color:var(--navy);}
+.idf-card .idf-metric .t{font-size:9.5px;margin-top:2px;font-weight:600;color:var(--muted);}
 
 .select-boxes{
   display:grid;
@@ -706,12 +735,12 @@ td.left, th.left{text-align:left;}
 
 .fin-table{padding:0;}
 .fin-table table{font-size:11px;border-collapse:collapse;width:100%;}
-.fin-table th{background:var(--navy);color:#fff;font-weight:700;font-size:10px;padding:7px 6px;border:1px solid var(--line);text-transform:uppercase;letter-spacing:.3px;}
+.fin-table th{background:var(--navy);color:#fff;font-weight:700;font-size:10px;padding:7px 6px;border:1px solid #b0b8c9;text-transform:uppercase;letter-spacing:.3px;}
 .fin-table th:last-child{border-left:1px solid var(--line);}
 .fin-table th.col-group{border-top:1px solid var(--line);}
 .fin-table th.sub-year{border-top:1px solid var(--line);font-size:9.5px;text-transform:none;letter-spacing:0;}
 .fin-table th.sub-year:first-child{border-left:1px solid var(--line);}
-.fin-table td{padding:6px 8px;border:1px solid var(--line);text-align:center;font-weight:700;font-size:11px;color:var(--navy);}
+.fin-table td{padding:6px 8px;border:1px solid #b0b8c9;text-align:center;font-weight:700;font-size:11px;color:var(--navy);}
 .fin-table td.left{font-weight:800;text-align:left;font-size:10.5px;color:var(--navy);vertical-align:top;padding-top:10px;}
 .fin-table td.varcell{font-size:9px;line-height:1.4;text-align:left;color:#6b7688;font-weight:400;vertical-align:top;padding:8px;}
 .fin-table td.varcell .vg{margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--line);}
@@ -762,14 +791,15 @@ td.left, th.left{text-align:left;}
 .tab-row button:not(:last-child){border-right:none;}
 
 /* Consolidado comparison table */
-.consol-layout table{border-collapse:collapse;width:100%;font-size:11px;border:1px solid var(--line);}
-.consol-layout table th{background:var(--navy);color:#fff;font-weight:700;font-size:10px;padding:7px 8px;border:1px solid var(--line);}
+.consol-layout table{border-collapse:collapse;width:100%;font-size:11px;border:1px solid #b0b8c9;}
+.consol-layout table th{background:var(--navy);color:#fff;font-weight:700;font-size:10px;padding:8px 6px;border:1px solid #b0b8c9;}
 .consol-layout table th.left{text-align:left;}
-.consol-layout table td{padding:6px 8px;border:1px solid var(--line);text-align:center;font-weight:700;font-size:11px;color:var(--navy);}
+.consol-layout table td{padding:7px 6px;border:1px solid #b0b8c9;text-align:center;font-weight:700;font-size:11px;color:var(--navy);}
 .consol-layout table td.left{text-align:left;font-weight:800;font-size:10.5px;}
-.consol-layout table tr.dim-row td{background:#1c2f57 !important;color:#fff !important;font-weight:800;}
-.consol-layout table tr.idf-row td{background:#fff !important;border:2px solid var(--navy) !important;font-weight:900;font-size:14px;}
+.consol-layout table tr.dim-row td{background:#1c2f57 !important;color:#fff !important;font-weight:800;border:1px solid #1c2f57;}
+.consol-layout table tr.idf-row td{background:#f5f7fa !important;border:2px solid var(--navy) !important;font-weight:900;font-size:14px;color:var(--navy) !important;}
 .consol-layout table tr.idf-row td.left{font-size:13px;}
+.consol-layout table tr.dim-row td.left{color:#fff !important;}
 
 /* Ranking bar chart */
 .rank-list{padding:6px 0;}
@@ -1023,10 +1053,10 @@ footer.foot{
     </div>
 
     <div class="panel">
-      <div class="intro-title" id="dist-inst-title">DISTRIBUCIÓN POR RANGOS DE DESEMPEÑO IDF — AÑO 2024</div>
+      <div class="intro-title green" id="dist-inst-title">DISTRIBUCIÓN POR RANGOS DE DESEMPEÑO IDF — AÑO 2024</div>
       <table class="dist-table">
         <thead>
-          <tr><th class="left">Rango de desempeño</th><th>Cantidad</th><th>% del total</th><th>IDF prom.</th><th>Cant. año ant.</th><th>Var. cant.</th></tr>
+          <tr><th class="th-green left">Rango de desempeño</th><th class="th-green">Cantidad</th><th class="th-green">% del total</th><th class="th-green">IDF prom.</th><th class="th-purple">Cant. año ant.</th><th class="th-purple">Var. cant.</th></tr>
         </thead>
         <tbody id="dist-inst-tbody"></tbody>
       </table>
@@ -1051,11 +1081,13 @@ footer.foot{
         <button class="csv-btn" id="ficha-csv-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 19h14"/></svg>Descargar CSV</button>
       </div>
       <div class="idf-card">
-        <div class="lbl">IDF</div>
-        <div class="metric"><div class="n">–</div><div class="t" id="ficha-prev-year">–</div></div>
-        <div class="metric"><div class="n">–</div><div class="t" id="ficha-cur-year">2024</div></div>
-        <div class="metric"><div class="n">–</div><div class="t">δ</div></div>
-        <div class="metric"><div class="n">–</div><div class="t">%</div></div>
+        <div class="idf-label">IDF</div>
+        <div class="idf-metrics">
+          <div class="idf-metric"><div class="t" id="ficha-prev-year">–</div><div class="n">–</div></div>
+          <div class="idf-metric"><div class="t" id="ficha-cur-year">2024</div><div class="n">–</div></div>
+          <div class="idf-metric"><div class="t">δ</div><div class="n">–</div></div>
+          <div class="idf-metric"><div class="t">%</div><div class="n">–</div></div>
+        </div>
       </div>
     </div>
 
@@ -1215,7 +1247,7 @@ footer.foot{
         <div class="side">
           <div class="cap">Promedio Categoría</div>
           <div class="badge-orange">30,6</div>
-          <div class="body">Promedio de la categoría Ley 617 de 2000 para la calificación de Holgura: corresponde al promedio de Holgura Resultado de los municipios pertenecientes a la misma categoría Ley 617 del municipio seleccionado.</div>
+          <div class="body">Promedio de la categoría Ley 617 de 2000 para la calificación de Holgura: corresponde al promedio de Holgura Resultado de los departamentos pertenecientes a la misma categoría Ley 617 del municipio seleccionado.</div>
           <div class="legend">
             <div><span class="dot" style="background:var(--green-dk)"></span>Crece</div>
             <div><span class="dot" style="background:var(--red)"></span>Disminuye</div>
@@ -2193,73 +2225,85 @@ footer.foot{
     var subEl = document.getElementById('tipologia-sub');
     if(!container) return;
     var prevYear = String(parseInt(selectedYear)-1);
-    if(subEl) subEl.textContent = 'Año seleccionado: '+selectedYear+' vs. Año anterior: '+prevYear;
+    if(subEl) subEl.textContent = 'Promedio municipal por tipología y vigencia — años '+prevYear+' y '+selectedYear;
 
     var yd = idfData.records[selectedYear] || {};
     var prevYd = idfData.records[prevYear] || {};
 
-    /* Collect tipología data for selected year */
+    /* Compute Nacional average for both years */
+    var natSelArr = Object.values(yd).map(function(d){ return d.idf; }).filter(function(v){ return v!=null; });
+    var natPrevArr = Object.values(prevYd).map(function(d){ return d.idf; }).filter(function(v){ return v!=null; });
+    var natSel = natSelArr.length ? avg(natSelArr) : null;
+    var natPrev = natPrevArr.length ? avg(natPrevArr) : null;
+    var natCount = natSelArr.length;
+    var natPrevCount = natPrevArr.length;
+
+    /* Collect per-tipología averages for both years */
     var tipsSel = {};
     var tipsPrev = {};
-    var totalSel = 0, totalPrev = 0;
     Object.keys(yd).forEach(function(k){
       var t = yd[k].tipologia;
       if(t && t!=='N/A' && t!==null){
-        var tk = 'Tipología '+Math.round(t);
+        var tk = Math.round(t);
         if(!tipsSel[tk]) tipsSel[tk] = {sum:0, count:0};
-        if(yd[k].idf!=null){ tipsSel[tk].sum += yd[k].idf; tipsSel[tk].count++; totalSel++; }
+        if(yd[k].idf!=null){ tipsSel[tk].sum += yd[k].idf; tipsSel[tk].count++; }
       }
     });
     Object.keys(prevYd).forEach(function(k){
       var t = prevYd[k].tipologia;
       if(t && t!=='N/A' && t!==null){
-        var tk = 'Tipología '+Math.round(t);
+        var tk = Math.round(t);
         if(!tipsPrev[tk]) tipsPrev[tk] = {sum:0, count:0};
-        if(prevYd[k].idf!=null){ tipsPrev[tk].sum += prevYd[k].idf; tipsPrev[tk].count++; totalPrev++; }
+        if(prevYd[k].idf!=null){ tipsPrev[tk].sum += prevYd[k].idf; tipsPrev[tk].count++; }
       }
     });
 
-    var tipKeys = Object.keys(tipsSel).sort();
-    if(tipKeys.length === 0){
+    var tipKeys = Object.keys(tipsSel).sort(function(a,b){ return Number(a)-Number(b); });
+    if(tipKeys.length === 0 && natSel == null){
       container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">No hay datos de tipología disponibles para '+selectedYear+'. Las tipologías solo están asignadas a partir de 2024.</div>';
       return;
     }
 
-    var html = '<table class="dist-table" style="width:100%;"><thead><tr>';
+    var tipColors = ['#043c7c','#6436a1','#e8298a','#28a745','#0e7c66','#f86f0b'];
+
+    var html = '<table class="dist-table tipologia-table"><thead><tr>';
     html += '<th class="left">Tipología</th><th>IDF '+selectedYear+'</th><th>IDF '+prevYear+'</th><th>Var. (pp)</th><th>Deptos.</th><th>% del Total</th>';
     html += '</tr></thead><tbody>';
-    var totalDeptos = 0;
-    tipKeys.forEach(function(tk){
+
+    /* Nacional row */
+    var natVar = (natSel!=null && natPrev!=null) ? natSel-natPrev : null;
+    var natVarCls = natVar!=null ? (natVar>=0?'pos':'neg') : '';
+    var natVarStr = natVar!=null ? (natVar>=0?'+':'')+fmt(natVar) : '-';
+    html += '<tr class="tip-row-nacional">';
+    html += '<td class="range-name">Nacional</td>';
+    html += '<td class="tip-val">'+fmt(natSel)+'</td>';
+    html += '<td class="tip-val">'+(natPrev!=null?fmt(natPrev):'-')+'</td>';
+    html += '<td class="'+natVarCls+'">'+natVarStr+'</td>';
+    html += '<td>'+natCount+'</td>';
+    html += '<td>100%</td>';
+    html += '</tr>';
+
+    /* Per-tipología rows */
+    var totalSel = natCount;
+    tipKeys.forEach(function(tk, i){
       var selAvg = tipsSel[tk].count>0 ? tipsSel[tk].sum/tipsSel[tk].count : null;
       var prevAvg = tipsPrev[tk] && tipsPrev[tk].count>0 ? tipsPrev[tk].sum/tipsPrev[tk].count : null;
       var deptos = tipsSel[tk].count;
-      totalDeptos += deptos;
       var varPP = (selAvg!=null && prevAvg!=null) ? selAvg-prevAvg : null;
       var varCls = varPP!=null ? (varPP>=0?'pos':'neg') : '';
       var varStr = varPP!=null ? (varPP>=0?'+':'')+fmt(varPP) : '-';
+      var pct = totalSel>0 ? (deptos/totalSel*100) : 0;
+      var color = tipColors[i % tipColors.length];
       html += '<tr>';
-      html += '<td class="range-name">'+tk+'</td>';
-      html += '<td>'+fmt(selAvg)+'</td>';
-      html += '<td>'+(prevAvg!=null?fmt(prevAvg):'-')+'</td>';
+      html += '<td class="range-name" style="color:'+color+';">Tipología '+tk+'</td>';
+      html += '<td class="tip-val">'+fmt(selAvg)+'</td>';
+      html += '<td class="tip-val">'+(prevAvg!=null?fmt(prevAvg):'-')+'</td>';
       html += '<td class="'+varCls+'">'+varStr+'</td>';
       html += '<td>'+deptos+'</td>';
-      html += '<td>'+(totalSel>0?fmtPct(deptos/totalSel*100):'-')+'</td>';
+      html += '<td>'+fmtPct(pct)+'</td>';
       html += '</tr>';
     });
-    /* Total row */
-    var allSelAvg = totalSel>0 ? tipKeys.reduce(function(s,tk){ return s+(tipsSel[tk].sum||0); },0)/totalSel : null;
-    var allPrevAvg = totalPrev>0 ? tipKeys.reduce(function(s,tk){ return s+(tipsPrev[tk]?tipsPrev[tk].sum:0); },0)/totalPrev : null;
-    var totalVar = (allSelAvg!=null && allPrevAvg!=null) ? allSelAvg-allPrevAvg : null;
-    var totalVarCls = totalVar!=null ? (totalVar>=0?'pos':'neg') : '';
-    var totalVarStr = totalVar!=null ? (totalVar>=0?'+':'')+fmt(totalVar) : '-';
-    html += '<tr style="font-weight:700;border-top:2px solid var(--line);">';
-    html += '<td class="range-name">TOTAL</td>';
-    html += '<td>'+fmt(allSelAvg)+'</td>';
-    html += '<td>'+(allPrevAvg!=null?fmt(allPrevAvg):'-')+'</td>';
-    html += '<td class="'+totalVarCls+'">'+totalVarStr+'</td>';
-    html += '<td>'+totalSel+'</td>';
-    html += '<td>100%</td>';
-    html += '</tr>';
+
     html += '</tbody></table>';
     container.innerHTML = html;
   }
@@ -2306,8 +2350,9 @@ footer.foot{
       var diff = c - prevC;
       var cls = diff>0?'pos':diff<0?'neg':'';
       var sign = diff>0?'+'+diff:String(diff);
+      var rangeCls = 'range-'+rd.r.toLowerCase();
       var tr = document.createElement('tr');
-      tr.innerHTML='<td class="range-name">'+rd.label+'</td><td>'+c+'</td><td>'+fmtPct(p)+'</td><td>'+(avgV!=null?fmt(avgV):'-')+'</td><td>'+prevC+'</td><td class="'+cls+'">'+sign+'</td>';
+      tr.innerHTML='<td class="range-name '+rangeCls+'">'+rd.label+'</td><td>'+c+'</td><td>'+fmtPct(p)+'</td><td>'+(avgV!=null?fmt(avgV):'-')+'</td><td class="col-ant">'+prevC+'</td><td class="col-var '+cls+'">'+sign+'</td>';
       tbody.appendChild(tr);
     });
     var distTitle = document.getElementById('dist-inst-title');
@@ -2461,18 +2506,22 @@ footer.foot{
     /* IDF card */
     var idfCard = document.querySelector('#page-ficha .idf-card');
     if(idfCard){
-      var metrics = idfCard.querySelectorAll('.metric');
+      var metrics = idfCard.querySelectorAll('.idf-metric');
       if(metrics[0]) metrics[0].querySelector('.n').textContent = prevD ? fmt(prevD.idf) : '–';
       if(metrics[0]) metrics[0].querySelector('.t').textContent = prevY;
       if(metrics[1]) metrics[1].querySelector('.n').textContent = fmt(d.idf);
       if(metrics[1]) metrics[1].querySelector('.t').textContent = selectedYear;
       if(metrics[2]){
         var delta = prevD ? (d.idf - prevD.idf) : null;
-        metrics[2].querySelector('.n').textContent = delta!==null ? (delta>=0?'+':'')+fmt(delta) : '–';
+        var deltaEl = metrics[2].querySelector('.n');
+        deltaEl.textContent = delta!==null ? (delta>=0?'+':'')+fmt(delta) : '–';
+        deltaEl.style.color = delta!==null ? (delta>=0?'var(--green-dk)':'var(--red)') : '';
       }
       if(metrics[3]){
         var pctChange = prevD && prevD.idf ? ((d.idf - prevD.idf)/prevD.idf*100) : null;
-        metrics[3].querySelector('.n').textContent = pctChange!==null ? (pctChange>=0?'+':'')+fmtPct(pctChange) : '–';
+        var pctEl = metrics[3].querySelector('.n');
+        pctEl.textContent = pctChange!==null ? (pctChange>=0?'+':'')+fmtPct(pctChange) : '–';
+        pctEl.style.color = pctChange!==null ? (pctChange>=0?'var(--green-dk)':'var(--red)') : '';
       }
     }
 
@@ -2601,7 +2650,7 @@ footer.foot{
       var avgHolgura = avg(holguras);
       if(side2Badge) side2Badge.textContent = fmt(avgHolgura > 0 ? avgHolgura : 30.6);
       if(side2Cap) side2Cap.textContent = 'Promedio Categoría';
-      if(side2Body) side2Body.textContent = 'Promedio de la categoría Ley 617 de 2000 para la calificación de Holgura: corresponde al promedio de Holgura Resultado de los municipios pertenecientes a la misma categoría Ley 617 del municipio seleccionado.';
+      if(side2Body) side2Body.textContent = 'Promedio de la categoría Ley 617 de 2000 para la calificación de Holgura: corresponde al promedio de Holgura Resultado de los departamentos pertenecientes a la misma categoría Ley 617 del municipio seleccionado.';
     }
 
     /* Trend tables */
@@ -2812,11 +2861,11 @@ footer.foot{
     var rankTitle = document.getElementById('consol-rank-title');
     if(rankTitle){
       if(consolMode === 'nacional'){
-        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — MUNICIPIOS DE NACIONAL';
+        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — DEPARTAMENTOS DE NACIONAL';
       } else if(consolMode === 'categoria'){
-        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — MUNICIPIOS DE CATEGORÍA ' + (d.categoria || 'N/A');
+        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — DEPARTAMENTOS DE CATEGORÍA ' + (d.categoria || 'N/A');
       } else if(consolMode === 'tipologia'){
-        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — MUNICIPIOS DE TIPOLOGÍA ' + (d.tipologia ? Math.round(d.tipologia) : 'N/A');
+        rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL — DEPARTAMENTOS DE TIPOLOGÍA ' + (d.tipologia ? Math.round(d.tipologia) : 'N/A');
       }
     }
   }
