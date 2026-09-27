@@ -27,14 +27,15 @@
   --gold:#c98a1d;
 }
 *{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
+html,body{margin:0;padding:0;width:100%;overflow-x:hidden;}
 body{
   font-family:"Segoe UI",Roboto,Arial,Helvetica,sans-serif;
   background:var(--bg);
   color:var(--text);
   font-size:13px;
+  width:100%;
 }
-.app{max-width:1300px;margin:0 auto;padding:14px 14px 40px;}
+.app{width:100%;max-width:100%;margin:0;padding:14px 16px 40px;box-sizing:border-box;}
 
 /* ===== TOP NAV ===== */
 .topnav{
@@ -624,7 +625,7 @@ td.left, th.left{text-align:left;}
   border:1px solid var(--line);
 }
 .ficha-header h2{margin:0 0 4px;color:var(--navy);font-size:16px;font-weight:800;}
-.ficha-header p{margin:0;color:var(--muted);font-size:11.5px;max-width:620px;line-height:1.45;}
+.ficha-header p{margin:0;color:var(--muted);font-size:11.5px;max-width:100%;line-height:1.45;}
 .departamento-select{
   display:flex;
   flex-direction:column;
@@ -764,149 +765,197 @@ td.left, th.left{text-align:left;}
 
 /* ================= CONSOLIDADO ================= */
 #page-consolidado {
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: "Segoe UI", Roboto, -apple-system, sans-serif;
   background: var(--bg);
+  width: 100%;
 }
-.consol-header-sub {
-  color: var(--muted);
-  font-size: 12.5px;
-  margin-bottom: 14px;
-  font-style: italic;
+
+/* Top KPI Row */
+.consol-kpi-row {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1.4fr;
+  gap: 14px;
+  margin-bottom: 16px;
+  width: 100%;
 }
-.consol-top-bar {
+
+.consol-kpi-box {
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(20,30,60,.06);
+  border: 1px solid #e2e8f0;
+  min-height: 64px;
+}
+
+/* Card 1: Ranking + Rango */
+.consol-kpi-rank-box {
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.kpi-micro-hdr {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #10356c;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.kpi-rank-val-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.kpi-rank-big {
+  font-size: 28px;
+  font-weight: 900;
+  color: #10356c;
+  line-height: 1;
+}
+.kpi-rank-denom {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+}
+.rango-pill {
+  background: #35bb5a;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+/* Card 2: Magenta IDF Card */
+.consol-kpi-idf-box {
+  border: 2px solid #ef047c;
+  display: flex;
+  overflow: hidden;
+  align-items: stretch;
+}
+.idf-tag-badge {
+  background: #ef047c;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 17px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+}
+.idf-vals-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 6px 12px;
+}
+.idf-val-entry {
+  text-align: center;
+  flex: 1;
+}
+.idf-val-entry.border-l {
+  border-left: 1px solid #fed7ea;
+}
+.idf-val-lbl {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1c2438;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+}
+.idf-val-num {
+  font-size: 24px;
+  font-weight: 900;
+  color: #10356c;
+  line-height: 1.1;
+}
+
+/* Card 3: View & Variation Info */
+.consol-kpi-view-box {
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.consol-year-badge {
+  background: #ef047c;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 11.5px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(239,4,124,.25);
+  flex-shrink: 0;
+}
+.consol-view-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.consol-view-title {
+  font-size: 10px;
+  font-weight: 800;
+  color: #10356c;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.consol-view-desc {
+  font-size: 9.5px;
+  color: #64748b;
+  line-height: 1.3;
+}
+.consol-view-stat {
+  font-size: 11px;
+  font-weight: 800;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.consol-view-stat.neg { color: #dc2626; }
+.consol-view-stat.neut { color: #64748b; }
+
+/* Controls Bar: Tabs on Left, Selectors on Right */
+.consol-controls-bar {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   flex-wrap: wrap;
+  width: 100%;
 }
-.muni-select-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.muni-select-wrap label {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--navy);
-}
-.muni-select-wrap select {
-  padding: 8px 14px;
-  border: 1px solid #d0d7de;
-  border-radius: 4px;
-  font-size: 13.5px;
-  color: var(--text);
-  background: #fff;
-  min-width: 250px;
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(20,30,60,.06);
-}
-.consol-cards-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.stat-card-kpi {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 8px 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 58px;
-  box-shadow: 0 1px 3px rgba(20,30,60,.05);
-}
-.stat-card-kpi .lbl {
-  font-size: 9.5px;
-  font-weight: 800;
-  color: var(--muted);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  margin-bottom: 2px;
-}
-.stat-card-kpi .val-rank {
-  font-size: 26px;
-  font-weight: 900;
-  color: var(--navy);
-  line-height: 1;
-}
-.stat-card-kpi .val-rank span {
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--muted);
-}
-.rango-pill {
-  background: #ee8e16;
-  color: #fff;
-  font-weight: 700;
-  font-size: 11.5px;
-  padding: 5px 12px;
-  border-radius: 16px;
-  display: inline-block;
-  white-space: nowrap;
-}
-/* IDF Pink Card */
-.idf-card-pink {
-  border: 2px solid #ef047c;
-  border-radius: 6px;
-  background: #fff;
-  display: flex;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(20,30,60,.05);
-  min-height: 58px;
-}
-.idf-card-pink .idf-badge-hdr {
-  background: #ef047c;
-  color: #fff;
-  font-weight: 900;
-  font-size: 16px;
-  padding: 8px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.idf-card-pink .idf-vals-row {
-  display: flex;
-  align-items: center;
-  padding: 4px 14px;
-  gap: 14px;
-}
-.idf-card-pink .idf-val-col {
-  text-align: center;
-}
-.idf-card-pink .idf-val-col .lbl {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--muted);
-  margin-bottom: 1px;
-}
-.idf-card-pink .idf-val-col .num {
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--navy);
-  line-height: 1.1;
-}
-
-/* Tabs */
 .consol-tabs-row {
-  display: flex;
-  border: 2px solid #10356c;
-  border-radius: 3px;
+  display: inline-flex;
+  border: 1.5px solid #10356c;
+  border-radius: 4px;
   overflow: hidden;
-  width: fit-content;
-  margin-bottom: 16px;
-  background: #fff;
+  background: #ffffff;
 }
 .consol-tabs-row button {
-  padding: 10px 36px;
-  background: #fff;
+  padding: 9px 24px;
+  background: #ffffff;
   color: #10356c;
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 700;
   border: none;
-  border-right: 1px solid #10356c;
+  border-right: 1.5px solid #10356c;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -917,20 +966,53 @@ td.left, th.left{text-align:left;}
   background: #2b2b2b;
   color: #ffffff;
 }
+.consol-selectors-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.consol-select-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.consol-select-item label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #10356c;
+}
+.consol-select-item select {
+  padding: 7px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 12.5px;
+  color: #1e293b;
+  background: #ffffff;
+  min-width: 110px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.consol-select-item select#consol-dept-select {
+  min-width: 200px;
+}
 
-/* Layout Grid */
+/* Main Grid Layout */
 .consol-grid {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
   gap: 16px;
   align-items: start;
+  width: 100%;
 }
 .consol-table-box {
-  background: #fff;
+  background: #ffffff;
   border: 1px solid #d0d7de;
   border-radius: 4px;
   padding: 14px;
   box-shadow: 0 1px 3px rgba(20,30,60,.05);
+  overflow-x: auto;
+  width: 100%;
 }
 table.consol-table {
   width: 100%;
@@ -939,11 +1021,11 @@ table.consol-table {
   border: 1px solid #b0b8c9;
 }
 table.consol-table th {
-  background: #fff;
-  color: var(--navy);
+  background: #f8fafc;
+  color: #10356c;
   font-weight: 800;
-  font-size: 11px;
-  padding: 8px 8px;
+  font-size: 11.5px;
+  padding: 8px;
   border: 1px solid #b0b8c9;
   text-align: center;
 }
@@ -956,11 +1038,12 @@ table.consol-table th.sub-hdr {
   font-size: 10.5px;
 }
 table.consol-table td {
-  padding: 6.5px 8px;
+  padding: 6px 8px;
   border: 1px solid #b0b8c9;
   text-align: center;
   font-weight: 700;
-  color: var(--navy);
+  color: #10356c;
+  font-size: 11px;
 }
 table.consol-table td.left {
   text-align: left;
@@ -970,112 +1053,319 @@ table.consol-table td.left {
 table.consol-table tr.dim-res-row td {
   background: #eef2f7 !important;
   font-weight: 900 !important;
-  color: var(--navy) !important;
+  color: #10356c !important;
 }
 table.consol-table tr.dim-gest-row td {
   background: #fde8f2 !important;
   font-weight: 900 !important;
-  color: var(--navy) !important;
+  color: #10356c !important;
+}
+.sub-bono-text {
+  font-size: 8.5px;
+  color: #c026d3;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-top: 2px;
 }
 
-/* Calificacion text colors */
-.val-red { color: #d32f2f !important; font-weight: 800; }
+/* Qualification Text Colors */
 .val-green { color: #2e7d32 !important; font-weight: 800; }
 .val-orange { color: #ee8e16 !important; font-weight: 800; }
+.val-red { color: #d32f2f !important; font-weight: 800; }
+.val-gray { color: #94a3b8 !important; font-weight: 700; }
 
-/* Bottom summary badges under table */
+/* Bottom Badges */
 .consol-bottom-badges {
   display: flex;
   align-items: center;
   justify-content: space-around;
   margin-top: 14px;
-  padding-top: 12px;
-  border-top: 3px solid #10356c;
+  margin-bottom: 12px;
+  padding-top: 10px;
+  border-top: 2px solid #10356c;
 }
 .bottom-badge {
-  border-radius: 8px;
-  padding: 6px 20px;
-  font-size: 15px;
+  border-radius: 6px;
+  padding: 6px 24px;
+  font-size: 16px;
   font-weight: 900;
   text-align: center;
-  background: #fff;
+  background: #ffffff;
   min-width: 90px;
 }
 .bottom-badge.gold {
-  border: 2px solid #c98a1d;
-  color: #c98a1d;
+  border: 2px solid #eab308;
+  color: #ca8a04;
 }
 .bottom-badge.navy {
   border: 2px solid #10356c;
   color: #10356c;
-  font-size: 17px;
+  font-size: 18px;
 }
+
+/* Qualification Legend Box */
+.consol-calif-legend {
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 8px 12px;
+  background: #ffffff;
+  margin-top: 8px;
+}
+.calif-legend-title {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #10356c;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.calif-legend-items {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 10.5px;
+  color: #475569;
+  font-weight: 600;
+}
+.calif-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.calif-sq {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.sq-green { background: #35bb5a; }
+.sq-orange { background: #ee8e16; }
+.sq-red { background: #f4443c; }
+.sq-gray { background: #cbd5e1; border: 1px solid #94a3b8; }
 
 /* Right Chart Container */
 .consol-chart-box {
-  background: #fff;
+  background: #ffffff;
   border: 1px solid #d0d7de;
-  border-radius: 4px;
-  padding: 16px;
+  border-radius: 6px;
+  padding: 16px 18px;
   box-shadow: 0 1px 3px rgba(20,30,60,.05);
+  width: 100%;
 }
-.consol-chart-box .rank-title {
-  color: #10356c;
-  font-size: 13.5px;
-  font-weight: 900;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
+.consol-rank-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eef2f6;
 }
+.rank-main-title {
+  color: #0b2d64;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+.rank-trend-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #374151;
+}
+.trend-leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.tri-symbol {
+  font-size: 9.5px;
+  line-height: 1;
+}
+.tri-symbol.green { color: #16a34a; }
+.tri-symbol.red { color: #dc2626; }
+.tri-symbol.gray { color: #64748b; }
+
 .rank-bar-list {
-  max-height: 510px;
+  max-height: 590px;
   overflow-y: auto;
   padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5px;
 }
+.rank-bar-list::-webkit-scrollbar {
+  width: 5px;
+}
+.rank-bar-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+.rank-bar-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.rank-bar-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
 .rank-bar-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 5px;
-  font-size: 11px;
+  padding: 3px 6px;
+  font-size: 11.5px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+  min-height: 27px;
+  box-sizing: border-box;
 }
-.rank-bar-row .muni-name {
-  width: 140px;
+.rank-bar-row:hover {
+  background: #f8fafc;
+}
+.rank-bar-row.hl {
+  border: 2px solid #ef047c !important;
+  border-radius: 8px;
+  background: #ffffff;
+}
+.rank-row-num {
+  width: 22px;
+  text-align: right;
+  font-weight: 800;
+  color: #374151;
+  font-size: 11.5px;
+  flex-shrink: 0;
+}
+.rank-bar-row.hl .rank-row-num {
+  color: #ef047c;
+  font-weight: 900;
+}
+.rank-row-name {
+  width: 135px;
   text-align: right;
   font-weight: 600;
-  color: #334155;
+  color: #374151;
+  font-size: 11.5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex-shrink: 0;
+  padding-right: 4px;
 }
-.rank-bar-row .bar-track {
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-.rank-bar-row .bar-fill {
-  background: #35bb5a;
-  height: 16px;
-  border-radius: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 6px;
-  min-width: 28px;
-}
-.rank-bar-row .bar-val {
-  color: #fff;
-  font-weight: 800;
-  font-size: 10px;
-}
-.rank-bar-row.hl .muni-name {
+.rank-bar-row.hl .rank-row-name {
   color: #ef047c;
   font-weight: 800;
 }
-.rank-bar-row.hl .bar-fill {
-  background: #ef047c;
+.hl-diamond {
+  color: #ef047c;
+  font-size: 9px;
+  margin-right: 4px;
+  display: inline-block;
+  vertical-align: middle;
 }
+.rank-row-track {
+  flex: 1;
+  height: 15px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  min-width: 100px;
+  overflow: hidden;
+}
+.rank-row-fill {
+  height: 100%;
+  border-radius: 4px 0 0 4px;
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.rank-row-score {
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 0 6px;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  z-index: 2;
+}
+.rank-row-var {
+  width: 68px;
+  padding-left: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  justify-content: flex-start;
+}
+.rank-row-var.pos { color: #16a34a; }
+.rank-row-var.neg { color: #dc2626; }
+.rank-row-var.neut { color: #64748b; }
+
+/* ====== Ranking Tooltip ====== */
+.rank-tooltip {
+  display: none;
+  position: fixed;
+  z-index: 99999;
+  pointer-events: none;
+  background: linear-gradient(145deg, #0f2447, #1a3a6b);
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px 15px;
+  min-width: 205px;
+  max-width: 230px;
+  box-shadow: 0 6px 28px rgba(10, 22, 60, 0.45), 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.14);
+  font-family: inherit;
+  font-size: 12px;
+}
+.rank-tt-header {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 9px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+  letter-spacing: 0.1px;
+}
+.rank-tt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 2.5px 0;
+  font-size: 11.5px;
+}
+.rank-tt-lbl {
+  color: #93c5fd;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.rank-tt-val {
+  color: #ffffff;
+  font-weight: 700;
+  text-align: right;
+}
+.rank-tt-var-row .rank-tt-val {
+  font-size: 12px;
+  font-weight: 800;
+}
+.rank-tt-divider {
+  border-top: 1px solid rgba(255,255,255,0.14);
+  margin: 6px 0 4px;
+}
+.rank-tt-rank {
+  background: rgba(255,255,255,0.12);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
 
 .stat-card{
   background:var(--card);
@@ -1091,12 +1381,45 @@ table.consol-table tr.dim-gest-row td {
 
 /* ================= DISTRIBUCION ================= */
 .dist-top{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;}
-@media(max-width:1100px){.dist-top{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:560px){.dist-top{grid-template-columns:1fr;}}
 .dist-filters{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px;}
 .dist-filters .f label{display:block;font-size:12px;color:var(--navy);font-weight:700;margin-bottom:4px;}
 .dist-filters .f select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:3px;font-size:12.5px;color:#37415a;}
 .dist-layout{display:grid;grid-template-columns:2fr 1fr;gap:14px;align-items:start;}
+
+/* ===== RESPONSIVE MEDIA QUERIES FOR 100% WIDTH FLEXIBILITY ===== */
+@media(max-width:1100px){
+  .dist-top{grid-template-columns:repeat(2,1fr);}
+  .consol-grid{grid-template-columns:1fr;}
+}
+@media(max-width:960px){
+  .fin-grid{grid-template-columns:1fr;}
+  .fin-grid .side{border-left:none;border-top:1px solid var(--line);}
+  .dist-filters{grid-template-columns:repeat(2,1fr);}
+  .dist-layout{grid-template-columns:1fr;}
+}
+@media(max-width:880px){
+  .hero{grid-template-columns:1fr;text-align:center;}
+  .hero-left,.hero-links,.hero-logos{grid-column:1;}
+  .hero-links{padding:14px 20px;align-items:center;}
+  .hero-logos{padding:14px 20px;}
+  .rangos-wrap{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:768px){
+  .split80{grid-template-columns:1fr;}
+  .split80 .col.left{border-right:none;border-bottom:1px solid var(--line);}
+  .select-boxes{grid-template-columns:1fr;}
+}
+@media(max-width:640px){
+  .topnav{flex-wrap:wrap;}
+  .topnav button{flex:1 1 calc(50% - 6px);padding:10px 6px;font-size:12px;}
+  .rangos-wrap{grid-template-columns:repeat(2,1fr);}
+  .dist-top{grid-template-columns:1fr;}
+  .dist-filters{grid-template-columns:1fr;}
+}
+@media(max-width:420px){
+  .topnav button{flex:1 1 100%;}
+  .rangos-wrap{grid-template-columns:1fr;}
+}
 .map-wrap{padding:10px;position:relative;}
 .dist-bars{padding:14px 16px;}
 .dist-bars h4{margin:0 0 10px;color:var(--navy);font-size:12.5px;}
@@ -1344,7 +1667,7 @@ footer.foot{
   <div class="page" id="page-ficha">
 
     <div class="ficha-header">
-      <div style="max-width:480px;">
+      <div style="flex:1;min-width:250px;">
         <h2 id="ficha-title-vigencia">Índice de Desempeño Fiscal — IDF — Vigencia 2024:</h2>
         <p>El Índice de Desempeño Fiscal permite medir la gestión fiscal y financiera de las entidades territoriales, considerando variables como viabilidad fiscal, generación de recursos propios, endeudamiento, inversión y programación de los recursos.</p>
       </div>
@@ -1552,59 +1875,85 @@ footer.foot{
   <!-- ================= PAGE 3: CONSOLIDADO ================= -->
   <div class="page" id="page-consolidado">
 
-    <div class="consol-header-sub">
-      a nivel nacional, departamental y por tipologías.
-    </div>
-
-    <div class="consol-top-bar">
-      <div class="muni-select-wrap">
-        <label for="consol-muni-select">Municipio</label>
-        <select id="consol-muni-select"></select>
-      </div>
-
-      <div class="consol-cards-row">
-        <div class="stat-card-kpi">
-          <div class="lbl">RANKING NACIONAL</div>
-          <div class="val-rank" id="consol-kpi-rank">373 <span>de 1.103</span></div>
-        </div>
-
-        <div class="stat-card-kpi">
-          <div class="lbl">RANGO</div>
-          <div>
-            <span class="rango-pill" id="consol-kpi-rango">2. Riesgo (>=40 y &lt;60)</span>
+    <!-- Top KPI Cards (3 cards matching reference) -->
+    <div class="consol-kpi-row">
+      <!-- Card 1: Ranking & Rango -->
+      <div class="consol-kpi-box consol-kpi-rank-box">
+        <div class="kpi-rank-col">
+          <div class="kpi-micro-hdr">RANKING DEPARTAMENTO</div>
+          <div class="kpi-rank-val-row">
+            <span class="kpi-rank-big" id="consol-kpi-rank-num">8</span>
+            <span class="kpi-rank-denom" id="consol-kpi-rank-total">de 33</span>
           </div>
         </div>
-
-        <div class="idf-card-pink">
-          <div class="idf-badge-hdr">IDF</div>
-          <div class="idf-vals-row">
-            <div class="idf-val-col">
-              <div class="lbl" id="consol-idf-dept-lbl">Supía</div>
-              <div class="num" id="consol-idf-dept-val">59,3</div>
-            </div>
-            <div class="idf-val-col">
-              <div class="lbl" id="consol-idf-comp-lbl">Nacional</div>
-              <div class="num" id="consol-idf-comp-val">55,9</div>
-            </div>
+        <div class="kpi-rango-col">
+          <div class="kpi-micro-hdr">RANGO</div>
+          <div class="kpi-rango-pill-wrap">
+            <span class="rango-pill" id="consol-kpi-rango">4. Solvente (>=70 y &lt;80)</span>
           </div>
         </div>
       </div>
+
+      <!-- Card 2: Magenta IDF Badge & Comparisons -->
+      <div class="consol-kpi-box consol-kpi-idf-box">
+        <div class="idf-tag-badge">IDF</div>
+        <div class="idf-vals-container">
+          <div class="idf-val-entry">
+            <div class="idf-val-lbl" id="consol-idf-dept-lbl">Antioquia</div>
+            <div class="idf-val-num" id="consol-idf-dept-val">74,76</div>
+          </div>
+          <div class="idf-val-entry border-l">
+            <div class="idf-val-lbl" id="consol-idf-comp-lbl">Nacional</div>
+            <div class="idf-val-num" id="consol-idf-comp-val">59,37</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Active View / Variation Info -->
+      <div class="consol-kpi-box consol-kpi-view-box">
+        <div class="consol-year-badge" id="consol-kpi-year-range">2023 — 2024</div>
+        <div class="consol-view-content">
+          <div class="consol-view-title" id="consol-view-title">VISTA ACTIVA: DEPARTAMENTO · ANTIOQUIA · 33 DEPARTAMENTOS</div>
+          <div class="consol-view-desc" id="consol-view-desc">El gráfico conserva todos los departamentos del nivel seleccionado y resalta el departamento elegido.</div>
+          <div class="consol-view-stat" id="consol-view-stat">
+            <span class="tri-symbol green" id="consol-view-tri">▲</span>
+            <span id="consol-view-stat-text">IDF departamento: +5,03</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="consol-tabs-row" id="consol-comparison-tabs">
-      <button data-mode="categoria">Departamento</button>
-      <button class="active" data-mode="nacional">Nacional</button>
-      <button data-mode="tipologia">Tipología</button>
+    <!-- Controls Row: Tabs on Left + Selectors on Right -->
+    <div class="consol-controls-bar">
+      <div class="consol-tabs-row" id="consol-comparison-tabs">
+        <button class="active" data-mode="categoria">Departamento</button>
+        <button data-mode="nacional">Nacional</button>
+        <button data-mode="tipologia">Tipología</button>
+      </div>
+
+      <div class="consol-selectors-group">
+        <div class="consol-select-item">
+          <label for="consol-year-select">Año</label>
+          <select id="consol-year-select"></select>
+        </div>
+        <div class="consol-select-item">
+          <label for="consol-dept-select">Departamento</label>
+          <select id="consol-dept-select"></select>
+        </div>
+        <button class="csv-btn" id="consol-csv-btn" style="height:34px;align-self:flex-end;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 19h14"/></svg>Descargar CSV</button>
+      </div>
     </div>
 
+    <!-- Main Grid: Left Table vs Right Ranking -->
     <div class="consol-grid">
+      <!-- Left Column: Table + Badges + Legend -->
       <div class="consol-table-box">
         <table class="consol-table">
           <thead>
             <tr>
               <th class="left" rowspan="2">Indicador</th>
-              <th colspan="2" id="consol-table-dept-header" style="background:#fff;color:#10356c;font-size:12px;">Supía</th>
-              <th colspan="2" id="consol-table-comp-header" style="background:#fff;color:#10356c;font-size:12px;">Nacional</th>
+              <th colspan="2" id="consol-table-dept-header">Antioquia</th>
+              <th colspan="2" id="consol-table-comp-header">Nacional</th>
             </tr>
             <tr>
               <th class="sub-hdr">Resultado</th>
@@ -1613,19 +1962,38 @@ footer.foot{
               <th class="sub-hdr">Calificación</th>
             </tr>
           </thead>
-          <tbody id="consol-tbody">
-          </tbody>
+          <tbody id="consol-tbody"></tbody>
         </table>
 
+        <!-- Bottom IDF 3 Badges -->
         <div class="consol-bottom-badges">
           <div class="bottom-badge gold">IDF</div>
-          <div class="bottom-badge navy" id="consol-badge-dept-val">59,3</div>
-          <div class="bottom-badge navy" id="consol-badge-comp-val">55,9</div>
+          <div class="bottom-badge navy" id="consol-badge-dept-val">74,76</div>
+          <div class="bottom-badge navy" id="consol-badge-comp-val">59,37</div>
+        </div>
+
+        <!-- Legend -->
+        <div class="consol-calif-legend">
+          <div class="calif-legend-title">LEYENDA DE CALIFICACIÓN</div>
+          <div class="calif-legend-items">
+            <span class="calif-item"><span class="calif-sq sq-green"></span> Alta: &gt;= 60</span>
+            <span class="calif-item"><span class="calif-sq sq-orange"></span> Media: 40 a 59,99</span>
+            <span class="calif-item"><span class="calif-sq sq-red"></span> Baja: &lt; 40</span>
+            <span class="calif-item"><span class="calif-sq sq-gray"></span> Sin dato</span>
+          </div>
         </div>
       </div>
 
+      <!-- Right Column: Chart / Ranking List -->
       <div class="consol-chart-box">
-        <div class="rank-title" id="consol-rank-title">ÍNDICE DE DESEMPEÑO FISCAL</div>
+        <div class="consol-rank-header">
+          <div class="rank-main-title" id="consol-rank-title">ÍNDICE DE DESEMPEÑO FISCAL</div>
+          <div class="rank-trend-legend">
+            <span class="trend-leg-item"><span class="tri-symbol green">▲</span> Crece</span>
+            <span class="trend-leg-item"><span class="tri-symbol red">▼</span> Disminuye</span>
+            <span class="trend-leg-item"><span class="tri-symbol gray">—</span> Igual</span>
+          </div>
+        </div>
         <div class="rank-bar-list" id="consol-rank-list"></div>
       </div>
     </div>
@@ -1694,7 +2062,7 @@ footer.foot{
     <div class="dist-layout">
         <div class="panel map-wrap" style="position:relative;">
           <div id="map-year-label" class="map-year-label"></div>
-          <svg id="colombia-map" viewBox="0 0 420 520" style="width:100%;height:auto;"></svg>
+          <svg id="colombia-map" viewBox="0 0 420 520"></svg>
         <div id="mapTooltip">
           <div class="tt-dept" id="tt-dept-name">–</div>
           <div class="tt-row"><span class="tt-lbl" id="tt-cur-year-lbl">2024</span><span class="tt-val" id="tt-cur-idf">–</span></div>
@@ -3023,80 +3391,176 @@ footer.foot{
     }
   }
 
+  /* Helper for Department Title Case */
+  function formatDeptName(rawName){
+    if(!rawName) return '';
+    var clean = rawName.trim();
+    if(clean.toUpperCase() === 'BOGOTA D.C.' || clean.toUpperCase() === 'BOGOTÁ D.C.') return 'Bogotá D.C.';
+    if(clean.toUpperCase() === 'SAN ANDRES' || clean.toUpperCase() === 'SAN ANDRÉS') return 'San Andrés';
+    if(clean.toUpperCase() === 'NORTE DE SANTANDER') return 'Norte de Santander';
+    if(clean.toUpperCase() === 'VALLE DEL CAUCA') return 'Valle del Cauca';
+    if(clean.toUpperCase() === 'LA GUAJIRA' || clean.toUpperCase() === 'GUAJIRA') return 'La Guajira';
+    return clean.split(' ').map(function(w){
+      var lw = w.toLowerCase();
+      if(lw === 'de' || lw === 'del' || lw === 'y' || lw === 'la' || lw === 'los' || lw === 'las') return lw;
+      return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+    }).join(' ');
+  }
+
+  function getRangoColorByScore(score){
+    if(score == null || isNaN(score)) return '#cbd5e1';
+    if(score >= 80) return IDF_COLORS.Sostenible || '#1c7b2c';
+    if(score >= 70) return IDF_COLORS.Solvente || '#35bb5a';
+    if(score >= 60) return IDF_COLORS.Vulnerable || '#ab2493';
+    if(score >= 40) return IDF_COLORS.Riesgo || '#ee8e16';
+    return IDF_COLORS.Deterioro || '#f4443c';
+  }
+
+  /* Tooltip Floating Handler for Consolidado */
+  var consolTooltipEl = null;
+
   /* ================================================================
      POPULATE CONSOLIDADO
      ================================================================ */
   function populateConsolidado(dept){
-    if(!dept || !idfData) return;
+    if(!idfData) return;
+    var allYears = (idfData.meta && idfData.meta.anios) ? idfData.meta.anios : Object.keys(idfData.records).sort();
+    if(!selectedYear) selectedYear = allYears[allYears.length - 1];
     var yd = idfData.records[selectedYear] || {};
+    var deptsList = getDeptList();
+    if(!dept || !yd[dept]) {
+      dept = deptsList[0] || 'ANTIOQUIA';
+      selectedDept = dept;
+    }
     var d = yd[dept];
     if(!d) return;
 
-    /* Populate/Sync Municipio Select Dropdown */
-    var muniSelect = document.getElementById('consol-muni-select');
-    if(muniSelect){
-      if(muniSelect.options.length === 0){
-        var depts = getDeptList();
-        depts.forEach(function(depName){
+    /* Previous Year Data for Variation Calculations */
+    var curYearIdx = allYears.indexOf(String(selectedYear));
+    var prevYear = (curYearIdx > 0) ? allYears[curYearIdx - 1] : null;
+    var prevYd = prevYear ? (idfData.records[prevYear] || {}) : null;
+
+    /* Populate and Sync Selectors */
+    var yearSelect = document.getElementById('consol-year-select');
+    if(yearSelect){
+      if(yearSelect.options.length === 0){
+        allYears.forEach(function(yr){
+          var opt = document.createElement('option');
+          opt.value = yr;
+          opt.textContent = yr;
+          yearSelect.appendChild(opt);
+        });
+        yearSelect.addEventListener('change', function(){
+          selectedYear = this.value;
+          updatePage('consolidado');
+        });
+      }
+      yearSelect.value = selectedYear;
+    }
+
+    var deptSelect = document.getElementById('consol-dept-select') || document.getElementById('consol-muni-select');
+    if(deptSelect){
+      if(deptSelect.options.length === 0){
+        deptsList.forEach(function(depName){
           var opt = document.createElement('option');
           opt.value = depName;
-          var label = depName.charAt(0) + depName.slice(1).toLowerCase();
-          if(depName === 'CALDAS') label = 'Caldas - Supía';
-          else label = depName.split(' ').map(function(w){ return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); }).join(' ');
-          opt.textContent = label;
-          muniSelect.appendChild(opt);
+          opt.textContent = formatDeptName(depName);
+          deptSelect.appendChild(opt);
         });
-        muniSelect.addEventListener('change', function(){
+        deptSelect.addEventListener('change', function(){
           selectedDept = this.value;
           populateConsolidado(selectedDept);
         });
       }
-      muniSelect.value = dept;
+      deptSelect.value = dept;
     }
 
-    var consolMode = 'nacional'; // Default active mode
+    /* Comparison Mode */
+    var consolMode = 'categoria';
     var activeBtn = document.querySelector('#consol-comparison-tabs button.active');
-    if(activeBtn) consolMode = activeBtn.dataset.mode || 'nacional';
+    if(activeBtn) consolMode = activeBtn.dataset.mode || 'categoria';
 
-    var allDepts = Object.entries(yd).filter(function(e){return e[1].idf!=null;}).sort(function(a,b){return b[1].idf-a[1].idf;});
-    var rank = allDepts.findIndex(function(e){return e[0]===dept;})+1;
-    var scores = allDepts.map(function(e){return e[1].idf;});
-    var nacAvg = avg(scores);
+    /* Department Name Formatted */
+    var deptDisplayName = formatDeptName(dept);
 
-    /* Entity Display Name */
-    var deptDisplayName = dept === 'CALDAS' ? 'Supía' : dept.split(' ').map(function(w){ return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); }).join(' ');
+    /* Full Ranking of ALL Departments in the year (Never filtered, always all 32 departments) */
+    var allDepts = Object.entries(yd).filter(function(e){ return e[1].idf != null; }).sort(function(a,b){ return b[1].idf - a[1].idf; });
+    var deptRank = allDepts.findIndex(function(e){ return e[0] === dept; }) + 1;
+    var totalDepts = allDepts.length;
 
-    /* Comparison entities & label */
+    /* Filter Entities for TABLE COMPARISON only */
     var compDepts = Object.values(yd);
     var compLabel = 'Nacional';
+
     if(consolMode === 'categoria'){
       compDepts = Object.values(yd).filter(function(dd){ return dd.categoria === d.categoria; });
-      compLabel = 'Departamento';
+      compLabel = (d.categoria ? ('Categoría ' + d.categoria) : 'Departamento');
     } else if(consolMode === 'tipologia'){
       compDepts = Object.values(yd).filter(function(dd){ return dd.tipologia === d.tipologia; });
-      compLabel = 'Tipología';
+      compLabel = (d.tipologia && d.tipologia !== 'N/A' ? ('Tipología ' + d.tipologia) : 'Tipología');
     }
 
-    var compIDFScore = avg(compDepts.map(function(dd){return dd.idf;}).filter(function(v){return v!=null;}));
+    var compIDFScore = avg(compDepts.map(function(dd){ return dd.idf; }).filter(function(v){ return v != null; }));
+    var curIDF = d.idf;
+    var prevIDF = (prevYd && prevYd[dept]) ? prevYd[dept].idf : null;
+    var idfDelta = (curIDF != null && prevIDF != null) ? (curIDF - prevIDF) : null;
 
-    /* 1. Update Top KPI Cards */
-    var rankEl = document.getElementById('consol-kpi-rank');
-    if(rankEl) rankEl.innerHTML = (rank > 0 ? rank : 373) + ' <span>de 1.103</span>';
+    /* 1. Update Card 1 (Ranking + Rango) */
+    var rankNumEl = document.getElementById('consol-kpi-rank-num');
+    var rankTotalEl = document.getElementById('consol-kpi-rank-total');
+    if(rankNumEl) rankNumEl.textContent = deptRank;
+    if(rankTotalEl) rankTotalEl.textContent = 'de ' + totalDepts;
 
     var rangoEl = document.getElementById('consol-kpi-rango');
-    if(rangoEl) rangoEl.textContent = d.rango_completo || '2. Riesgo (>=40 y <60)';
+    if(rangoEl){
+      rangoEl.textContent = d.rango_completo || (getRango(curIDF) ? (getRango(curIDF) + ' (' + fmt(curIDF) + ')') : '–');
+      rangoEl.style.background = getRangoColorByScore(curIDF);
+    }
 
+    /* 2. Update Card 2 (Magenta IDF Card) */
     var idfDeptLbl = document.getElementById('consol-idf-dept-lbl');
     var idfDeptVal = document.getElementById('consol-idf-dept-val');
     var idfCompLbl = document.getElementById('consol-idf-comp-lbl');
     var idfCompVal = document.getElementById('consol-idf-comp-val');
 
     if(idfDeptLbl) idfDeptLbl.textContent = deptDisplayName;
-    if(idfDeptVal) idfDeptVal.textContent = fmt(d.idf);
+    if(idfDeptVal) idfDeptVal.textContent = fmt(curIDF);
     if(idfCompLbl) idfCompLbl.textContent = compLabel;
     if(idfCompVal) idfCompVal.textContent = fmt(compIDFScore);
 
-    /* 2. Update Table Headers & Bottom Badges */
+    /* 3. Update Card 3 (Active View Info & Default Variation) */
+    function renderCard3Default(){
+      var yrRangeEl = document.getElementById('consol-kpi-year-range');
+      if(yrRangeEl) yrRangeEl.textContent = prevYear ? (prevYear + ' — ' + selectedYear) : selectedYear;
+
+      var viewTitleEl = document.getElementById('consol-view-title');
+      if(viewTitleEl) viewTitleEl.textContent = 'VISTA ACTIVA: DEPARTAMENTO · ' + deptDisplayName.toUpperCase() + ' · ' + totalDepts + ' DEPARTAMENTOS';
+
+      var viewDescEl = document.getElementById('consol-view-desc');
+      if(viewDescEl) viewDescEl.textContent = 'El gráfico conserva todos los departamentos del nivel seleccionado y resalta el departamento elegido.';
+
+      var viewStatEl = document.getElementById('consol-view-stat');
+      if(viewStatEl){
+        if(idfDelta != null){
+          if(idfDelta > 0){
+            viewStatEl.className = 'consol-view-stat';
+            viewStatEl.innerHTML = '<span class="tri-symbol green">▲</span> <span>IDF departamento: +' + fmt(idfDelta) + '</span>';
+          } else if(idfDelta < 0){
+            viewStatEl.className = 'consol-view-stat neg';
+            viewStatEl.innerHTML = '<span class="tri-symbol red">▼</span> <span>IDF departamento: ' + fmt(idfDelta) + '</span>';
+          } else {
+            viewStatEl.className = 'consol-view-stat neut';
+            viewStatEl.innerHTML = '<span class="tri-symbol gray">—</span> <span>IDF departamento: 0,00</span>';
+          }
+        } else {
+          viewStatEl.className = 'consol-view-stat neut';
+          viewStatEl.innerHTML = '<span class="tri-symbol gray">—</span> <span>IDF departamento: ' + fmt(curIDF) + '</span>';
+        }
+      }
+    }
+    renderCard3Default();
+
+    /* 4. Update Table Headers & Bottom Badges */
     var tableDeptHeader = document.getElementById('consol-table-dept-header');
     var tableCompHeader = document.getElementById('consol-table-comp-header');
     if(tableDeptHeader) tableDeptHeader.textContent = deptDisplayName;
@@ -3104,19 +3568,19 @@ footer.foot{
 
     var badgeDeptVal = document.getElementById('consol-badge-dept-val');
     var badgeCompVal = document.getElementById('consol-badge-comp-val');
-    if(badgeDeptVal) badgeDeptVal.textContent = fmt(d.idf);
+    if(badgeDeptVal) badgeDeptVal.textContent = fmt(curIDF);
     if(badgeCompVal) badgeCompVal.textContent = fmt(compIDFScore);
 
-    /* 3. Populate Comparison Table */
+    /* 5. Populate Comparison Table */
     var compTbody = document.getElementById('consol-tbody');
     if(compTbody){
       compTbody.innerHTML = '';
 
       function getCalClass(val){
-        if(val == null || isNaN(val)) return '';
-        if(val < 40) return 'val-red';
-        if(val < 60) return 'val-orange';
-        return 'val-green';
+        if(val == null || isNaN(val)) return 'val-gray';
+        if(val >= 60) return 'val-green';
+        if(val >= 40) return 'val-orange';
+        return 'val-red';
       }
 
       /* Results Dimension Indicators */
@@ -3134,16 +3598,16 @@ footer.foot{
             cnt++;
           }
         });
-        compAvgCal[k] = cnt ? sumC/cnt : 0;
-        compAvgRes[k] = cnt ? sumR/cnt : 0;
+        compAvgCal[k] = cnt ? (sumC/cnt) : 0;
+        compAvgRes[k] = cnt ? (sumR/cnt) : 0;
       });
 
       resIndKeys.forEach(function(k, i){
-        var cur = d.resultados && d.resultados.indicadores ? (d.resultados.indicadores[k] || {}) : {};
+        var cur = (d.resultados && d.resultados.indicadores) ? (d.resultados.indicadores[k] || {}) : {};
         var curRes = cur.resultado || 0;
         var curCal = cur.calificacion || 0;
-        var compRes = compAvgRes[k];
-        var compCal = compAvgCal[k];
+        var compRes = compAvgRes[k] || 0;
+        var compCal = compAvgCal[k] || 0;
 
         var tr = document.createElement('tr');
         tr.innerHTML = '<td class="left">' + resIndNames[i] + '</td>' +
@@ -3155,10 +3619,10 @@ footer.foot{
       });
 
       /* Dimensión de Resultados Fiscales Row */
-      var compResScore = avg(compDepts.map(function(dd){return dd.resultados?dd.resultados.calificacion:0;}).filter(function(v){return v>0;}));
-      var compResResultAvg = avg(compDepts.map(function(dd){return dd.resultados?dd.resultados.resultado:0;}).filter(function(v){return v>0;}));
+      var compResScore = avg(compDepts.map(function(dd){return dd.resultados ? dd.resultados.calificacion : 0;}).filter(function(v){return v>0;}));
+      var compResResultAvg = avg(compDepts.map(function(dd){return dd.resultados ? (dd.resultados.resultado || dd.resultados.score || 0) : 0;}).filter(function(v){return v>0;}));
       var curResScore = d.resultados ? d.resultados.calificacion : 0;
-      var curResResult = d.resultados ? (d.resultados.resultado || curResScore) : 0;
+      var curResResult = d.resultados ? (d.resultados.resultado || d.resultados.score || curResScore) : 0;
 
       var trDR = document.createElement('tr');
       trDR.className = 'dim-res-row';
@@ -3184,16 +3648,16 @@ footer.foot{
             cnt++;
           }
         });
-        compGestCal[k] = cnt ? sumC/cnt : 0;
-        compGestRes[k] = cnt ? sumR/cnt : 0;
+        compGestCal[k] = cnt ? (sumC/cnt) : 0;
+        compGestRes[k] = cnt ? (sumR/cnt) : 0;
       });
 
       gestIndKeys.forEach(function(k, i){
-        var cur = d.gestion && d.gestion.indicadores ? (d.gestion.indicadores[k] || { resultado: 0, calificacion: 0 }) : { resultado: 0, calificacion: 0 };
+        var cur = (d.gestion && d.gestion.indicadores) ? (d.gestion.indicadores[k] || { resultado: 0, calificacion: 0 }) : { resultado: 0, calificacion: 0 };
         var curRes = cur.resultado || 0;
         var curCal = cur.calificacion || 0;
-        var compRes = compGestRes[k];
-        var compCal = compGestCal[k];
+        var compRes = compGestRes[k] || 0;
+        var compCal = compGestCal[k] || 0;
 
         var tr = document.createElement('tr');
         tr.innerHTML = '<td class="left">' + gestIndNames[i] + '</td>' +
@@ -3205,58 +3669,217 @@ footer.foot{
       });
 
       /* Dimensión de Gestión Financiera Row */
-      var compGestScore = avg(compDepts.map(function(dd){return dd.gestion?dd.gestion.calificacion:0;}).filter(function(v){return v>0;}));
-      var compGestResultAvg = avg(compDepts.map(function(dd){return dd.gestion?dd.gestion.resultado:0;}).filter(function(v){return v>0;}));
-      var curGestScore = d.gestion ? d.gestion.calificacion : 0;
-      var curGestResult = d.gestion ? (d.gestion.resultado || curGestScore) : 0;
+      var compGestCalAvg = avg(compDepts.map(function(dd){return dd.gestion ? dd.gestion.calificacion : 0;}).filter(function(v){return v>0;}));
+      var compGestScoreAvg = avg(compDepts.map(function(dd){return dd.gestion ? (dd.gestion.score || dd.gestion.resultado || 0) : 0;}).filter(function(v){return v>0;}));
+      var compGestBonosAvg = avg(compDepts.map(function(dd){return dd.gestion ? (dd.gestion.gestion_mas_bonos || dd.gestion.resultado_con_bonos || dd.gestion.score || 0) : 0;}).filter(function(v){return v>0;}));
+
+      var curGestCal = d.gestion ? d.gestion.calificacion : 0;
+      var curGestScore = d.gestion ? (d.gestion.score || d.gestion.resultado || 0) : 0;
+      var curGestBonos = d.gestion ? (d.gestion.gestion_mas_bonos || d.gestion.resultado_con_bonos || curGestScore) : 0;
 
       var trDG = document.createElement('tr');
       trDG.className = 'dim-gest-row';
       trDG.innerHTML = '<td class="left">Dimensión de Gestión Financiera</td>' +
-                       '<td>' + fmt(curGestResult) + '</td>' +
-                       '<td class="' + getCalClass(curGestScore) + '">' + fmt(curGestScore) + '</td>' +
-                       '<td>' + fmt(compGestResultAvg || curGestResult) + '</td>' +
-                       '<td class="' + getCalClass(compGestScore) + '">' + fmt(compGestScore) + '</td>';
+                       '<td>' + fmt(curGestScore) + '<div class="sub-bono-text">Resultado + bonos: ' + fmt(curGestBonos) + '</div></td>' +
+                       '<td class="' + getCalClass(curGestCal) + '">' + fmt(curGestCal) + '</td>' +
+                       '<td>' + fmt(compGestScoreAvg) + '<div class="sub-bono-text">Resultado + bonos: ' + fmt(compGestBonosAvg) + '</div></td>' +
+                       '<td class="' + getCalClass(compGestCalAvg) + '">' + fmt(compGestCalAvg) + '</td>';
       compTbody.appendChild(trDG);
     }
 
-    /* 4. Update Right Ranking Bar Chart */
+    /* 6. Update Right Ranking Bar Chart with ALL DEPARTMENTS */
     var rl = document.getElementById('consol-rank-list');
     if(rl){
-      var rankDepts = allDepts;
-      if(consolMode === 'categoria'){
-        rankDepts = allDepts.filter(function(e){ return e[1].categoria === d.categoria; });
-      } else if(consolMode === 'tipologia'){
-        rankDepts = allDepts.filter(function(e){ return e[1].tipologia === d.tipologia; });
-      }
-      var rankData = rankDepts.map(function(e){ return [e[0], e[1].idf]; });
-      buildConsolRankList(rl, rankData, dept);
+      buildConsolRankList(rl, allDepts, dept, prevYd, renderCard3Default);
     }
 
-    /* 5. Update Ranking Title */
+    /* 7. Update Ranking Title */
     var rankTitle = document.getElementById('consol-rank-title');
     if(rankTitle){
-      rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL ' + compLabel.toUpperCase();
+      rankTitle.textContent = 'ÍNDICE DE DESEMPEÑO FISCAL';
     }
   }
 
-  function buildConsolRankList(container, data, highlight){
-    container.innerHTML = '';
-    var maxVal = 100;
-    data.forEach(function(d){
-      var row = document.createElement('div');
-      var isHL = highlight && (d[0] === highlight || d[0].toUpperCase() === highlight.toUpperCase());
-      row.className = 'rank-bar-row' + (isHL ? ' hl' : '');
-      var barPct = maxVal > 0 ? (d[1] / maxVal * 100) : 0;
-      var rawName = d[0] === 'CALDAS' ? 'Supía' : d[0];
-      var nameStr = rawName.split(' ').map(function(w){ return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); }).join(' ');
+  function buildConsolRankList(container, data, highlight, prevYd, resetCard3Callback){
+    if(!consolTooltipEl){
+      consolTooltipEl = document.getElementById('consol-tooltip');
+      if(!consolTooltipEl){
+        consolTooltipEl = document.createElement('div');
+        consolTooltipEl.id = 'consol-tooltip';
+        consolTooltipEl.className = 'rank-tooltip';
+        document.body.appendChild(consolTooltipEl);
+      }
+    }
 
-      row.innerHTML = '<span class="muni-name" title="' + nameStr + '">' + nameStr + '</span>' +
-                      '<div class="bar-track">' +
-                        '<div class="bar-fill" style="width:' + Math.max(10, barPct).toFixed(1) + '%">' +
-                          '<span class="bar-val">' + fmt(d[1]) + '</span>' +
-                        '</div>' +
+    container.innerHTML = '';
+    var totalCount = data.length;
+
+    data.forEach(function(item, idx){
+      var deptKey = item[0];
+      var deptObj = item[1];
+      var pos = idx + 1;
+      var isHL = highlight && (deptKey === highlight || deptKey.toUpperCase() === highlight.toUpperCase());
+      var dName = formatDeptName(deptKey);
+      var curScore = deptObj.idf || 0;
+      var pObj = (prevYd && prevYd[deptKey]) ? prevYd[deptKey] : null;
+      var pScore = pObj ? pObj.idf : null;
+      var vDelta = (curScore != null && pScore != null) ? (curScore - pScore) : null;
+      var rName = deptObj.rango_completo || rangoLabel(getRango(curScore));
+
+      /* Colors matching reference image */
+      var fillBg, trackBg, scoreColor;
+      if(isHL){
+        fillBg = '#ef047c';
+        trackBg = '#fce7f3';
+        scoreColor = '#be185d';
+      } else if(curScore >= 80){
+        fillBg = '#15803d';
+        trackBg = '#dcfce7';
+        scoreColor = '#14532d';
+      } else if(curScore >= 70){
+        fillBg = '#22c55e';
+        trackBg = '#dcfce7';
+        scoreColor = '#15803d';
+      } else if(curScore >= 60){
+        fillBg = '#9333ea';
+        trackBg = '#f3e8ff';
+        scoreColor = '#7e22ce';
+      } else if(curScore >= 40){
+        fillBg = '#f97316';
+        trackBg = '#ffedd5';
+        scoreColor = '#c2410c';
+      } else {
+        fillBg = '#ef4444';
+        trackBg = '#fee2e2';
+        scoreColor = '#b91c1c';
+      }
+
+      var row = document.createElement('div');
+      row.className = 'rank-bar-row' + (isHL ? ' hl' : '');
+      row.dataset.dept = deptKey;
+
+      var barWidth = Math.max(8, Math.min(86, curScore * 0.86)).toFixed(1);
+
+      var varHtml = '—';
+      var varCls = 'neut';
+      var triCls = 'gray';
+      var triChar = '—';
+      if(vDelta != null){
+        if(vDelta > 0){
+          varHtml = '+' + fmt(vDelta);
+          varCls = 'pos';
+          triCls = 'green';
+          triChar = '▲';
+        } else if(vDelta < 0){
+          varHtml = fmt(vDelta);
+          varCls = 'neg';
+          triCls = 'red';
+          triChar = '▼';
+        } else {
+          varHtml = '0,00';
+          varCls = 'neut';
+          triCls = 'gray';
+          triChar = '—';
+        }
+      }
+
+      row.innerHTML = '<span class="rank-row-num">' + pos + '</span>' +
+                      '<span class="rank-row-name" title="' + dName + '">' + (isHL ? '<span class="hl-diamond">◆</span>' : '') + dName + '</span>' +
+                      '<div class="rank-row-track" style="background:' + trackBg + ';">' +
+                        '<div class="rank-row-fill" style="width:' + barWidth + '%;background:' + fillBg + ';"></div>' +
+                        '<span class="rank-row-score" style="color:' + scoreColor + ';">' + fmt(curScore) + '</span>' +
+                      '</div>' +
+                      '<div class="rank-row-var ' + varCls + '">' +
+                        '<span class="tri-symbol ' + triCls + '">' + triChar + '</span>' +
+                        '<span>' + varHtml + '</span>' +
                       '</div>';
+
+      /* Click to select department */
+      row.addEventListener('click', function(){
+        currentDept = deptKey;
+        var s = document.getElementById('consol-dept-select');
+        if(s) s.value = deptKey;
+        var gs = document.getElementById('global-dept-select');
+        if(gs) gs.value = deptKey;
+        populateConsolidado();
+      });
+
+      /* Hover Interactions */
+      row.addEventListener('mouseenter', function(e){
+        /* 1. Live update Top Right Card 3 */
+        var yrRangeEl = document.getElementById('consol-kpi-year-range');
+        if(yrRangeEl) yrRangeEl.textContent = (prevYd ? (String(parseInt(selectedYear)-1) + ' — ' + selectedYear) : selectedYear);
+
+        var viewTitleEl = document.getElementById('consol-view-title');
+        if(viewTitleEl) viewTitleEl.textContent = 'DEPARTAMENTO: ' + dName.toUpperCase() + ' · RANKING: ' + pos + ' DE ' + totalCount;
+
+        var viewDescEl = document.getElementById('consol-view-desc');
+        if(viewDescEl) viewDescEl.textContent = 'IDF ' + selectedYear + ': ' + fmt(curScore) + '  |  IDF ' + (prevYd ? String(parseInt(selectedYear)-1) : 'Año ant.') + ': ' + (pScore != null ? fmt(pScore) : '–');
+
+        var viewStatEl = document.getElementById('consol-view-stat');
+        if(viewStatEl){
+          if(vDelta != null){
+            if(vDelta > 0){
+              viewStatEl.className = 'consol-view-stat';
+              viewStatEl.innerHTML = '<span class="tri-symbol green">▲</span> <span>Variación: +' + fmt(vDelta) + '</span>';
+            } else if(vDelta < 0){
+              viewStatEl.className = 'consol-view-stat neg';
+              viewStatEl.innerHTML = '<span class="tri-symbol red">▼</span> <span>Variación: ' + fmt(vDelta) + '</span>';
+            } else {
+              viewStatEl.className = 'consol-view-stat neut';
+              viewStatEl.innerHTML = '<span class="tri-symbol gray">—</span> <span>Variación: 0,00</span>';
+            }
+          } else {
+            viewStatEl.className = 'consol-view-stat neut';
+            viewStatEl.innerHTML = '<span class="tri-symbol gray">—</span> <span>Sin datos previos</span>';
+          }
+        }
+
+        /* 2. Show Rich Tooltip */
+        if(consolTooltipEl){
+          var prevYearLabel = prevYd ? String(parseInt(selectedYear) - 1) : 'Año anterior';
+          var varColor = vDelta > 0 ? '#4ade80' : (vDelta < 0 ? '#f87171' : '#94a3b8');
+          var varSign = vDelta > 0 ? '▲ +' : (vDelta < 0 ? '▼ ' : '— ');
+          var varDisplay = vDelta != null ? (varSign + fmt(Math.abs(vDelta))) : '—';
+
+          consolTooltipEl.innerHTML =
+            '<div class="rank-tt-header">' + dName + '</div>' +
+            '<div class="rank-tt-row"><span class="rank-tt-lbl">IDF ' + selectedYear + '</span><span class="rank-tt-val">' + fmt(curScore) + '</span></div>' +
+            '<div class="rank-tt-row"><span class="rank-tt-lbl">IDF ' + prevYearLabel + '</span><span class="rank-tt-val">' + (pScore != null ? fmt(pScore) : '–') + '</span></div>' +
+            '<div class="rank-tt-row rank-tt-var-row"><span class="rank-tt-lbl">Variación</span><span class="rank-tt-val" style="color:' + varColor + ';font-weight:800;">' + varDisplay + '</span></div>' +
+            '<div class="rank-tt-divider"></div>' +
+            '<div class="rank-tt-row"><span class="rank-tt-lbl">Ranking</span><span class="rank-tt-val rank-tt-rank">' + pos + ' de ' + totalCount + '</span></div>';
+
+          /* Smart positioning: avoid right edge */
+          var ttW = 210;
+          var leftPos = e.clientX + 16;
+          if(leftPos + ttW > window.innerWidth - 10) leftPos = e.clientX - ttW - 10;
+          var topPos = e.clientY - 20;
+          if(topPos + 160 > window.innerHeight - 10) topPos = e.clientY - 140;
+
+          consolTooltipEl.style.display = 'block';
+          consolTooltipEl.style.left = leftPos + 'px';
+          consolTooltipEl.style.top = topPos + 'px';
+        }
+      });
+
+      row.addEventListener('mousemove', function(e){
+        if(consolTooltipEl && consolTooltipEl.style.display === 'block'){
+          var ttW = 210;
+          var leftPos = e.clientX + 16;
+          if(leftPos + ttW > window.innerWidth - 10) leftPos = e.clientX - ttW - 10;
+          var topPos = e.clientY - 20;
+          if(topPos + 160 > window.innerHeight - 10) topPos = e.clientY - 140;
+          consolTooltipEl.style.left = leftPos + 'px';
+          consolTooltipEl.style.top = topPos + 'px';
+        }
+      });
+
+      row.addEventListener('mouseleave', function(){
+        if(consolTooltipEl) consolTooltipEl.style.display = 'none';
+        if(resetCard3Callback) resetCard3Callback();
+      });
+
       container.appendChild(row);
     });
   }
@@ -3718,10 +4341,11 @@ footer.foot{
           var rango = getDeptRango(deptName);
           var prevY = String(parseInt(selectedYear)-1);
 
-          /* Apply subtle hover stroke ONLY to the active department */
+          /* Apply subtle hover stroke ONLY to the active department and draw it on top of neighbors */
           d3.select(this)
+            .raise()
             .attr('stroke','#0f172a')
-            .attr('stroke-width', 1.25);
+            .attr('stroke-width', 0.75);
 
           var tooltip = document.getElementById('mapTooltip');
           if(tooltip){
@@ -3791,8 +4415,9 @@ footer.foot{
       var name = mapState.findDeptName(d.properties);
       if(name && name.toLowerCase() === deptName.toLowerCase()){
         d3.select(this)
+          .raise()
           .attr('stroke', '#0f172a')
-          .attr('stroke-width', 1.25);
+          .attr('stroke-width', 0.75);
       }
     });
   }

@@ -625,6 +625,20 @@ body {
   gap: 12px;
   align-items: flex-start;
 }
+.dist-layout > .map-wrap {
+  flex: 0 0 32%;
+  max-width: 32%;
+  min-width: 200px;
+  height: 230px;
+  overflow: hidden;
+}
+.dist-layout > .map-wrap #colombia-map {
+  display: block;
+  width: 100% !important;
+  height: 210px !important;
+  max-height: 210px !important;
+  margin: 0 auto;
+}
 .dist-donut { width: 130px !important; height: 130px !important; flex-shrink: 0; }
 .dist-table-wrap { flex: 1; min-width: 0; max-height: 200px; border-radius: 5px; }
 
@@ -699,6 +713,16 @@ body {
   .kpi-divider { display: none; }
   .evo-layout { flex-direction: column; }
   .dist-layout { flex-direction: column; }
+  .dist-layout > .map-wrap {
+    flex-basis: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 200px;
+  }
+  .dist-layout > .map-wrap #colombia-map {
+    height: 180px !important;
+    max-height: 180px !important;
+  }
 }
 @media (max-width: 600px) {
   :root { --sidebar-width: 56px; }
