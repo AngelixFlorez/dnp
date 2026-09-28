@@ -6,7 +6,6 @@
 <title>Índice de Desempeño Fiscal — IDF Departamental</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://d3js.org/topojson.v3.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root{
   --navy:#10356c;
@@ -83,6 +82,7 @@ body{
 }
 .section-bar.navy{background:var(--navy);}
 .section-bar.pink{background:var(--pink);}
+.section-bar.trend-title{text-align:center;font-size:14px;padding:13px 14px;}
 .panel-body{padding:16px 18px;}
 
 /* ===== INSTRUCTIVO HEADER ===== */
@@ -362,15 +362,19 @@ td.left, th.left{text-align:left;}
 }
 .region-bar-group .bar-years{
   display:flex;
-  gap:0;
+  justify-content:center;
+  gap:4px;
   width:100%;
-  padding:0 14px;
+    padding:0 2px;
   position:absolute;
   bottom:-10px;
   left:0;
+  box-sizing:border-box;
 }
 .region-bar-group .bar-years span{
   flex:1 1 0;
+  max-width:28px;
+  min-width:8px;
   text-align:center;
   font-size:7.5px;
   color:var(--muted);
@@ -482,35 +486,55 @@ td.left, th.left{text-align:left;}
 }
 .rank-bar .val{
   position:absolute;
-  top:-18px;
-  font-size:8px;
-  color:var(--navy);
+  bottom:100%;
+  left:50%;
+  transform:translateX(-50%);
+  margin-bottom:4px;
+  font-size:7.5px;
+  color:#0f172a;
   font-weight:800;
   white-space:nowrap;
   text-align:center;
   line-height:1;
+  background:#ffffff;
+  padding:1px 3px;
+  border:1px solid #cbd5e1;
+  border-radius:2px;
+  box-shadow:0 1px 2px rgba(0,0,0,0.12);
+  z-index:6;
 }
 .diamond-marker{
   position:absolute;
-  width:7px;
-  height:7px;
-  background:#f97316;
-  border:1px solid #fff;
-  box-shadow:0 1px 3px rgba(0,0,0,0.35);
+  width:8px;
+  height:8px;
+  background:#ff7a00;
+  border:1.5px solid #c2410c;
+  box-shadow:0 1px 2px rgba(0,0,0,0.3);
   transform:rotate(45deg);
   left:50%;
-  margin-left:-3.5px;
-  margin-bottom:-3.5px;
+  margin-left:-4px;
+  margin-bottom:-4px;
   z-index:4;
   border-radius:1px;
+}
+.diamond-marker::after{
+  content:'';
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:#ffffff;
+  border-radius:50%;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
 }
 .rank-labels-area{
   display:flex;
   justify-content:space-between;
   padding:0 6px 0;
-  margin-left:30px;
-  margin-top:6px;
-  height:120px;
+  margin-left:16px;
+  margin-top:4px;
+  height:140px;
   position:relative;
 }
 .rank-lbl-col{
@@ -522,26 +546,26 @@ td.left, th.left{text-align:left;}
 }
 .rank-lbl-col span{
   position:absolute;
-  top:72px;
-  left:-15%;
-  transform:rotate(-55deg);
-  transform-origin:0 0;
+  top:6px;
+  left:calc(50% - 5.5px);
+  transform:translateX(-100%) rotate(-90deg);
+  transform-origin:right top;
   font-size:8px;
-  font-weight:700;
-  color:var(--navy);
+  font-weight:800;
+  color:#10356c;
   white-space:nowrap;
   text-align:left;
   pointer-events:none;
 }
 
-/* ranking legend badges — modern design */
+/* ranking legend badges — modern design with squares */
 .ranking-conventions{
   display:flex;
   flex-wrap:wrap;
   align-items:center;
   justify-content:center;
-  gap:8px;
-  padding:6px 12px 2px;
+  gap:12px;
+  padding:8px 12px;
   margin-top:0;
   border-top:1px solid var(--line);
 }
@@ -550,20 +574,20 @@ td.left, th.left{text-align:left;}
   align-items:center;
   gap:6px;
   font-size:11px;
-  font-weight:600;
-  color:#475569;
+  font-weight:700;
+  color:#334155;
 }
 .rank-label .b-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
+  width:10px;
+  height:10px;
+  border-radius:0;
   flex-shrink:0;
 }
 .rank-label .b-diamond{
   width:8px;
   height:8px;
-  background:#f97316;
-  border:1px solid #fff;
+  background:#ff7a00;
+  border:1.5px solid #c2410c;
   transform:rotate(45deg);
   box-shadow:0 1px 2px rgba(0,0,0,0.25);
   border-radius:1px;
@@ -758,9 +782,11 @@ td.left, th.left{text-align:left;}
 .tendencia-table th.left{text-align:left;}
 .tendencia-table td{padding:8px 10px;border:1px solid var(--line);text-align:center;font-weight:700;font-size:11px;color:var(--navy);}
 .tendencia-table td.left{text-align:left;font-weight:800;font-size:10.5px;}
+#fiscal-tendencia-table td.interpretation{color:var(--muted);font-weight:400;}
+#gestion-tendencia-table td.interpretation{color:var(--muted);font-weight:400;}
 .trend-mini{
-  display:inline-flex;align-items:center;justify-content:center;
-  width:120px;height:40px;
+  display:flex;align-items:center;justify-content:center;
+  width:130px;height:54px;margin:0 auto;
 }
 
 /* ================= CONSOLIDADO ================= */
@@ -1062,7 +1088,7 @@ table.consol-table tr.dim-gest-row td {
 }
 .sub-bono-text {
   font-size: 8.5px;
-  color: #c026d3;
+  color: #ef047c;
   font-weight: 700;
   line-height: 1.1;
   margin-top: 2px;
@@ -1421,20 +1447,26 @@ table.consol-table tr.dim-gest-row td {
   .rangos-wrap{grid-template-columns:1fr;}
 }
 .map-wrap{padding:10px;position:relative;}
-.dist-bars{padding:14px 16px;}
-.dist-bars h4{margin:0 0 10px;color:var(--navy);font-size:12.5px;}
-.dist-bar-row{margin-bottom:12px;}
-.dist-bar-row .lbl{display:flex;justify-content:space-between;font-size:11px;color:#37415a;margin-bottom:4px;font-weight:600;}
-.dist-bar-row .track{background:#eef1f6;border-radius:5px;height:16px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(26,46,74,.04);}
-.dist-bar-row .fill{height:100%;border-radius:5px;transition:width 0.85s cubic-bezier(0.22,1,0.36,1);}
-.dist-note{
-  background:#fdf3e2;border:1px solid #f2dfb0;color:#7a5b12;
-  font-size:11px;padding:10px 12px;border-radius:3px;margin-top:8px;line-height:1.5;
-}
+.dist-bars{padding:20px 24px; background:#fff; border-radius:12px;}
+.dist-section-header{margin-bottom:18px;}
+.dist-header-title{margin:0;color:#10356c;font-size:16px;font-weight:800;letter-spacing:-0.2px;}
+.dist-header-sub{color:#64748b;font-size:11.5px;margin-top:3px;}
+.dist-rows-container{display:flex;flex-direction:column;gap:12px;}
+.dist-row-card{display:flex;align-items:center;gap:16px;padding:8px 0;}
+.dist-col-label{width:180px;flex-shrink:0;font-size:12px;font-weight:800;color:#10356c;line-height:1.3;}
+.dist-col-middle{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0;}
+.dist-track{height:36px;background:#f1f5f9;border-radius:6px;position:relative;overflow:hidden;display:flex;align-items:center;}
+.dist-fill{height:100%;border-radius:6px;transition:width 0.5s cubic-bezier(0.22,1,0.36,1);min-width:8px;}
+.dist-pct-pill{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#ffffff;color:#0f172a;font-weight:800;font-size:11.5px;padding:2px 10px;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,0.12);pointer-events:none;z-index:2;white-space:nowrap;}
+.dist-pills-sub{display:flex;align-items:center;gap:8px;}
+.badge-in{background:#dcfce7;border:1px solid #86efac;color:#166534;padding:2px 10px;border-radius:12px;font-size:10.5px;font-weight:800;}
+.badge-out{background:#ffe4e6;border:1px solid #fca5a5;color:#9f1239;padding:2px 10px;border-radius:12px;font-size:10.5px;font-weight:800;}
+.dist-col-count{width:50px;text-align:right;font-size:15px;font-weight:900;color:#10356c;flex-shrink:0;}
+.dist-highlight-note{margin-top:16px;background:#fef3c7;border-left:4px solid #f59e0b;padding:12px 16px;border-radius:6px;color:#92400e;font-size:11.5px;line-height:1.5;font-weight:500;}
 .map-legend{position:absolute;top:14px;left:14px;z-index:5;display:flex;flex-direction:column;gap:5px;padding:9px 12px;background:rgba(255,255,255,0.92);border:1px solid var(--line);border-radius:6px;box-shadow:0 1px 5px rgba(20,30,60,.12);font-size:11px;color:#37415a;}
 .map-legend .ttl{font-weight:800;color:var(--navy);font-size:10px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:2px;}
 .map-legend div{display:flex;align-items:center;gap:8px;}
-.map-legend .dot{width:12px;height:12px;border-radius:50%;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.06);}
+.map-legend .dot{width:12px;height:12px;border-radius:2px;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.06);}
 .map-year-label{position:absolute;top:22px;left:50%;transform:translateX(-50%);z-index:6;font-weight:900;font-size:22px;letter-spacing:1px;color:var(--navy);background:rgba(255,255,255,0.9);border:1px solid var(--line);border-radius:6px;padding:2px 16px;box-shadow:0 1px 4px rgba(20,30,60,.12);}
 .map-ctrl{position:absolute;top:11px;right:11px;z-index:8;display:flex;gap:8px;}
 .map-btn{display:inline-flex;align-items:center;gap:6px;border:none;cursor:pointer;font-size:11.5px;font-weight:700;letter-spacing:.2px;padding:7px 14px;border-radius:7px;color:#fff;box-shadow:0 2px 6px rgba(20,30,60,.20);transition:transform .12s ease,box-shadow .12s ease,filter .12s ease;white-space:nowrap;}
@@ -1442,7 +1474,11 @@ table.consol-table tr.dim-gest-row td {
 .map-btn:active{transform:translateY(0);}
 .map-btn:disabled{opacity:.75;cursor:default;transform:none;filter:none;box-shadow:0 2px 6px rgba(20,30,60,.20);}
 .map-btn.play{background:linear-gradient(180deg,#2a4673,#1c3052);}
-.map-btn.dl{background:linear-gradient(180deg,#2aa163,#1f7a4d);}
+.map-btn.print{background:linear-gradient(180deg,#59677a,#3d4a5e);}
+.dist-print-view{display:none;}
+.dist-print-sheet{background:#fff;padding:10px;}
+.dist-print-period{display:block;font-size:12px;font-weight:700;color:var(--navy);margin:12px 0 4px;}
+.dist-print-period select{display:block;width:100%;margin-top:5px;padding:8px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--text);font:inherit;}
 
 footer.foot{
   display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);
@@ -1467,6 +1503,15 @@ footer.foot{
   .rangos-wrap{flex-wrap:wrap !important;}
   .intro-title{font-size:13px !important;}
   .section-bar{font-size:12px !important;}
+  body.distribution-print-mode .app{display:none !important;}
+  body.distribution-print-mode #dist-print-view{display:block !important;}
+  body.distribution-print-mode #dist-print-view .dist-print-sheet{break-inside:auto;page-break-inside:auto;break-after:page;page-break-after:always;}
+  body.distribution-print-mode #dist-print-view .dist-print-sheet:last-child{break-after:auto;page-break-after:auto;}
+  body.distribution-print-mode #dist-print-view .dist-top{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;}
+  body.distribution-print-mode #dist-print-view .dist-layout{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:8px;}
+  body.distribution-print-mode #dist-print-view .map-wrap{height:auto;overflow:hidden;}
+  body.distribution-print-mode #dist-print-view #colombia-map>svg{width:65% !important;margin:0 auto !important;}
+  body.distribution-print-mode #dist-print-view .dist-bars{padding:10px 12px;}
 }
 
 /* Print selection modal */
@@ -1475,7 +1520,7 @@ footer.foot{
 .print-modal-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:14px;}
 .print-opt{display:flex;align-items:center;gap:9px;padding:8px 6px;font-size:13.5px;color:#37415a;border-radius:4px;cursor:pointer;}
 .print-opt:hover{background:#f1f5fb;}
-.print-opt input{width:16px;height:16px;cursor:pointer;}
+.print-opt input{width:16px;height:16px;cursor:pointer;accent-color:var(--navy);opacity:1;}
 .print-opt-all{border-bottom:1px solid var(--line);margin-bottom:4px;padding-bottom:10px;}
 .print-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
 .print-cancel{padding:8px 16px;background:#eef1f6;border:none;border-radius:4px;font-size:13px;font-weight:600;color:#475569;cursor:pointer;}
@@ -1641,12 +1686,12 @@ footer.foot{
       <div class="chart-sub" style="text-align:center;">Las barras representan el IDF del año seleccionado y los rombos el resultado del año anterior</div>
       <div id="chart-ranking"></div>
       <div class="ranking-conventions">
-        <span class="rank-label"><span class="b-dot" style="background:#1c7b2c"></span>Sostenible (≥80 pts)</span>
-        <span class="rank-label"><span class="b-dot" style="background:#35bb5a"></span>Solvente (70-79 pts)</span>
-        <span class="rank-label"><span class="b-dot" style="background:#ab2493"></span>Vulnerable (60-69 pts)</span>
-        <span class="rank-label"><span class="b-dot" style="background:#ee8e16"></span>Riesgo (40-59 pts)</span>
-        <span class="rank-label"><span class="b-dot" style="background:#f4443c"></span>Deterioro (&lt;40 pts)</span>
-        <span class="rank-label"><span class="b-diamond"></span>Año anterior</span>
+        <span class="rank-label"><span class="b-dot" style="background:#1c7b2c"></span>Sostenible</span>
+        <span class="rank-label"><span class="b-dot" style="background:#35bb5a"></span>Solvente</span>
+        <span class="rank-label"><span class="b-dot" style="background:#ab2493"></span>Vulnerable</span>
+        <span class="rank-label"><span class="b-dot" style="background:#ee8e16"></span>Riesgo</span>
+        <span class="rank-label"><span class="b-dot" style="background:#f4443c"></span>Deterioro</span>
+        <span class="rank-label"><span class="b-diamond"></span><span id="rank-diamond-lbl">IDF 2024</span></span>
       </div>
     </div>
 
@@ -1676,7 +1721,6 @@ footer.foot{
           <label>Departamento</label>
           <select></select>
         </div>
-        <button class="csv-btn" id="ficha-csv-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 19h14"/></svg>Descargar CSV</button>
       </div>
       <div class="idf-card">
         <div class="idf-label">IDF</div>
@@ -1775,8 +1819,8 @@ footer.foot{
     </div>
 
     <div class="panel">
-      <div class="section-bar navy">ANÁLISIS DE LA TENDENCIA DE LOS INDICADORES FISCALES</div>
-      <table class="tendencia-table">
+      <div class="section-bar navy trend-title">ANÁLISIS DE LA TENDENCIA DE LOS INDICADORES FISCALES</div>
+      <table class="tendencia-table" id="fiscal-tendencia-table">
         <thead><tr><th class="left">Indicador</th><th>2022</th><th>2023</th><th>2024</th><th>Prom.</th><th>Tendencia</th><th class="left">Interpretación</th></tr></thead>
         <tbody>
           <tr><td class="left">Dependencia de las Transferencias</td><td>34,9</td><td>33,5</td><td>26,7</td><td>31,7</td><td>↘</td><td class="left"></td></tr>
@@ -1856,8 +1900,8 @@ footer.foot{
     </div>
 
     <div class="panel">
-      <div class="section-bar navy">ANÁLISIS DE LA TENDENCIA DE LOS INDICADORES DE GESTIÓN FINANCIERA</div>
-      <table class="tendencia-table">
+      <div class="section-bar navy trend-title">ANÁLISIS DE LA TENDENCIA DE LOS INDICADORES DE GESTIÓN FINANCIERA</div>
+      <table class="tendencia-table" id="gestion-tendencia-table">
         <thead><tr><th class="left">Indicador</th><th>2022</th><th>2023</th><th>2024</th><th>Prom.</th><th>Tendencia</th><th class="left">Interpretación</th></tr></thead>
         <tbody>
           <tr><td class="left">Holgura</td><td>95,9</td><td>95,6</td><td>100,0</td><td>97,2</td><td>↗</td><td class="left"></td></tr>
@@ -1940,7 +1984,6 @@ footer.foot{
           <label for="consol-dept-select">Departamento</label>
           <select id="consol-dept-select"></select>
         </div>
-        <button class="csv-btn" id="consol-csv-btn" style="height:34px;align-self:flex-end;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 19h14"/></svg>Descargar CSV</button>
       </div>
     </div>
 
@@ -2055,14 +2098,13 @@ footer.foot{
           <div class="f"><label>Año</label><select id="dist-year-filter"></select></div>
           <div class="f"><label>Departamento</label><select id="dist-dept-filter"><option>Todos</option></select></div>
         </div>
-        <button class="csv-btn" id="dist-csv-btn" style="margin-bottom:2px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 19h14"/></svg>Descargar CSV</button>
       </div>
     </div>
 
     <div class="dist-layout">
         <div class="panel map-wrap" style="position:relative;">
           <div id="map-year-label" class="map-year-label"></div>
-          <svg id="colombia-map" viewBox="0 0 420 520"></svg>
+          <div id="colombia-map"></div>
         <div id="mapTooltip">
           <div class="tt-dept" id="tt-dept-name">–</div>
           <div class="tt-row"><span class="tt-lbl" id="tt-cur-year-lbl">2024</span><span class="tt-val" id="tt-cur-idf">–</span></div>
@@ -2072,15 +2114,15 @@ footer.foot{
         </div>
         <div class="map-ctrl">
           <button id="map-play-btn" class="map-btn play">&#9654; Reproducir</button>
-          <button id="map-download-btn" class="map-btn dl"><svg class="ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 3V15m0 0 4-4m-4 4-4-4M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Descargar visualización</button>
+          <button id="dist-print-btn" class="map-btn print" onclick="openDistributionPrintModal();">Imprimir vistas</button>
         </div>
-        <div class="map-legend">
+<div class="map-legend">
           <div class="ttl">Rangos IDF</div>
-          <div><span class="dot" style="background:var(--red)"></span>1. Deterioro (&lt;40)</div>
-          <div><span class="dot" style="background:var(--orange)"></span>2. Riesgo (≥40 y &lt;60)</div>
-          <div><span class="dot" style="background:var(--purple)"></span>3. Vulnerable (≥60 y &lt;70)</div>
-          <div><span class="dot" style="background:#35bb5a"></span>4. Solvente (≥70 y &lt;80)</div>
-          <div><span class="dot" style="background:var(--green-dk)"></span>5. Sostenible (≥80)</div>
+          <div><span class="dot" style="background:#f4443c"></span>1. Deterioro (<40)</div>
+          <div><span class="dot" style="background:#ee8e16"></span>2. Riesgo (≥40 y <60)</div>
+          <div><span class="dot" style="background:#ab2493"></span>3. Vulnerable (≥60 y <70)</div>
+          <div><span class="dot" style="background:#35bb5a"></span>4. Solvente (≥70 y <80)</div>
+          <div><span class="dot" style="background:#1c7b2c"></span>5. Sostenible (≥80)</div>
         </div>
       </div>
       <div class="panel dist-bars">
@@ -2122,6 +2164,7 @@ footer.foot{
   }
   function fmt(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':n.toFixed(1).replace('.',','); }
   function fmtPct(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':n.toFixed(1).replace('.',',')+'%'; }
+  function fmtTrendValue(v){ if(v==null||v===''||!isFinite(Number(v)))return '–'; return Number(v).toFixed(2).replace('.',','); }
   function fmtInt(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':Math.round(n).toLocaleString('es-CO'); }
 
   /* Smooth scroll to section */
@@ -2140,16 +2183,79 @@ footer.foot{
     ahorro_corriente: false,
     balance_fiscal_primario: false
   };
-  function interpretarTendencia(key, tend, curVal, prevVal){
-    if(!prevVal) return '';
-    var delta = curVal - prevVal;
+  function interpretarTendencia(key, values){
+    var years = ['2022','2023','2024'];
     var mejoraEsBaja = FISCAL_MEJORA_ES_BAJA[key] || false;
-    var mejora = mejoraEsBaja ? delta < 0 : delta > 0;
-    var abs = Math.abs(delta).toFixed(1);
-    if(Math.abs(delta) < 0.05) return '<span style="color:var(--muted)">Sin variación significativa</span>';
-    var cls = mejora ? 'color:var(--green-dk)' : 'color:var(--red)';
-    var sign = delta > 0 ? '+' : '';
-    return '<span style="'+cls+'">'+sign+abs.replace('.',',')+' pp '+(mejora?'↑ Mejora':'↓ Deterioro')+'</span>';
+    if(!values.some(function(v){return v!=null&&isFinite(Number(v));})) return 'Sin datos disponibles para este indicador.';
+    var segments = [];
+    for(var i=1;i<values.length;i++){
+      var from = values[i-1], to = values[i];
+      if(from==null||to==null||!isFinite(Number(from))||!isFinite(Number(to))){
+        segments.push(years[i-1]+'–'+years[i]+': sin datos suficientes.');
+        continue;
+      }
+      var delta = Number(to)-Number(from);
+      if(Math.abs(delta)<0.005){
+        segments.push(years[i-1]+'–'+years[i]+': se mantuvo estable.');
+        continue;
+      }
+      var mejora = mejoraEsBaja ? delta<0 : delta>0;
+      var cambio = delta>0 ? 'aumentó ' : 'disminuyó ';
+      segments.push(years[i-1]+'–'+years[i]+': '+cambio+fmtTrendValue(Math.abs(delta))+' puntos ('+(mejora?'mejora':'deterioro')+').');
+    }
+    return segments.join(' ');
+  }
+
+  var INTERPRETACION_FISCAL_BASE = {
+    dependencia_transferencias: 'Mide qué tanto dependen los ingresos del municipio de transferencias nacionales frente a sus ingresos totales. Una mejor calificación significa menor vulnerabilidad por dependencia externa y mayor autonomía fiscal relativa.',
+    relevancia_fbkf: 'Mide el peso de la formación bruta de capital fijo dentro del gasto de capital. Una mejor calificación indica que una mayor proporción de la inversión se orienta a activos duraderos, infraestructura y formación de capital.',
+    endeudamiento: 'Mide la presión de los pasivos frente a la capacidad financiera de la entidad territorial. Una mejor calificación sugiere menor carga relativa de endeudamiento y menor riesgo fiscal.',
+    ahorro_corriente: 'Mide la capacidad de generar ahorro después de cubrir gastos corrientes. Una mejor calificación indica mayor disponibilidad de recursos para financiar inversión y sostener el funcionamiento fiscal.',
+    balance_fiscal_primario: 'Mide la posición fiscal primaria de la entidad, antes del pago de intereses. Una mejor calificación refleja una situación fiscal más equilibrada entre ingresos, gastos y necesidades de financiamiento.'
+  };
+  function interpretarTendenciaFiscal(key, values){
+    var base = INTERPRETACION_FISCAL_BASE[key] || '';
+    var previous = values[1], current = values[2];
+    var conclusion;
+    if(previous==null||current==null||!isFinite(Number(previous))||!isFinite(Number(current))){
+      conclusion = 'No hay datos suficientes para calcular la variación frente a 2023.';
+    }else{
+      var delta = Number(current)-Number(previous);
+      if(Math.abs(delta)<0.005){
+        conclusion = 'La calificación se mantiene sin variación frente a 2023, lo que señala estabilidad en el desempeño relativo de este indicador.';
+      }else if(delta>0){
+        conclusion = 'La calificación aumenta '+fmtTrendValue(delta)+' puntos frente a 2023, lo que señala una mejora en el desempeño relativo de este indicador.';
+      }else{
+        conclusion = 'La calificación disminuye '+fmtTrendValue(Math.abs(delta))+' puntos frente a 2023, lo que señala un deterioro en el desempeño relativo de este indicador.';
+      }
+    }
+    return (base ? base+' ' : '')+conclusion;
+  }
+
+  var INTERPRETACION_GESTION_BASE = {
+    holgura: 'Mide el margen entre el límite permitido por la Ley 617 de 2000 y el peso de los gastos de funcionamiento sobre los ingresos corrientes de libre destinación. Una mejor calificación indica mayor margen fiscal para operar sin presionar el límite legal.',
+    capacidad_programacion_recaudo: 'Evalúa la correspondencia entre el presupuesto inicial y el recaudo efectivo. Una mejor calificación sugiere mayor precisión en la programación presupuestal y mejor capacidad de convertir la planeación de ingresos en recaudo real.',
+    capacidad_ejecucion_inversion: 'Mide la relación entre pagos y compromisos de inversión. Una mejor calificación indica mayor capacidad para ejecutar efectivamente la inversión programada y reducir rezagos entre compromiso y pago.',
+    bonificacion_esfuerzo_propio: 'Reconoce avances asociados al esfuerzo fiscal propio. Una mejora indica mayor aporte positivo de este bono a la calificación de gestión financiera.',
+    bonificacion_catastro: 'Reconoce avances asociados a la actualización o gestión catastral. Una mejora indica mayor aporte positivo de este bono a la calificación de gestión financiera.'
+  };
+  function interpretarTendenciaGestion(key, values){
+    var base = INTERPRETACION_GESTION_BASE[key] || '';
+    var previous = values[1], current = values[2];
+    var conclusion;
+    if(previous==null||current==null||!isFinite(Number(previous))||!isFinite(Number(current))){
+      conclusion = 'No hay datos suficientes para calcular la variación frente a 2023.';
+    }else{
+      var delta = Number(current)-Number(previous);
+      if(Math.abs(delta)<0.005){
+        conclusion = 'La calificación se mantiene estable frente a 2023, sin cambio en puntos.';
+      }else if(delta>0){
+        conclusion = 'La calificación aumenta en '+fmtTrendValue(delta)+' puntos frente a 2023, lo que indica una mejora en la gestión financiera del indicador.';
+      }else{
+        conclusion = 'La calificación disminuye en '+fmtTrendValue(Math.abs(delta))+' puntos frente a 2023, lo que indica un deterioro en la gestión financiera del indicador.';
+      }
+    }
+    return (base ? base+' ' : '')+conclusion;
   }
 
   /* ================================================================
@@ -2612,11 +2718,11 @@ footer.foot{
     var chartContainer = document.createElement('div');
     chartContainer.className = 'rank-chart-container';
 
-    /* Y-axis (30 to 100) */
+    /* Y-axis (0 to 80) */
     var yAxis = document.createElement('div');
     yAxis.className = 'rank-y-axis';
-    var minValY = 30;
-    var maxValY = 100;
+    var minValY = 0;
+    var maxValY = 80;
     var tickStep = 10;
     for(var t = maxValY; t >= minValY; t -= tickStep){
       var tick = document.createElement('div');
@@ -2666,7 +2772,7 @@ footer.foot{
       /* Bar for current year */
       var bar = document.createElement('div');
       bar.className = 'rank-bar';
-      var hPct = Math.max(4, ((v - minValY) / (maxValY - minValY)) * 100);
+      var hPct = Math.max(0, Math.min(100, ((v - minValY) / (maxValY - minValY)) * 100));
       bar.style.height = hPct + '%';
       bar.style.background = rangoColorHex(v); /* 100% SOLID HEX COLOR */
 
@@ -2680,7 +2786,7 @@ footer.foot{
       if(prevV != null){
         var dia = document.createElement('div');
         dia.className = 'diamond-marker';
-        var prevHpct = Math.max(2, ((prevV - minValY) / (maxValY - minValY)) * 100);
+        var prevHpct = Math.max(0, Math.min(100, ((prevV - minValY) / (maxValY - minValY)) * 100));
         dia.style.bottom = prevHpct + '%';
         dia.title = 'Vigencia anterior: ' + fmt(prevV);
         barCol.appendChild(dia);
@@ -3032,6 +3138,8 @@ footer.foot{
     buildRankingChart(document.getElementById('chart-ranking'), depts);
     var rankTitle = document.getElementById('ranking-title');
     if(rankTitle) rankTitle.textContent = 'Ranking de departamentos IDF '+selectedYear;
+    var rankDiamondLbl = document.getElementById('rank-diamond-lbl');
+    if(rankDiamondLbl) rankDiamondLbl.textContent = 'IDF ' + prevYear;
   }
 
   /* ================================================================
@@ -3094,38 +3202,37 @@ footer.foot{
     return '—';
   }
 
-  function renderSparklineSVG(vals){
-    var validVals = vals.filter(function(v){ return v!=null && !isNaN(v); });
-    if(validVals.length < 2) return '<span>–</span>';
-
-    var w = 110, h = 36, p = 6;
-    var minV = Math.min.apply(null, validVals);
-    var maxV = Math.max.apply(null, validVals);
-    if(maxV === minV){ minV -= 2; maxV += 2; }
-    var span = maxV - minV;
-
-    var pts = [];
-    var stepX = (w - 2 * p) / (vals.length - 1);
-    vals.forEach(function(v, i){
-      if(v == null || isNaN(v)) return;
-      var x = p + i * stepX;
-      var y = h - p - ((v - minV) / span) * (h - 2 * p);
-      pts.push({x: x, y: y, val: v});
+  function renderSparklineSVG(vals, colorByOverallTrend){
+    var validVals = vals.filter(function(v){ return v!=null && isFinite(Number(v)); }).map(Number);
+    var w = 120, h = 54, xs = [10, 60, 110], top = 12, bottom = 36;
+    var minV = validVals.length ? Math.min.apply(null, validVals) : 0;
+    var maxV = validVals.length ? Math.max.apply(null, validVals) : 1;
+    var range = maxV - minV;
+    var pts = vals.map(function(v, i){
+      if(v==null || !isFinite(Number(v))) return null;
+      var y = range === 0 ? (top + bottom) / 2 : bottom - ((Number(v) - minV) / range) * (bottom - top);
+      return {x: xs[i], y: y, val: Number(v)};
     });
-
-    if(pts.length < 2) return '<span>–</span>';
-
-    var overallDiff = pts[pts.length-1].val - pts[0].val;
-    var lineColor = overallDiff > 0.5 ? '#35bb5a' : (overallDiff < -0.5 ? '#f4443c' : '#94a3b8');
-
-    var svg = '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '" style="vertical-align:middle;overflow:visible;">';
+    var firstPoint = pts[0], lastPoint = pts[pts.length-1];
+    var overallDelta = firstPoint&&lastPoint ? lastPoint.val-firstPoint.val : null;
+    var overallColor = overallDelta==null||Math.abs(overallDelta)<0.005 ? '#aeb6c2' : (overallDelta>0 ? '#35bb5a' : '#f4443c');
+    var svg = '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="Tendencia 2022, 2023 y 2024">';
+    svg += '<line x1="4" y1="48" x2="116" y2="48" stroke="#cbd5e1" stroke-width="1"/>';
     for(var i = 0; i < pts.length - 1; i++){
       var p1 = pts[i], p2 = pts[i+1];
-      svg += '<line x1="' + p1.x.toFixed(1) + '" y1="' + p1.y.toFixed(1) + '" x2="' + p2.x.toFixed(1) + '" y2="' + p2.y.toFixed(1) + '" stroke="' + lineColor + '" stroke-width="2.5" stroke-linecap="round"/>';
+      if(!p1 || !p2) continue;
+      var delta = p2.val - p1.val;
+      var lineColor = colorByOverallTrend ? overallColor : (Math.abs(delta) < 0.005 ? '#aeb6c2' : (delta > 0 ? '#35bb5a' : '#f4443c'));
+      svg += '<line x1="' + p1.x + '" y1="' + p1.y.toFixed(1) + '" x2="' + p2.x + '" y2="' + p2.y.toFixed(1) + '" stroke="' + lineColor + '" stroke-width="2.5" stroke-linecap="round"/>';
     }
-    pts.forEach(function(pt){
-      svg += '<circle cx="' + pt.x.toFixed(1) + '" cy="' + pt.y.toFixed(1) + '" r="3" fill="' + lineColor + '" stroke="#fff" stroke-width="1.5"><title>' + fmt(pt.val) + '</title></circle>';
+    pts.forEach(function(pt, i){
+      if(!pt) return;
+      var anchor = i === 0 ? 'start' : (i === pts.length - 1 ? 'end' : 'middle');
+      var labelY = Math.max(9, pt.y - 5);
+      svg += '<text x="' + pt.x + '" y="' + labelY.toFixed(1) + '" text-anchor="' + anchor + '" fill="#10356c" font-size="8" font-weight="700">' + fmtTrendValue(pt.val) + '</text>';
+      svg += '<circle cx="' + pt.x + '" cy="' + pt.y.toFixed(1) + '" r="3" fill="#10356c" stroke="#fff" stroke-width="1"><title>' + fmtTrendValue(pt.val) + '</title></circle>';
     });
+    if(!validVals.length) svg += '<text x="60" y="30" text-anchor="middle" fill="#64748b" font-size="8">Sin datos</text>';
     svg += '</svg>';
     return svg;
   }
@@ -3334,24 +3441,19 @@ footer.foot{
         var v23 = d2023 && d2023.resultados && d2023.resultados.indicadores[k] ? d2023.resultados.indicadores[k].calificacion : null;
         var v24 = d2024 && d2024.resultados && d2024.resultados.indicadores[k] ? d2024.resultados.indicadores[k].calificacion : null;
 
-        var prom = avg([v22, v23, v24]);
-        var sparkHtml = renderSparklineSVG([v22, v23, v24]);
-
-        var interp = '';
-        var diff = (v24 != null && v22 != null) ? (v24 - v22) : 0;
-        if(diff > 5) interp = 'Mejora sostenida en la calificación.';
-        else if(diff < -5) interp = 'Deterioro respecto a vigencia 2022.';
-        else if(v24 >= 80) interp = 'Desempeño sobresaliente y estable.';
-        else interp = 'Comportamiento estable en el periodo.';
+        var values = [v22, v23, v24];
+        var prom = values.some(function(v){return v!=null;}) ? avg(values) : null;
+        var sparkHtml = renderSparklineSVG(values, true);
+        var interp = interpretarTendenciaFiscal(k, values);
 
         var tr = document.createElement('tr');
         tr.innerHTML='<td class="left">'+fiscalNames[i]+'</td>' +
-                     '<td>'+fmt(v22)+'</td>' +
-                     '<td>'+fmt(v23)+'</td>' +
-                     '<td>'+fmt(v24)+'</td>' +
-                     '<td>'+fmt(prom)+'</td>' +
+                     '<td>'+fmtTrendValue(v22)+'</td>' +
+                     '<td>'+fmtTrendValue(v23)+'</td>' +
+                     '<td>'+fmtTrendValue(v24)+'</td>' +
+                     '<td>'+fmtTrendValue(prom)+'</td>' +
                      '<td><div class="trend-mini">'+sparkHtml+'</div></td>' +
-                     '<td class="left">'+interp+'</td>';
+                     '<td class="left interpretation">'+interp+'</td>';
         tb.appendChild(tr);
       });
     }
@@ -3368,24 +3470,19 @@ footer.foot{
         var v23 = d2023 && d2023.gestion && d2023.gestion.indicadores[k] ? d2023.gestion.indicadores[k].calificacion : null;
         var v24 = d2024 && d2024.gestion && d2024.gestion.indicadores[k] ? d2024.gestion.indicadores[k].calificacion : null;
 
-        var prom = avg([v22, v23, v24]);
-        var sparkHtml = renderSparklineSVG([v22, v23, v24]);
-
-        var interp = '';
-        var diff = (v24 != null && v22 != null) ? (v24 - v22) : 0;
-        if(diff > 5) interp = 'Mejora sostenida en la gestión.';
-        else if(diff < -5) interp = 'Deterioro en el indicador.';
-        else if(v24 >= 80) interp = 'Nivel óptimo mantenido.';
-        else interp = 'Estabilidad en los resultados.';
+        var values = [v22, v23, v24];
+        var prom = values.some(function(v){return v!=null;}) ? avg(values) : null;
+        var sparkHtml = renderSparklineSVG(values, true);
+        var interp = interpretarTendenciaGestion(k, values);
 
         var tr = document.createElement('tr');
         tr.innerHTML='<td class="left">'+gestNames[i]+'</td>' +
-                     '<td>'+fmt(v22)+'</td>' +
-                     '<td>'+fmt(v23)+'</td>' +
-                     '<td>'+fmt(v24)+'</td>' +
-                     '<td>'+fmt(prom)+'</td>' +
+                     '<td>'+fmtTrendValue(v22)+'</td>' +
+                     '<td>'+fmtTrendValue(v23)+'</td>' +
+                     '<td>'+fmtTrendValue(v24)+'</td>' +
+                     '<td>'+fmtTrendValue(prom)+'</td>' +
                      '<td><div class="trend-mini">'+sparkHtml+'</div></td>' +
-                     '<td class="left">'+interp+'</td>';
+                     '<td class="left interpretation">'+interp+'</td>';
         tb2.appendChild(tr);
       });
     }
@@ -3531,7 +3628,7 @@ footer.foot{
     /* 3. Update Card 3 (Active View Info & Default Variation) */
     function renderCard3Default(){
       var yrRangeEl = document.getElementById('consol-kpi-year-range');
-      if(yrRangeEl) yrRangeEl.textContent = prevYear ? (prevYear + ' — ' + selectedYear) : selectedYear;
+      if(yrRangeEl) yrRangeEl.textContent = prevYear ? (prevYear + ' → ' + selectedYear) : selectedYear;
 
       var viewTitleEl = document.getElementById('consol-view-title');
       if(viewTitleEl) viewTitleEl.textContent = 'VISTA ACTIVA: DEPARTAMENTO · ' + deptDisplayName.toUpperCase() + ' · ' + totalDepts + ' DEPARTAMENTOS';
@@ -3544,17 +3641,17 @@ footer.foot{
         if(idfDelta != null){
           if(idfDelta > 0){
             viewStatEl.className = 'consol-view-stat';
-            viewStatEl.innerHTML = '<span class="tri-symbol green">▲</span> <span>IDF departamento: +' + fmt(idfDelta) + '</span>';
+            viewStatEl.innerHTML = '<span class="tri-symbol green">▲</span> <span>Δ IDF departamento: +' + fmt(idfDelta) + '</span>';
           } else if(idfDelta < 0){
             viewStatEl.className = 'consol-view-stat neg';
-            viewStatEl.innerHTML = '<span class="tri-symbol red">▼</span> <span>IDF departamento: ' + fmt(idfDelta) + '</span>';
+            viewStatEl.innerHTML = '<span class="tri-symbol red">▼</span> <span>Δ IDF departamento: ' + fmt(idfDelta) + '</span>';
           } else {
             viewStatEl.className = 'consol-view-stat neut';
-            viewStatEl.innerHTML = '<span class="tri-symbol gray">—</span> <span>IDF departamento: 0,00</span>';
+            viewStatEl.innerHTML = '<span class="tri-symbol gray">—</span> <span>Δ IDF departamento: 0,00</span>';
           }
         } else {
           viewStatEl.className = 'consol-view-stat neut';
-          viewStatEl.innerHTML = '<span class="tri-symbol gray">—</span> <span>IDF departamento: ' + fmt(curIDF) + '</span>';
+          viewStatEl.innerHTML = '<span class="tri-symbol gray">—</span> <span>Δ IDF departamento: ' + fmt(curIDF) + '</span>';
         }
       }
     }
@@ -3690,7 +3787,7 @@ footer.foot{
     /* 6. Update Right Ranking Bar Chart with ALL DEPARTMENTS */
     var rl = document.getElementById('consol-rank-list');
     if(rl){
-      buildConsolRankList(rl, allDepts, dept, prevYd, renderCard3Default);
+      buildConsolRankList(rl, allDepts, dept, prevYd);
     }
 
     /* 7. Update Ranking Title */
@@ -3700,7 +3797,7 @@ footer.foot{
     }
   }
 
-  function buildConsolRankList(container, data, highlight, prevYd, resetCard3Callback){
+  function buildConsolRankList(container, data, highlight, prevYd){
     if(!consolTooltipEl){
       consolTooltipEl = document.getElementById('consol-tooltip');
       if(!consolTooltipEl){
@@ -3726,30 +3823,30 @@ footer.foot{
       var vDelta = (curScore != null && pScore != null) ? (curScore - pScore) : null;
       var rName = deptObj.rango_completo || rangoLabel(getRango(curScore));
 
-      /* Colors matching reference image */
+      /* Colors matching IDF_COLORS exactly */
       var fillBg, trackBg, scoreColor;
       if(isHL){
         fillBg = '#ef047c';
         trackBg = '#fce7f3';
         scoreColor = '#be185d';
       } else if(curScore >= 80){
-        fillBg = '#15803d';
+        fillBg = IDF_COLORS.Sostenible;
         trackBg = '#dcfce7';
         scoreColor = '#14532d';
       } else if(curScore >= 70){
-        fillBg = '#22c55e';
+        fillBg = IDF_COLORS.Solvente;
         trackBg = '#dcfce7';
         scoreColor = '#15803d';
       } else if(curScore >= 60){
-        fillBg = '#9333ea';
+        fillBg = IDF_COLORS.Vulnerable;
         trackBg = '#f3e8ff';
         scoreColor = '#7e22ce';
       } else if(curScore >= 40){
-        fillBg = '#f97316';
+        fillBg = IDF_COLORS.Riesgo;
         trackBg = '#ffedd5';
         scoreColor = '#c2410c';
       } else {
-        fillBg = '#ef4444';
+        fillBg = IDF_COLORS.Deterioro;
         trackBg = '#fee2e2';
         scoreColor = '#b91c1c';
       }
@@ -3796,46 +3893,17 @@ footer.foot{
 
       /* Click to select department */
       row.addEventListener('click', function(){
-        currentDept = deptKey;
+        selectedDept = deptKey;
         var s = document.getElementById('consol-dept-select');
         if(s) s.value = deptKey;
         var gs = document.getElementById('global-dept-select');
         if(gs) gs.value = deptKey;
-        populateConsolidado();
+        populateConsolidado(selectedDept);
       });
 
-      /* Hover Interactions */
+      /* Hover Interactions - only show tooltip, don't update Vista Activa card */
       row.addEventListener('mouseenter', function(e){
-        /* 1. Live update Top Right Card 3 */
-        var yrRangeEl = document.getElementById('consol-kpi-year-range');
-        if(yrRangeEl) yrRangeEl.textContent = (prevYd ? (String(parseInt(selectedYear)-1) + ' — ' + selectedYear) : selectedYear);
-
-        var viewTitleEl = document.getElementById('consol-view-title');
-        if(viewTitleEl) viewTitleEl.textContent = 'DEPARTAMENTO: ' + dName.toUpperCase() + ' · RANKING: ' + pos + ' DE ' + totalCount;
-
-        var viewDescEl = document.getElementById('consol-view-desc');
-        if(viewDescEl) viewDescEl.textContent = 'IDF ' + selectedYear + ': ' + fmt(curScore) + '  |  IDF ' + (prevYd ? String(parseInt(selectedYear)-1) : 'Año ant.') + ': ' + (pScore != null ? fmt(pScore) : '–');
-
-        var viewStatEl = document.getElementById('consol-view-stat');
-        if(viewStatEl){
-          if(vDelta != null){
-            if(vDelta > 0){
-              viewStatEl.className = 'consol-view-stat';
-              viewStatEl.innerHTML = '<span class="tri-symbol green">▲</span> <span>Variación: +' + fmt(vDelta) + '</span>';
-            } else if(vDelta < 0){
-              viewStatEl.className = 'consol-view-stat neg';
-              viewStatEl.innerHTML = '<span class="tri-symbol red">▼</span> <span>Variación: ' + fmt(vDelta) + '</span>';
-            } else {
-              viewStatEl.className = 'consol-view-stat neut';
-              viewStatEl.innerHTML = '<span class="tri-symbol gray">—</span> <span>Variación: 0,00</span>';
-            }
-          } else {
-            viewStatEl.className = 'consol-view-stat neut';
-            viewStatEl.innerHTML = '<span class="tri-symbol gray">—</span> <span>Sin datos previos</span>';
-          }
-        }
-
-        /* 2. Show Rich Tooltip */
+        /* Show Rich Tooltip only */
         if(consolTooltipEl){
           var prevYearLabel = prevYd ? String(parseInt(selectedYear) - 1) : 'Año anterior';
           var varColor = vDelta > 0 ? '#4ade80' : (vDelta < 0 ? '#f87171' : '#94a3b8');
@@ -3877,7 +3945,6 @@ footer.foot{
 
       row.addEventListener('mouseleave', function(){
         if(consolTooltipEl) consolTooltipEl.style.display = 'none';
-        if(resetCard3Callback) resetCard3Callback();
       });
 
       container.appendChild(row);
@@ -3984,36 +4051,105 @@ footer.foot{
 
     /* Distribution bars */
     var barsContainer = document.querySelector('#page-distribucion .dist-bars');
+    var previousWidths = {};
+    if(animateDistributionBars && barsContainer){
+      barsContainer.querySelectorAll('.dist-row-card').forEach(function(row){
+        var fill = row.querySelector('.dist-fill');
+        if(fill) previousWidths[row.getAttribute('data-r')] = fill.style.width || '0%';
+      });
+    }
     if(barsContainer){
       var barData = [
+        {r:'Deterioro', label:'1. Deterioro (<40)'},
         {r:'Riesgo', label:'2. Riesgo (≥40 y <60)'},
         {r:'Vulnerable', label:'3. Vulnerable (≥60 y <70)'},
         {r:'Solvente', label:'4. Solvente (≥70 y <80)'},
-        {r:'Deterioro', label:'1. Deterioro (<40)'},
         {r:'Sostenible', label:'5. Sostenible (≥80)'}
       ];
-      /* Build structure only once */
-      if(!barsContainer.querySelector('.dist-bar-row')){
-        var html = '<h4>Distribución Rangos IDF — % de Departamentos en cada Categoría</h4>';
-        barData.forEach(function(bd){
-          html += '<div class="dist-bar-row" data-r="'+bd.r+'"><div class="lbl"><span>'+bd.label+'</span><span class="lbl-val"></span></div><div class="track"><div class="fill" style="background:'+IDF_COLORS[bd.r]+';"></div></div></div>';
-        });
-        html += '<div class="dist-note"></div>';
-        barsContainer.innerHTML = html;
-      }
-      /* Animate: update widths and labels */
-      barData.forEach(function(bd){
-        var c = counts[bd.r]||0;
-        var p = total>0?(c/total*100):0;
-        var row = barsContainer.querySelector('[data-r="'+bd.r+'"]');
-        if(row){
-          row.querySelector('.fill').style.width = p+'%';
-          row.querySelector('.lbl-val').textContent = fmtPct(p)+' · '+c;
+
+      /* Calculate entrances and exits vs prevYear */
+      var entraronMap = {};
+      var salieronMap = {};
+      RANGO_ORDER.forEach(function(r){ entraronMap[r] = 0; salieronMap[r] = 0; });
+
+      var curKeys = Object.keys(yd);
+      var prevKeys = Object.keys(prevYd);
+      var allKeys = Array.from(new Set(curKeys.concat(prevKeys)));
+
+      allKeys.forEach(function(k){
+        var curItem = yd[k];
+        var prevItem = prevYd[k];
+        var curR = (curItem && curItem.idf != null) ? getRango(curItem.idf) : null;
+        var prevR = (prevItem && prevItem.idf != null) ? getRango(prevItem.idf) : null;
+
+        if(curR && curR !== prevR){
+          entraronMap[curR] = (entraronMap[curR] || 0) + 1;
+        }
+        if(prevR && prevR !== curR){
+          salieronMap[prevR] = (salieronMap[prevR] || 0) + 1;
         }
       });
+
+      var html = '<div class="dist-section-header">' +
+                 '<h3 class="dist-header-title">Distribución Rangos IDF — % de Departamentos en cada Categoría</h3>' +
+                 '<div class="dist-header-sub">Entradas y salidas calculadas frente a la vigencia anterior.</div>' +
+                 '</div>' +
+                 '<div class="dist-rows-container">';
+
+      barData.forEach(function(bd){
+        var c = counts[bd.r] || 0;
+        var p = total > 0 ? (c / total * 100) : 0;
+        var inCount = entraronMap[bd.r] || 0;
+        var outCount = salieronMap[bd.r] || 0;
+
+        html += '<div class="dist-row-card" data-r="' + bd.r + '">' +
+                  '<div class="dist-col-label">' + bd.label + '</div>' +
+                  '<div class="dist-col-middle">' +
+                    '<div class="dist-track">' +
+                      '<div class="dist-fill" style="width:' + Math.max(p > 0 ? 0.8 : 0, p).toFixed(2) + '%;background:' + IDF_COLORS[bd.r] + ';"></div>' +
+                      '<div class="dist-pct-pill">' + fmtPct(p.toFixed(2)) + '</div>' +
+                    '</div>' +
+                    '<div class="dist-pills-sub">' +
+                      '<span class="badge-in">Entraron: ' + inCount + '</span>' +
+                      '<span class="badge-out">Salieron: ' + outCount + '</span>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="dist-col-count">' + c + '</div>' +
+                '</div>';
+      });
+
+      html += '</div>';
+
       var maxRango = getMaxRango(counts);
-      var note = barsContainer.querySelector('.dist-note');
-      if(note) note.textContent = 'En el total nacional ('+total+' departamentos), el rango con mayor concentración es '+maxRango+', con '+(counts[maxRango]||0)+' departamentos. El IDF promedio '+selectedYear+' es '+fmt(nacAvg)+'.';
+      var maxRangoLabel = (barData.find(function(b){ return b.r === maxRango; }) || {}).label || maxRango;
+      var maxCount = counts[maxRango] || 0;
+      var maxPct = total > 0 ? (maxCount / total * 100).toFixed(2) : '0';
+      var maxEntraron = entraronMap[maxRango] || 0;
+      var maxSalieron = salieronMap[maxRango] || 0;
+
+      html += '<div class="dist-highlight-note">' +
+                'En la vigencia ' + selectedYear + ', el rango con mayor concentración es ' + maxRangoLabel + ', con ' + maxCount + ' departamentos, equivalente al ' + fmtPct(maxPct) + '. Frente a ' + prevYear + ', en ese rango entraron ' + maxEntraron + ' departamentos y salieron ' + maxSalieron + '.' +
+              '</div>';
+
+      barsContainer.innerHTML = html;
+      if(animateDistributionBars){
+        var fills = barsContainer.querySelectorAll('.dist-fill');
+        fills.forEach(function(fill){
+          var row = fill.closest('.dist-row-card');
+          var range = row ? row.getAttribute('data-r') : '';
+          fill.dataset.targetWidth = fill.style.width;
+          fill.style.transition = 'none';
+          fill.style.width = previousWidths[range] || '0%';
+        });
+        void barsContainer.offsetWidth;
+        requestAnimationFrame(function(){
+          fills.forEach(function(fill){
+            fill.style.transition = '';
+            fill.style.width = fill.dataset.targetWidth;
+            delete fill.dataset.targetWidth;
+          });
+        });
+      }
     }
   }
 
@@ -4068,14 +4204,7 @@ footer.foot{
   }
 
   var playInterval = null;
-  function resetBars(){
-    var barsContainer = document.querySelector('#page-distribucion .dist-bars');
-    if(!barsContainer) return;
-    var fills = barsContainer.querySelectorAll('.fill');
-    fills.forEach(function(f){ f.style.transition='none'; f.style.width='0%'; });
-    void fills[0];
-    fills.forEach(function(f){ f.style.transition='width 0.85s cubic-bezier(0.22,1,0.36,1)'; });
-  }
+  var animateDistributionBars = false;
   function setupMapPlay(){
     var btn = document.getElementById('map-play-btn');
     if(!btn) return;
@@ -4083,149 +4212,35 @@ footer.foot{
       if(playInterval){
         clearInterval(playInterval);
         playInterval = null;
+        animateDistributionBars = false;
         btn.innerHTML = '&#9654; Reproducir';
         return;
       }
       var years = idfData.meta.anios;
       var idx = 0;
+      animateDistributionBars = true;
       selectedYear = years[idx];
       var ySel = document.getElementById('dist-year-filter');
       if(ySel) ySel.value = selectedYear;
-      resetBars();
-      setTimeout(function(){
-        updatePage('distribucion');
-      }, 50);
+      updatePage('distribucion');
       btn.innerHTML = '&#9646;&#9646; Pausar';
       playInterval = setInterval(function(){
         idx++;
         if(idx >= years.length){
           clearInterval(playInterval);
           playInterval = null;
+          animateDistributionBars = false;
           btn.innerHTML = '&#9654; Reproducir';
           return;
         }
         selectedYear = years[idx];
         var ySel2 = document.getElementById('dist-year-filter');
         if(ySel2) ySel2.value = selectedYear;
-        resetBars();
-        setTimeout(function(){
-          updatePage('distribucion');
-        }, 50);
-      }, 1200);
+        updatePage('distribucion');
+      }, 1600);
     });
   }
 
-  function setupMapDownload(){
-    var btn = document.getElementById('map-download-btn');
-    if(!btn) return;
-
-    var DL_LABEL = '<svg class="ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 3V15m0 0 4-4m-4 4-4-4M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Descargar visualización';
-
-    btn.addEventListener('click', function(){
-      if(btn.disabled) return;
-      if(typeof html2canvas !== 'function'){
-        alert('No se pudo cargar la librería de captura (html2canvas). Revisa tu conexión a internet.');
-        return;
-      }
-      if(typeof MediaRecorder === 'undefined'){
-        alert('Tu navegador no soporta la grabación de video (MediaRecorder).');
-        return;
-      }
-      var years = idfData.meta.anios;
-      if(!years || !years.length) return;
-
-      var area = document.getElementById('page-distribucion');
-      var scale = Math.min(3, 2560 / Math.max(1, area.offsetWidth));
-      var W = Math.round(area.offsetWidth * scale);
-      var H = Math.max(1, Math.round(area.offsetHeight * scale));
-
-      var canvas = document.createElement('canvas');
-      canvas.width = W;
-      canvas.height = H;
-      var ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, W, H);
-      canvas.style.position = 'absolute';
-      canvas.style.left = '-9999px';
-      canvas.style.top = '0';
-      document.body.appendChild(canvas);
-
-      var stream = canvas.captureStream(15);
-      var mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9'
-               : (MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : 'video/mp4');
-      var rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 40000000 });
-      var chunks = [];
-      rec.ondataavailable = function(e){ if(e.data && e.data.size) chunks.push(e.data); };
-      rec.onstop = function(){
-        try {
-          var blob = new Blob(chunks, { type: mime.split(';')[0] });
-          var url = URL.createObjectURL(blob);
-          var a = document.createElement('a');
-          a.href = url;
-          a.download = 'visualizacion_idf_' + years[0] + '_' + years[years.length - 1] + '.webm';
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
-        } catch(e) {}
-        if(canvas.parentNode) canvas.parentNode.removeChild(canvas);
-        btn.disabled = false;
-        btn.innerHTML = DL_LABEL;
-      };
-
-      btn.disabled = true;
-      btn.innerHTML = 'Descargando...';
-      rec.start();
-
-      var i = 0;
-      function step(){
-        if(i >= years.length){ rec.stop(); return; }
-        selectedYear = years[i];
-        var ySel = document.getElementById('dist-year-filter');
-        if(ySel) ySel.value = selectedYear;
-        var dSel = document.getElementById('dist-dept-filter');
-        if(dSel) dSel.value = selectedDept || 'Todos';
-        refreshDistribucion();
-        /* Esperar a que terminen las transiciones de las barras */
-        setTimeout(function(){
-          var svgEl = area.querySelector('#colombia-map svg');
-          var hadW = svgEl ? svgEl.hasAttribute('width') : false;
-          var prevW = null, prevH = null;
-          if(svgEl){
-            var r = svgEl.getBoundingClientRect();
-            prevW = svgEl.getAttribute('width');
-            prevH = svgEl.getAttribute('height');
-            svgEl.setAttribute('width', r.width);
-            svgEl.setAttribute('height', r.height);
-          }
-          html2canvas(area, {
-            backgroundColor: '#ffffff',
-            scale: scale,
-            logging: false,
-            useCORS: true,
-            windowWidth: area.offsetWidth,
-            windowHeight: area.offsetHeight
-          })
-            .then(function(c){
-              ctx.drawImage(c, 0, 0, W, H);
-              i++;
-              setTimeout(step, 700);
-            })
-            .catch(function(){
-              i++;
-              setTimeout(step, 700);
-            })
-            .finally(function(){
-              if(svgEl){
-                if(hadW){ svgEl.setAttribute('width', prevW); svgEl.setAttribute('height', prevH); }
-                else { svgEl.removeAttribute('width'); svgEl.removeAttribute('height'); }
-              }
-            });
-        }, 950);
-      }
-      step();
-    });
-  }
   var mapState = null;
   function renderMap(topoData){
     var container = document.getElementById('colombia-map');
@@ -4236,10 +4251,9 @@ footer.foot{
       container.innerHTML = '';
       var svg = d3.select(container).append('svg')
         .attr('viewBox', '0 0 '+width+' '+height)
-        .style('width','100%').style('height','auto');
+        .style('display','block').style('width','75%').style('height','auto').style('margin','50px auto 0');
 
       var g = svg.append('g');
-
       var defs = svg.append('defs');
       var glow = defs.append('filter').attr('id','dept-glow')
         .attr('x','-40%').attr('y','-40%').attr('width','180%').attr('height','180%');
@@ -4330,22 +4344,18 @@ footer.foot{
         .attr('stroke', '#ffffff')
         .attr('stroke-width', 0.5)
         .style('cursor', 'pointer')
-        .style('transition', 'stroke 0.05s ease, stroke-width 0.05s ease, fill 0.2s ease')
+        .style('transition', 'stroke 0.12s ease, stroke-width 0.12s ease, fill 0.2s ease, filter 0.12s ease')
         .on('mouseover', function(e, d){
-          /* Immediately clear stroke from any previously hovered department */
-          if(mapState && mapState.paths) mapState.paths.attr('stroke', '#ffffff').attr('stroke-width', 0.5);
-
           var deptName = findDeptName(d.properties);
           var score = getDeptIdF(deptName);
           var scorePrev = getDeptIdFPrev(deptName);
           var rango = getDeptRango(deptName);
           var prevY = String(parseInt(selectedYear)-1);
 
-          /* Apply subtle hover stroke ONLY to the active department and draw it on top of neighbors */
+          var isSelectedDept = deptName && selectedDept && deptName.toLowerCase() === selectedDept.toLowerCase();
           d3.select(this)
-            .raise()
             .attr('stroke','#0f172a')
-            .attr('stroke-width', 0.75);
+            .attr('stroke-width', 0.65);
 
           var tooltip = document.getElementById('mapTooltip');
           if(tooltip){
@@ -4390,9 +4400,16 @@ footer.foot{
             tooltip.style.top = (e.clientY-10)+'px';
           }
         })
+        .on('click', function(e, d){
+          var deptName = findDeptName(d.properties);
+          if(!deptName) return;
+          selectedDept = deptName;
+          var deptSel = document.getElementById('dist-dept-filter');
+          if(deptSel) deptSel.value = deptName;
+          updatePage('distribucion');
+        })
         .on('mouseout', function(){
-          /* Clear hover stroke on all paths on mouseout */
-          if(mapState && mapState.paths) mapState.paths.attr('stroke', '#ffffff').attr('stroke-width', 0.5);
+          highlightDeptOnMap(selectedDept);
 
           var tooltip = document.getElementById('mapTooltip');
           if(tooltip) tooltip.style.display='none';
@@ -4405,20 +4422,14 @@ footer.foot{
 
   function highlightDeptOnMap(deptName){
     if(!mapState || !mapState.paths) return;
-    /* Reset all paths to default white thin border */
-    mapState.paths.attr('stroke', '#ffffff').attr('stroke-width', 0.5);
-
-    if(!deptName || deptName === 'Todos') return;
-
-    /* Highlight matching department with subtle dark border stroke */
     mapState.paths.each(function(d){
       var name = mapState.findDeptName(d.properties);
-      if(name && name.toLowerCase() === deptName.toLowerCase()){
-        d3.select(this)
-          .raise()
-          .attr('stroke', '#0f172a')
-          .attr('stroke-width', 0.75);
-      }
+      var selected = deptName && deptName !== 'Todos' && name && name.toLowerCase() === deptName.toLowerCase();
+      var path = d3.select(this)
+        .attr('stroke', selected ? '#0f172a' : '#ffffff')
+        .attr('stroke-width', selected ? 0.65 : 0.5)
+        .attr('filter', null);
+      if(selected) path.raise();
     });
   }
 
@@ -4494,7 +4505,6 @@ footer.foot{
       refreshDistribucion();
       setupDistFilters();
       setupMapPlay();
-      setupMapDownload();
       setupCSVButtons();
 
     } catch(err){
@@ -4505,6 +4515,7 @@ footer.foot{
 
   // ---- Print section selection ----
   window.openPrintModal=function(){
+    syncPrintAll();
     document.getElementById('print-modal').style.display='flex';
   };
   window.closePrintModal=function(){
@@ -4512,13 +4523,99 @@ footer.foot{
   };
   window.togglePrintAll=function(src){
     var secs=document.querySelectorAll('.print-sec');
-    secs.forEach(function(c){ c.checked=src.checked; c.disabled=src.checked; });
+    secs.forEach(function(c){ c.checked=src.checked; });
+    src.indeterminate=false;
   };
   window.syncPrintAll=function(){
     var all=document.getElementById('print-all');
     var secs=Array.prototype.slice.call(document.querySelectorAll('.print-sec'));
-    all.checked=secs.every(function(c){ return c.checked; });
-    all.disabled=false;
+    var selected=secs.filter(function(c){ return c.checked; }).length;
+    all.checked=selected===secs.length;
+    all.indeterminate=selected>0&&selected<secs.length;
+  };
+  window.openDistributionPrintModal=function(){
+    var select=document.getElementById('dist-print-year');
+    var years=(idfData&&idfData.meta&&idfData.meta.anios?idfData.meta.anios:[]).slice().sort(function(a,b){return Number(b)-Number(a);});
+    select.innerHTML='';
+    years.forEach(function(year){
+      var option=document.createElement('option');
+      option.value=year;
+      option.textContent=year;
+      select.appendChild(option);
+    });
+    var allOption=document.createElement('option');
+    allOption.value='Todos';
+    allOption.textContent='Todos';
+    select.appendChild(allOption);
+    select.value=years.indexOf(String(selectedYear))>=0?String(selectedYear):(years[0]||'Todos');
+    document.getElementById('dist-print-modal').style.display='flex';
+  };
+  window.closeDistributionPrintModal=function(){
+    document.getElementById('dist-print-modal').style.display='none';
+  };
+  window.printDistributionViews=async function(){
+    if(!idfData) return;
+    var select=document.getElementById('dist-print-year');
+    var years=select.value==='Todos'?idfData.meta.anios.slice():[select.value];
+    var originalYear=selectedYear;
+    var yearSelect=document.getElementById('dist-year-filter');
+    var printView=document.getElementById('dist-print-view');
+    var playButton=document.getElementById('map-play-btn');
+    if(playInterval){
+      clearInterval(playInterval);
+      playInterval=null;
+      if(playButton) playButton.innerHTML='&#9654; Reproducir';
+    }
+    animateDistributionBars=false;
+    printView.innerHTML='';
+    var waitForRender=function(){
+      return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve);});});
+    };
+    var page=document.getElementById('page-distribucion');
+    try{
+      for(var i=0;i<years.length;i++){
+        selectedYear=years[i];
+        if(yearSelect) yearSelect.value=selectedYear;
+        updatePage('distribucion');
+        await waitForRender();
+        var sheet=document.createElement('section');
+        sheet.className='dist-print-sheet';
+        sheet.dataset.year=selectedYear;
+        [
+          page.querySelector(':scope > .panel.panel-body'),
+          page.querySelector(':scope > .dist-top'),
+          page.querySelector(':scope > .dist-layout')
+        ].forEach(function(section){
+          if(section) sheet.appendChild(section.cloneNode(true));
+        });
+        sheet.querySelectorAll('.map-ctrl,#mapTooltip').forEach(function(element){element.remove();});
+        printView.appendChild(sheet);
+      }
+    }catch(error){
+      console.error('No se pudo preparar la impresión de Distribución:',error);
+      printView.innerHTML='';
+      selectedYear=originalYear;
+      if(yearSelect) yearSelect.value=originalYear;
+      updatePage('distribucion');
+      closeDistributionPrintModal();
+      return;
+    }
+    selectedYear=originalYear;
+    if(yearSelect) yearSelect.value=originalYear;
+    updatePage('distribucion');
+    await waitForRender();
+    closeDistributionPrintModal();
+    var printStyle=document.createElement('style');
+    printStyle.id='dist-print-page-style';
+    printStyle.textContent='@page { size: landscape; margin: 10mm; }';
+    document.head.appendChild(printStyle);
+    document.body.classList.add('distribution-print-mode');
+    window.addEventListener('afterprint',function(){
+      document.body.classList.remove('distribution-print-mode');
+      printView.innerHTML='';
+      printStyle.remove();
+    },{once:true});
+    window.print();
   };
   window.doPrint=function(){
     var secs=Array.prototype.slice.call(document.querySelectorAll('.print-sec')).filter(function(c){ return c.checked; });
@@ -4542,20 +4639,34 @@ footer.foot{
       <input type="checkbox" id="print-all" onchange="togglePrintAll(this);" checked> <b>Todas las secciones</b>
     </label>
     <label class="print-opt">
-      <input type="checkbox" class="print-sec" value="page-instructivo" onchange="syncPrintAll();"> Instructivo
+      <input type="checkbox" class="print-sec" value="page-instructivo" onchange="syncPrintAll();" checked> Instructivo
     </label>
     <label class="print-opt">
-      <input type="checkbox" class="print-sec" value="page-ficha" onchange="syncPrintAll();"> Ficha Departamental IDF
+      <input type="checkbox" class="print-sec" value="page-ficha" onchange="syncPrintAll();" checked> Ficha Departamental IDF
     </label>
     <label class="print-opt">
-      <input type="checkbox" class="print-sec" value="page-consolidado" onchange="syncPrintAll();"> Consolidado
+      <input type="checkbox" class="print-sec" value="page-consolidado" onchange="syncPrintAll();" checked> Consolidado
     </label>
     <label class="print-opt">
-      <input type="checkbox" class="print-sec" value="page-distribucion" onchange="syncPrintAll();"> Distribución IDF
+      <input type="checkbox" class="print-sec" value="page-distribucion" onchange="syncPrintAll();" checked> Distribución IDF
     </label>
     <div class="print-modal-actions">
       <button class="print-cancel" onclick="closePrintModal();">Cancelar</button>
       <button class="print-go" onclick="doPrint();">Imprimir</button>
+    </div>
+  </div>
+</div>
+
+<div id="dist-print-view" class="dist-print-view"></div>
+<div class="print-modal" id="dist-print-modal" onclick="if(event.target===this)closeDistributionPrintModal();">
+  <div class="print-modal-box">
+    <div class="print-modal-title">Imprimir Distribución IDF</div>
+    <label class="dist-print-period" for="dist-print-year">Período
+      <select id="dist-print-year"></select>
+    </label>
+    <div class="print-modal-actions">
+      <button class="print-cancel" onclick="closeDistributionPrintModal();">Cancelar</button>
+      <button class="print-go" onclick="printDistributionViews();">Imprimir</button>
     </div>
   </div>
 </div>
