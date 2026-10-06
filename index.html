@@ -6,6 +6,8 @@
 <title>Índice de Desempeño Fiscal — IDF Departamental</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://d3js.org/topojson.v3.min.js"></script>
+<script src="js/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
   --navy:#10356c;
@@ -1474,7 +1476,8 @@ table.consol-table tr.dim-gest-row td {
 .map-btn:active{transform:translateY(0);}
 .map-btn:disabled{opacity:.75;cursor:default;transform:none;filter:none;box-shadow:0 2px 6px rgba(20,30,60,.20);}
 .map-btn.play{background:linear-gradient(180deg,#2a4673,#1c3052);}
-.map-btn.print{background:linear-gradient(180deg,#59677a,#3d4a5e);}
+.map-btn.print{background:linear-gradient(135deg,#1c7b2c,#35bb5a);box-shadow:0 2px 6px rgba(28,123,44,.28);}
+.map-btn.print:hover{filter:brightness(1.1);box-shadow:0 4px 10px rgba(28,123,44,.38);transform:translateY(-1px);}
 .dist-print-view{display:none;}
 .dist-print-sheet{background:#fff;padding:10px;}
 .dist-print-period{display:block;font-size:12px;font-weight:700;color:var(--navy);margin:12px 0 4px;}
@@ -2259,21 +2262,857 @@ footer.foot{
   }
 
   /* ================================================================
-     CSV DOWNLOAD UTILITY
+     EXCEL EXPORT UTILITY — MULTI-SHEET WORKBOOK
      ================================================================ */
+  function exportarIndiceDesempenoFiscal(){
+    if(!idfData) return;
+    var anios = (idfData.meta && idfData.meta.anios) ? idfData.meta.anios : ['2020','2021','2022','2023','2024'];
+    var selYear = selectedYear || anios[anios.length - 1];
+    var prevYear = String(parseInt(selYear) - 1);
+    var deptName = selectedDept || getDeptList()[0] || 'ANTIOQUIA';
+    var ydCurrent = idfData.records[selYear] || {};
+    var ydPrev = idfData.records[prevYear] || {};
+    var d = ydCurrent[deptName] || {};
+    var prevD = ydPrev[deptName] || {};
+
+    /* Helper to calculate auto column widths */
+    function autoColWidths(rows){
+      var widths = [];
+      rows.forEach(function(row){
+        if(!row) return;
+        row.forEach(function(cell, idx){
+          var len = cell != null ? String(cell).length : 0;
+          if(!widths[idx] || len > widths[idx]) widths[idx] = len;
+        });
+      });
+      return widths.map(function(w){
+        return { wch: Math.min(Math.max(w + 3, 12), 70) };
+      });
+    }
+
+    /* Helper formatters for Excel */
+    function safeNum(v){
+      if(v == null || v === '' || isNaN(v)) return '-';
+      var n = parseFloat(v);
+      return isNaN(n) ? '-' : Number(n.toFixed(2));
+    }
+
+    /* ----------------------------------------------------
+       HOJA 1: INSTRUCTIVO
+       ---------------------------------------------------- */
+    var rowsInst = [];
+    rowsInst.push(['ÍNDICE DE DESEMPEÑO FISCAL (IDF) — INSTRUCTIVO Y METODOLOGÍA']);
+    rowsInst.push(['Vigencia Seleccionada:', selYear, 'Vigencia Anterior:', prevYear, 'Fecha de Exportación:', new Date().toLocaleDateString('es-CO')]);
+    rowsInst.push([]);
+
+    rowsInst.push(['1. ¿QUÉ MIDE EL IDF?']);
+    rowsInst.push(['Mide el desempeño de la gestión fiscal y financiera de las entidades territoriales en función de la viabilidad fiscal, la capacidad de generación de recursos propios, el endeudamiento, los niveles de inversión y la capacidad de gestión financiera (Ley 617 de 2000, art. 79).']);
+    rowsInst.push([]);
+
+    rowsInst.push(['2. DIMENSIONES Y PONDERACIÓN']);
+    rowsInst.push(['Dimensión', 'Ponderación', 'Descripción de Indicadores']);
+    rowsInst.push(['Resultados Fiscales', '80%', 'Dependencia de las transferencias (16%), Relevancia FBKF (16%), Endeudamiento contable (16%), Ahorro corriente (16%) y Balance fiscal primario (16%).']);
+    rowsInst.push(['Gestión Financiera Territorial', '20%', 'Holgura Ley 617 (6,66%), Capacidad de programación y recaudo (6,66%), Capacidad de ejecución de inversión (6,66%), más bonificaciones por esfuerzo propio y catastro actualizado.']);
+    rowsInst.push([]);
+
+    rowsInst.push(['3. RANGOS DE DESEMPEÑO FISCAL']);
+    rowsInst.push(['Rango', 'Puntaje', 'Categoría', 'Descripción']);
+    rowsInst.push(['1', '< 40 pts', '1. Deterioro', 'Riesgo de déficit o alto endeudamiento. Alta dependencia de transferencias. Bajos niveles de inversión en FBKF.']);
+    rowsInst.push(['2', '40 - 60 pts', '2. Riesgo', 'Debilidades fiscales importantes, aunque en un nivel menos crítico que los departamentos en deterioro.']);
+    rowsInst.push(['3', '60 - 70 pts', '3. Vulnerable', 'Pueden cumplir límites legales de deuda y gasto, pero aún presentan dependencia de transferencias.']);
+    rowsInst.push(['4', '70 - 80 pts', '4. Solvente', 'Finanzas saludables con oportunidades de mejora en algunos indicadores fiscales.']);
+    rowsInst.push(['5', '>= 80 pts', '5. Sostenible', 'Finanzas saludables, cumplimiento de límites, recursos propios y alto gasto en FBKF.']);
+    rowsInst.push([]);
+
+    rowsInst.push(['4. EVOLUCIÓN HISTÓRICA DEL IDF (NACIONAL)']);
+    rowsInst.push(['Año', 'IDF Promedio Nacional', 'Variación (pp)', 'Departamentos Evaluados', 'IDF Máximo', 'IDF Mínimo']);
+    var evoList = (idfData.dashboard && idfData.dashboard.evolucion_historica) ? idfData.dashboard.evolucion_historica : [];
+    if(evoList.length){
+      evoList.forEach(function(item){
+        rowsInst.push([
+          item.anio,
+          item.idf_promedio != null ? safeNum(item.idf_promedio) : '-',
+          item.var_pp != null ? (item.var_pp >= 0 ? '+' : '') + safeNum(item.var_pp) : '-',
+          item.deptos,
+          item.maximo != null ? safeNum(item.maximo) : '-',
+          item.minimo != null ? safeNum(item.minimo) : '-'
+        ]);
+      });
+    } else {
+      var pAvg = null;
+      anios.forEach(function(y){
+        var sc = getAllScores(y);
+        var a = sc.length ? avg(sc) : null;
+        var diff = (pAvg != null && a != null) ? a - pAvg : null;
+        var mx = sc.length ? Math.max.apply(null, sc) : null;
+        var mn = sc.length ? Math.min.apply(null, sc) : null;
+        rowsInst.push([
+          y,
+          a != null ? safeNum(a) : '-',
+          diff != null ? (diff >= 0 ? '+' : '') + safeNum(diff) : '-',
+          sc.length,
+          mx != null ? safeNum(mx) : '-',
+          mn != null ? safeNum(mn) : '-'
+        ]);
+        pAvg = a;
+      });
+    }
+    rowsInst.push([]);
+
+    /* 5. Resultados por Regiones */
+    rowsInst.push(['5. RESULTADOS IDF GENERAL POR REGIONES']);
+    var regionHdr = ['Región'].concat(anios.map(function(y){ return 'IDF ' + y; }));
+    rowsInst.push(regionHdr);
+    var regList = ['Nacional','Caribe','Centro Oriente','Centro Sur Amazonia','Del Llano','Eje Cafetero','Pacifico'];
+    regList.forEach(function(r){
+      var rRow = [r];
+      anios.forEach(function(y){
+        var ydY = idfData.records[y] || {};
+        var arr = r === 'Nacional'
+          ? Object.values(ydY).map(function(dd){ return dd.idf; }).filter(function(v){ return v!=null; })
+          : Object.values(ydY).filter(function(dd){ return (dd.region||'').trim() === r; }).map(function(dd){ return dd.idf; }).filter(function(v){ return v!=null; });
+        rRow.push(arr.length ? safeNum(avg(arr)) : '-');
+      });
+      rowsInst.push(rRow);
+    });
+    rowsInst.push([]);
+
+    /* 6. Resultados por Categorías */
+    rowsInst.push(['6. RESULTADOS IDF GENERAL POR CATEGORÍAS LEY 617 DE 2000']);
+    var catHdr = ['Categoría'].concat(anios.map(function(y){ return 'IDF ' + y; }));
+    rowsInst.push(catHdr);
+    var catList = ['Nacional','ESP','1','2','3','4'];
+    catList.forEach(function(c){
+      var cRow = [c];
+      anios.forEach(function(y){
+        var ydY = idfData.records[y] || {};
+        var arr = c === 'Nacional'
+          ? Object.values(ydY).map(function(dd){ return dd.idf; }).filter(function(v){ return v!=null; })
+          : Object.values(ydY).filter(function(dd){ return String(dd.categoria).trim() === c; }).map(function(dd){ return dd.idf; }).filter(function(v){ return v!=null; });
+        cRow.push(arr.length ? safeNum(avg(arr)) : '-');
+      });
+      rowsInst.push(cRow);
+    });
+    rowsInst.push([]);
+
+    /* 7. Tipologías */
+    rowsInst.push(['7. IDF PROMEDIO POR TIPOLOGÍA (VIGENCIA ' + selYear + ' VS ' + prevYear + ')']);
+    rowsInst.push(['Tipología', 'IDF ' + selYear, 'IDF ' + prevYear, 'Variación (pp)', 'Departamentos', '% del Total']);
+    var tipsSel = {}, tipsPrev = {};
+    Object.keys(ydCurrent).forEach(function(k){
+      var t = ydCurrent[k].tipologia;
+      if(t && t !== 'N/A' && t !== null){
+        var tk = Math.round(t);
+        if(!tipsSel[tk]) tipsSel[tk] = { sum: 0, count: 0 };
+        if(ydCurrent[k].idf != null){ tipsSel[tk].sum += ydCurrent[k].idf; tipsSel[tk].count++; }
+      }
+    });
+    Object.keys(ydPrev).forEach(function(k){
+      var t = ydPrev[k].tipologia;
+      if(t && t !== 'N/A' && t !== null){
+        var tk = Math.round(t);
+        if(!tipsPrev[tk]) tipsPrev[tk] = { sum: 0, count: 0 };
+        if(ydPrev[k].idf != null){ tipsPrev[tk].sum += ydPrev[k].idf; tipsPrev[tk].count++; }
+      }
+    });
+    var natScoresSel = Object.values(ydCurrent).map(function(dd){ return dd.idf; }).filter(function(v){ return v!=null; });
+    var natScoresPrev = Object.values(ydPrev).map(function(dd){ return dd.idf; }).filter(function(v){ return v!=null; });
+    var natAvgSel = natScoresSel.length ? avg(natScoresSel) : null;
+    var natAvgPrev = natScoresPrev.length ? avg(natScoresPrev) : null;
+    var natDiff = (natAvgSel != null && natAvgPrev != null) ? natAvgSel - natAvgPrev : null;
+    rowsInst.push([
+      'Nacional',
+      natAvgSel != null ? safeNum(natAvgSel) : '-',
+      natAvgPrev != null ? safeNum(natAvgPrev) : '-',
+      natDiff != null ? (natDiff >= 0 ? '+' : '') + safeNum(natDiff) : '-',
+      natScoresSel.length,
+      '100%'
+    ]);
+    Object.keys(tipsSel).sort(function(a,b){ return Number(a)-Number(b); }).forEach(function(tk){
+      var sAvg = tipsSel[tk].count > 0 ? tipsSel[tk].sum / tipsSel[tk].count : null;
+      var pAvg = tipsPrev[tk] && tipsPrev[tk].count > 0 ? tipsPrev[tk].sum / tipsPrev[tk].count : null;
+      var tDiff = (sAvg != null && pAvg != null) ? sAvg - pAvg : null;
+      var tPct = natScoresSel.length > 0 ? (tipsSel[tk].count / natScoresSel.length * 100).toFixed(1) + '%' : '-';
+      rowsInst.push([
+        'Tipología ' + tk,
+        sAvg != null ? safeNum(sAvg) : '-',
+        pAvg != null ? safeNum(pAvg) : '-',
+        tDiff != null ? (tDiff >= 0 ? '+' : '') + safeNum(tDiff) : '-',
+        tipsSel[tk].count,
+        tPct
+      ]);
+    });
+    rowsInst.push([]);
+
+    /* 8. Ranking Instructivo */
+    rowsInst.push(['8. RANKING DE DEPARTAMENTOS IDF ' + selYear]);
+    rowsInst.push(['Posición', 'Departamento', 'IDF ' + selYear, 'IDF ' + prevYear, 'Variación (pp)', 'Rango de Desempeño']);
+    var deptsRank = Object.keys(ydCurrent).map(function(k){
+      return [k, ydCurrent[k].idf, ydPrev[k] ? ydPrev[k].idf : null];
+    }).filter(function(item){ return item[1] != null; }).sort(function(a,b){ return b[1] - a[1]; });
+    deptsRank.forEach(function(item, idx){
+      var rDiff = item[2] != null ? item[1] - item[2] : null;
+      rowsInst.push([
+        idx + 1,
+        formatDeptName(item[0]),
+        safeNum(item[1]),
+        item[2] != null ? safeNum(item[2]) : '-',
+        rDiff != null ? (rDiff >= 0 ? '+' : '') + safeNum(rDiff) : '-',
+        rangoLabel(getRango(item[1]))
+      ]);
+    });
+    rowsInst.push([]);
+
+    /* 9. Distribución Instructivo */
+    rowsInst.push(['9. DISTRIBUCIÓN POR RANGOS DE DESEMPEÑO IDF — AÑO ' + selYear]);
+    rowsInst.push(['Rango de Desempeño', 'Cantidad Departamentos', '% del Total', 'IDF Promedio', 'Cant. Año Anterior', 'Var. Cantidad']);
+    var countsInst = {}, prevCountsInst = {};
+    RANGO_ORDER.forEach(function(r){ countsInst[r] = { count: 0, sum: 0 }; prevCountsInst[r] = 0; });
+    Object.values(ydCurrent).forEach(function(dd){
+      if(dd.idf != null){
+        var r = getRango(dd.idf);
+        if(countsInst[r]){ countsInst[r].count++; countsInst[r].sum += dd.idf; }
+      }
+    });
+    Object.values(ydPrev).forEach(function(dd){
+      if(dd.idf != null){
+        var r = getRango(dd.idf);
+        if(prevCountsInst[r] !== undefined) prevCountsInst[r]++;
+      }
+    });
+    var totalInst = Object.values(ydCurrent).length;
+    RANGO_ORDER.forEach(function(r){
+      var c = countsInst[r].count;
+      var a = c > 0 ? countsInst[r].sum / c : null;
+      var p = totalInst > 0 ? (c / totalInst * 100).toFixed(1) + '%' : '0%';
+      var pc = prevCountsInst[r] || 0;
+      var dCount = c - pc;
+      rowsInst.push([
+        rangoLabel(r),
+        c,
+        p,
+        a != null ? safeNum(a) : '-',
+        pc,
+        (dCount >= 0 ? '+' : '') + dCount
+      ]);
+    });
+
+    /* ----------------------------------------------------
+       HOJA 2: FICHA DEPARTAMENTAL
+       ---------------------------------------------------- */
+    var rowsFicha = [];
+    rowsFicha.push(['FICHA DEPARTAMENTAL — ÍNDICE DE DESEMPEÑO FISCAL (IDF)']);
+    rowsFicha.push(['DEPARTAMENTO SELECCIONADO:', deptName]);
+    rowsFicha.push(['Vigencia Seleccionada:', selYear, 'Vigencia Anterior:', prevYear, 'Fecha de Exportación:', new Date().toLocaleDateString('es-CO')]);
+    rowsFicha.push(['Región:', d.region || 'N/A', 'Categoría Ley 617:', d.categoria || 'N/A', 'Tipología:', d.tipologia ? ('Tipología ' + Math.round(d.tipologia)) : 'N/A']);
+    rowsFicha.push(['IDF Total ' + selYear + ':', safeNum(d.idf), 'IDF Total ' + prevYear + ':', prevD ? safeNum(prevD.idf) : '-']);
+    var deltaIDF = prevD && prevD.idf != null ? d.idf - prevD.idf : null;
+    var pctIDF = prevD && prevD.idf ? (deltaIDF / prevD.idf * 100) : null;
+    rowsFicha.push([
+      'Variación IDF (δ):', deltaIDF != null ? (deltaIDF >= 0 ? '+' : '') + safeNum(deltaIDF) : '-',
+      'Variación %:', pctIDF != null ? (pctIDF >= 0 ? '+' : '') + safeNum(pctIDF) + '%' : '-',
+      'Rango IDF ' + selYear + ':', d.rango_completo || rangoLabel(getRango(d.idf))
+    ]);
+    rowsFicha.push([]);
+
+    /* 1. Resultados Fiscales */
+    rowsFicha.push(['1. RESULTADOS FISCALES (80% DEL IDF)']);
+    var curResScore = d.resultados ? d.resultados.score : 0;
+    var curResCal = d.resultados ? d.resultados.calificacion : 0;
+    var prevResScore = prevD && prevD.resultados ? prevD.resultados.score : null;
+    var prevResCal = prevD && prevD.resultados ? prevD.resultados.calificacion : null;
+    var deltaResPct = (prevResScore != null && prevResScore > 0) ? ((curResScore - prevResScore) / prevResScore * 100) : null;
+    rowsFicha.push([
+      'Puntaje Dimensión ' + selYear + ':', safeNum(curResScore),
+      'Calificación Ponderada (80%):', safeNum(curResCal),
+      'Puntaje ' + prevYear + ':', prevResScore != null ? safeNum(prevResScore) : '-',
+      'Variación Dimensión %:', deltaResPct != null ? (deltaResPct >= 0 ? '+' : '') + safeNum(deltaResPct) + '%' : '-'
+    ]);
+    rowsFicha.push([]);
+
+    rowsFicha.push([
+      'Indicador',
+      'Variables (' + prevYear + ')',
+      'Variables (' + selYear + ')',
+      'Resultado ' + prevYear,
+      'Resultado ' + selYear,
+      'Calificación ' + prevYear,
+      'Calificación ' + selYear,
+      'Variación Calificación (%)',
+      'Tendencia'
+    ]);
+
+    function getVarTextPlain(pres, indKey){
+      if(!pres) return '-';
+      if(indKey === 'dependencia_transferencias'){
+        var t = pres.sgp_otras_transferencias != null ? pres.sgp_otras_transferencias : pres.transferencias_nacionales_totales_d1000;
+        var i = pres.ingresos_totales_calc != null ? pres.ingresos_totales_calc : pres.ingresos_totales_a;
+        return 'SGP: ' + fmtMoney(t) + ' / Ingresos: ' + fmtMoney(i);
+      }
+      if(indKey === 'relevancia_fbkf'){
+        return 'FBKF: ' + fmtMoney(pres.gasto_fbkf) + ' / Inversión: ' + fmtMoney(pres.gasto_inversion);
+      }
+      if(indKey === 'endeudamiento'){
+        return 'Pasivos: ' + fmtMoney(pres.pasivos_totales) + ' / Activos: ' + fmtMoney(pres.activos_totales);
+      }
+      if(indKey === 'ahorro_corriente'){
+        return 'Ahorro: ' + fmtMoney(pres.ahorro_corriente) + ' / Ing. Ctes: ' + fmtMoney(pres.ingreso_corriente);
+      }
+      if(indKey === 'balance_fiscal_primario'){
+        return 'Déficit/Superávit: ' + fmtMoney(pres.deficit_superavit_intereses_rb) + ' / Ingresos: ' + fmtMoney(pres.ingresos_totales_desembolsos);
+      }
+      if(indKey === 'holgura'){
+        return 'Límite Ley 617: ' + fmt(pres.limite_ley_617) + ' / Funcionamiento: ' + fmt(pres.gastos_funcionamiento);
+      }
+      if(indKey === 'capacidad_programacion_recaudo'){
+        return 'Recaudo: ' + fmtMoney(pres.recaudo) + ' / Presupuesto: ' + fmtMoney(pres.presupuesto_inicial);
+      }
+      if(indKey === 'capacidad_ejecucion_inversion'){
+        return 'Pagos: ' + fmtMoney(pres.pagos) + ' / Compromisos: ' + fmtMoney(pres.compromisos);
+      }
+      return '-';
+    }
+
+    var resKeys = ['dependencia_transferencias', 'relevancia_fbkf', 'endeudamiento', 'ahorro_corriente', 'balance_fiscal_primario'];
+    var curResInds = (d.resultados && d.resultados.indicadores) ? d.resultados.indicadores : {};
+    var prevResInds = (prevD && prevD.resultados && prevD.resultados.indicadores) ? prevD.resultados.indicadores : {};
+
+    resKeys.forEach(function(k){
+      var curI = curResInds[k] || {};
+      var prevI = prevResInds[k] || {};
+      var cCal = curI.calificacion;
+      var pCal = prevI.calificacion;
+      var vPct = (pCal != null && pCal > 0 && cCal != null) ? ((cCal - pCal) / pCal * 100) : 0;
+      var tend = cCal != null && pCal != null ? (cCal > pCal ? '↗ Crece' : (cCal < pCal ? '↘ Disminuye' : '→ Igual')) : '-';
+      rowsFicha.push([
+        curI.nombre || k,
+        getVarTextPlain(prevD ? prevD.presupuesto : null, k),
+        getVarTextPlain(d.presupuesto, k),
+        prevI.resultado != null ? safeNum(prevI.resultado) : '-',
+        curI.resultado != null ? safeNum(curI.resultado) : '-',
+        pCal != null ? safeNum(pCal) : '-',
+        cCal != null ? safeNum(cCal) : '-',
+        (vPct >= 0 ? '+' : '') + safeNum(vPct) + '%',
+        tend
+      ]);
+    });
+
+    /* Máximo FBKF */
+    var sameTipDepts = Object.values(ydCurrent).filter(function(dd){ return dd.tipologia === d.tipologia || dd.categoria === d.categoria; });
+    var maxFbkf = 0;
+    sameTipDepts.forEach(function(dd){
+      if(dd.resultados && dd.resultados.indicadores && dd.resultados.indicadores.relevancia_fbkf){
+        var v = dd.resultados.indicadores.relevancia_fbkf.resultado;
+        if(v > maxFbkf) maxFbkf = v;
+      }
+    });
+    rowsFicha.push(['Máximo de la Tipología/Categoría para FBKF:', safeNum(maxFbkf > 0 ? maxFbkf : 9.6)]);
+    rowsFicha.push([]);
+
+    /* Tendencia Fiscal */
+    rowsFicha.push(['ANÁLISIS DE LA TENDENCIA DE LOS INDICADORES FISCALES']);
+    rowsFicha.push(['Indicador', 'Calificación 2022', 'Calificación 2023', 'Calificación 2024', 'Promedio', 'Tendencia', 'Interpretación']);
+    var d2022 = (idfData.records['2022'] || {})[deptName];
+    var d2023 = (idfData.records['2023'] || {})[deptName];
+    var d2024 = (idfData.records['2024'] || {})[deptName];
+
+    resKeys.forEach(function(k){
+      var v22 = d2022 && d2022.resultados && d2022.resultados.indicadores[k] ? d2022.resultados.indicadores[k].calificacion : null;
+      var v23 = d2023 && d2023.resultados && d2023.resultados.indicadores[k] ? d2023.resultados.indicadores[k].calificacion : null;
+      var v24 = d2024 && d2024.resultados && d2024.resultados.indicadores[k] ? d2024.resultados.indicadores[k].calificacion : null;
+      var vals = [v22, v23, v24];
+      var pr = vals.some(function(v){ return v!=null; }) ? avg(vals) : null;
+      var sym = (v22!=null && v23!=null && v24!=null) ? (v24>v23 && v23>v22?'↗':v24<v23 && v23<v22?'↘':v24>v23?'↗':v24<v23?'↘':'→') : '-';
+      var interp = interpretarTendenciaFiscal(k, vals);
+      var indName = (curResInds[k] && curResInds[k].nombre) ? curResInds[k].nombre : k;
+      rowsFicha.push([
+        indName,
+        v22 != null ? safeNum(v22) : '-',
+        v23 != null ? safeNum(v23) : '-',
+        v24 != null ? safeNum(v24) : '-',
+        pr != null ? safeNum(pr) : '-',
+        sym,
+        interp
+      ]);
+    });
+    rowsFicha.push([]);
+
+    /* 2. Gestión Financiera */
+    rowsFicha.push(['2. RESULTADOS GESTIÓN FINANCIERA (20% DEL IDF)']);
+    var curGestScore = d.gestion ? d.gestion.score : 0;
+    var curGestCal = d.gestion ? d.gestion.calificacion : 0;
+    var curGestBonos = d.gestion ? (d.gestion.gestion_mas_bonos || d.gestion.resultado_con_bonos || curGestScore) : curGestScore;
+    var prevGestScore = prevD && prevD.gestion ? prevD.gestion.score : null;
+    var prevGestCal = prevD && prevD.gestion ? prevD.gestion.calificacion : null;
+    var deltaGestPct = (prevGestScore != null && prevGestScore > 0) ? ((curGestScore - prevGestScore) / prevGestScore * 100) : null;
+
+    rowsFicha.push([
+      'Puntaje Dimensión ' + selYear + ':', safeNum(curGestScore),
+      'Calificación Ponderada (20%):', safeNum(curGestCal),
+      'Resultado + Bonos:', safeNum(curGestBonos),
+      'Puntaje ' + prevYear + ':', prevGestScore != null ? safeNum(prevGestScore) : '-',
+      'Variación Dimensión %:', deltaGestPct != null ? (deltaGestPct >= 0 ? '+' : '') + safeNum(deltaGestPct) + '%' : '-'
+    ]);
+    rowsFicha.push([]);
+
+    rowsFicha.push([
+      'Indicador',
+      'Variables (' + prevYear + ')',
+      'Variables (' + selYear + ')',
+      'Resultado ' + prevYear,
+      'Resultado ' + selYear,
+      'Calificación ' + prevYear,
+      'Calificación ' + selYear,
+      'Variación Calificación (%)',
+      'Tendencia'
+    ]);
+
+    var gestKeys = ['holgura', 'capacidad_programacion_recaudo', 'capacidad_ejecucion_inversion', 'bonificacion_esfuerzo_propio', 'bonificacion_catastro'];
+    var curGestInds = (d.gestion && d.gestion.indicadores) ? d.gestion.indicadores : {};
+    var prevGestInds = (prevD && prevD.gestion && prevD.gestion.indicadores) ? prevD.gestion.indicadores : {};
+
+    gestKeys.forEach(function(k){
+      var curI = curGestInds[k] || {};
+      var prevI = prevGestInds[k] || {};
+      var cCal = curI.calificacion;
+      var pCal = prevI.calificacion;
+      var vPct = (pCal != null && pCal > 0 && cCal != null) ? ((cCal - pCal) / pCal * 100) : 0;
+      var tend = cCal != null && pCal != null ? (cCal > pCal ? '↗ Crece' : (cCal < pCal ? '↘ Disminuye' : '→ Igual')) : '-';
+      rowsFicha.push([
+        curI.nombre || k,
+        getVarTextPlain(prevD ? prevD.presupuesto : null, k),
+        getVarTextPlain(d.presupuesto, k),
+        prevI.resultado != null ? safeNum(prevI.resultado) : '-',
+        curI.resultado != null ? safeNum(curI.resultado) : '-',
+        pCal != null ? safeNum(pCal) : '-',
+        cCal != null ? safeNum(cCal) : '-',
+        (vPct >= 0 ? '+' : '') + safeNum(vPct) + '%',
+        tend
+      ]);
+    });
+
+    /* Promedio Categoría Holgura */
+    var sameCatDepts = Object.values(ydCurrent).filter(function(dd){ return dd.categoria === d.categoria; });
+    var holguras = sameCatDepts.map(function(dd){ return dd.gestion && dd.gestion.indicadores && dd.gestion.indicadores.holgura ? dd.gestion.indicadores.holgura.resultado : null; }).filter(function(v){ return v != null; });
+    var avgHolgura = avg(holguras);
+    rowsFicha.push(['Promedio Categoría Ley 617 para Holgura:', safeNum(avgHolgura > 0 ? avgHolgura : 30.6)]);
+    rowsFicha.push([]);
+
+    /* Tendencia Gestión */
+    rowsFicha.push(['ANÁLISIS DE LA TENDENCIA DE LOS INDICADORES DE GESTIÓN FINANCIERA']);
+    rowsFicha.push(['Indicador', 'Calificación 2022', 'Calificación 2023', 'Calificación 2024', 'Promedio', 'Tendencia', 'Interpretación']);
+
+    gestKeys.forEach(function(k){
+      var v22 = d2022 && d2022.gestion && d2022.gestion.indicadores[k] ? d2022.gestion.indicadores[k].calificacion : null;
+      var v23 = d2023 && d2023.gestion && d2023.gestion.indicadores[k] ? d2023.gestion.indicadores[k].calificacion : null;
+      var v24 = d2024 && d2024.gestion && d2024.gestion.indicadores[k] ? d2024.gestion.indicadores[k].calificacion : null;
+      var vals = [v22, v23, v24];
+      var pr = vals.some(function(v){ return v!=null; }) ? avg(vals) : null;
+      var sym = (v22!=null && v23!=null && v24!=null) ? (v24>v23 && v23>v22?'↗':v24<v23 && v23<v22?'↘':v24>v23?'↗':v24<v23?'↘':'→') : '-';
+      var interp = interpretarTendenciaGestion(k, vals);
+      var indName = (curGestInds[k] && curGestInds[k].nombre) ? curGestInds[k].nombre : k;
+      rowsFicha.push([
+        indName,
+        v22 != null ? safeNum(v22) : '-',
+        v23 != null ? safeNum(v23) : '-',
+        v24 != null ? safeNum(v24) : '-',
+        pr != null ? safeNum(pr) : '-',
+        sym,
+        interp
+      ]);
+    });
+
+    /* ----------------------------------------------------
+       HOJA 3: CONSOLIDADO
+       ---------------------------------------------------- */
+    var rowsConsol = [];
+    rowsConsol.push(['CONSOLIDADO NACIONAL Y COMPARATIVO IDF — VIGENCIA ' + selYear]);
+    var allDeptsSorted = Object.entries(ydCurrent).map(function(e){
+      var code = e[0];
+      var rec = e[1];
+      var pVal = (ydPrev[code]) ? ydPrev[code].idf : null;
+      return { code: code, rec: rec, prevVal: pVal };
+    }).filter(function(it){ return it.rec.idf != null; }).sort(function(a,b){ return b.rec.idf - a.rec.idf; });
+
+    var deptRankPos = 1;
+    allDeptsSorted.forEach(function(it, idx){
+      if(it.code === deptName || it.rec.departamento === deptName) deptRankPos = idx + 1;
+    });
+
+    rowsConsol.push(['Departamento Seleccionado:', deptName, 'Posición en Ranking:', deptRankPos + ' de ' + allDeptsSorted.length]);
+    rowsConsol.push(['IDF Departamento:', safeNum(d.idf), 'Rango:', d.rango_completo || rangoLabel(getRango(d.idf))]);
+
+    /* Comparison Groups */
+    var nacDepts = Object.values(ydCurrent);
+    var catDepts = Object.values(ydCurrent).filter(function(dd){ return dd.categoria === d.categoria; });
+    var tipDepts = Object.values(ydCurrent).filter(function(dd){ return dd.tipologia === d.tipologia; });
+
+    var nacAvgScore = avg(nacDepts.map(function(dd){ return dd.idf; }).filter(function(v){ return v!=null; }));
+    var catAvgScore = avg(catDepts.map(function(dd){ return dd.idf; }).filter(function(v){ return v!=null; }));
+    var tipAvgScore = avg(tipDepts.map(function(dd){ return dd.idf; }).filter(function(v){ return v!=null; }));
+
+    rowsConsol.push([
+      'IDF Promedio Nacional:', safeNum(nacAvgScore),
+      'IDF Promedio Categoría (' + (d.categoria || 'N/A') + '):', safeNum(catAvgScore),
+      'IDF Promedio Tipología (' + (d.tipologia ? 'Tipología ' + Math.round(d.tipologia) : 'N/A') + '):', safeNum(tipAvgScore)
+    ]);
+    rowsConsol.push([]);
+
+    /* Table: Comparativa Detallada de Indicadores */
+    rowsConsol.push(['1. COMPARATIVA DE INDICADORES: ' + deptName.toUpperCase() + ' VS NACIONAL, CATEGORÍA Y TIPOLOGÍA']);
+    rowsConsol.push([
+      'Indicador',
+      'Resultado ' + deptName,
+      'Calificación ' + deptName,
+      'Resultado Nacional',
+      'Calificación Nacional',
+      'Resultado Categoría (' + (d.categoria||'-') + ')',
+      'Calificación Categoría',
+      'Resultado Tipología (' + (d.tipologia?Math.round(d.tipologia):'-') + ')',
+      'Calificación Tipología'
+    ]);
+
+    function getGroupAverages(grp, indKey, isResults){
+      var sumR=0, sumC=0, cnt=0;
+      grp.forEach(function(dd){
+        var obj = isResults ? (dd.resultados && dd.resultados.indicadores ? dd.resultados.indicadores[indKey] : null)
+                            : (dd.gestion && dd.gestion.indicadores ? dd.gestion.indicadores[indKey] : null);
+        if(obj){
+          sumR += obj.resultado || 0;
+          sumC += obj.calificacion || 0;
+          cnt++;
+        }
+      });
+      return { res: cnt ? sumR/cnt : 0, cal: cnt ? sumC/cnt : 0 };
+    }
+
+    /* 5 Indicadores Fiscales */
+    var resIndNames = ['Dependencia de las Transferencias', 'Relevancia FBKF', 'Endeudamiento', 'Ahorro Corriente', 'Balance Fiscal Primario'];
+    resKeys.forEach(function(k, i){
+      var cur = curResInds[k] || {};
+      var nacA = getGroupAverages(nacDepts, k, true);
+      var catA = getGroupAverages(catDepts, k, true);
+      var tipA = getGroupAverages(tipDepts, k, true);
+      rowsConsol.push([
+        resIndNames[i],
+        safeNum(cur.resultado),
+        safeNum(cur.calificacion),
+        safeNum(nacA.res),
+        safeNum(nacA.cal),
+        safeNum(catA.res),
+        safeNum(catA.cal),
+        safeNum(tipA.res),
+        safeNum(tipA.cal)
+      ]);
+    });
+
+    /* Dimensión Resultados Row */
+    var nacResScore = avg(nacDepts.map(function(dd){ return dd.resultados ? dd.resultados.calificacion : 0; }).filter(function(v){ return v>0; }));
+    var nacResRes = avg(nacDepts.map(function(dd){ return dd.resultados ? (dd.resultados.resultado||dd.resultados.score||0) : 0; }).filter(function(v){ return v>0; }));
+    var catResScore = avg(catDepts.map(function(dd){ return dd.resultados ? dd.resultados.calificacion : 0; }).filter(function(v){ return v>0; }));
+    var catResRes = avg(catDepts.map(function(dd){ return dd.resultados ? (dd.resultados.resultado||dd.resultados.score||0) : 0; }).filter(function(v){ return v>0; }));
+    var tipResScore = avg(tipDepts.map(function(dd){ return dd.resultados ? dd.resultados.calificacion : 0; }).filter(function(v){ return v>0; }));
+    var tipResRes = avg(tipDepts.map(function(dd){ return dd.resultados ? (dd.resultados.resultado||dd.resultados.score||0) : 0; }).filter(function(v){ return v>0; }));
+
+    rowsConsol.push([
+      'Dimensión de Resultados Fiscales (80%)',
+      safeNum(curResScore),
+      safeNum(curResCal),
+      safeNum(nacResRes),
+      safeNum(nacResScore),
+      safeNum(catResRes),
+      safeNum(catResScore),
+      safeNum(tipResRes),
+      safeNum(tipResScore)
+    ]);
+
+    /* 5 Indicadores Gestión */
+    var gestIndNames = ['Holgura', 'Cap. Programación y Recaudo de Ingresos', 'Cap. Ejecución de Inversión', 'Bono Esfuerzo Propio', 'Bono Catastro'];
+    gestKeys.forEach(function(k, i){
+      var cur = curGestInds[k] || {};
+      var nacA = getGroupAverages(nacDepts, k, false);
+      var catA = getGroupAverages(catDepts, k, false);
+      var tipA = getGroupAverages(tipDepts, k, false);
+      rowsConsol.push([
+        gestIndNames[i],
+        safeNum(cur.resultado),
+        safeNum(cur.calificacion),
+        safeNum(nacA.res),
+        safeNum(nacA.cal),
+        safeNum(catA.res),
+        safeNum(catA.cal),
+        safeNum(tipA.res),
+        safeNum(tipA.cal)
+      ]);
+    });
+
+    /* Dimensión Gestión Row */
+    var nacGestCal = avg(nacDepts.map(function(dd){ return dd.gestion ? dd.gestion.calificacion : 0; }).filter(function(v){ return v>0; }));
+    var nacGestScore = avg(nacDepts.map(function(dd){ return dd.gestion ? (dd.gestion.score||dd.gestion.resultado||0) : 0; }).filter(function(v){ return v>0; }));
+    var catGestCal = avg(catDepts.map(function(dd){ return dd.gestion ? dd.gestion.calificacion : 0; }).filter(function(v){ return v>0; }));
+    var catGestScore = avg(catDepts.map(function(dd){ return dd.gestion ? (dd.gestion.score||dd.gestion.resultado||0) : 0; }).filter(function(v){ return v>0; }));
+    var tipGestCal = avg(tipDepts.map(function(dd){ return dd.gestion ? dd.gestion.calificacion : 0; }).filter(function(v){ return v>0; }));
+    var tipGestScore = avg(tipDepts.map(function(dd){ return dd.gestion ? (dd.gestion.score||dd.gestion.resultado||0) : 0; }).filter(function(v){ return v>0; }));
+
+    rowsConsol.push([
+      'Dimensión de Gestión Financiera (20%)',
+      safeNum(curGestScore),
+      safeNum(curGestCal),
+      safeNum(nacGestScore),
+      safeNum(nacGestCal),
+      safeNum(catGestScore),
+      safeNum(catGestCal),
+      safeNum(tipGestScore),
+      safeNum(tipGestCal)
+    ]);
+
+    /* Total IDF Row */
+    rowsConsol.push([
+      'ÍNDICE DE DESEMPEÑO FISCAL (IDF TOTAL)',
+      safeNum(d.idf),
+      safeNum(d.idf),
+      safeNum(nacAvgScore),
+      safeNum(nacAvgScore),
+      safeNum(catAvgScore),
+      safeNum(catAvgScore),
+      safeNum(tipAvgScore),
+      safeNum(tipAvgScore)
+    ]);
+    rowsConsol.push([]);
+
+    /* Ranking Completo */
+    rowsConsol.push(['2. RANKING COMPLETO DE DEPARTAMENTOS IDF ' + selYear]);
+    rowsConsol.push([
+      'Posición',
+      'Código DANE',
+      'Departamento',
+      'Región',
+      'Categoría Ley 617',
+      'Tipología',
+      'IDF ' + selYear,
+      'IDF ' + prevYear,
+      'Variación (pp)',
+      'Tendencia',
+      'Rango de Desempeño',
+      'Puntaje Res. Fiscales',
+      'Puntaje Gestión Fin.'
+    ]);
+
+    allDeptsSorted.forEach(function(item, idx){
+      var r = item.rec;
+      var cIdf = r.idf;
+      var pIdf = item.prevVal;
+      var diff = (cIdf != null && pIdf != null) ? cIdf - pIdf : null;
+      var tendSym = diff != null ? (diff > 0 ? '▲ Crece' : (diff < 0 ? '▼ Disminuye' : '— Igual')) : '-';
+      rowsConsol.push([
+        idx + 1,
+        r.codigo || r.divipola_5 || item.code,
+        formatDeptName(r.departamento || item.code),
+        r.region || '-',
+        r.categoria || '-',
+        r.tipologia ? ('Tipología ' + Math.round(r.tipologia)) : '-',
+        safeNum(cIdf),
+        pIdf != null ? safeNum(pIdf) : '-',
+        diff != null ? (diff >= 0 ? '+' : '') + safeNum(diff) : '-',
+        tendSym,
+        r.rango || getRango(cIdf),
+        r.resultados && r.resultados.calificacion != null ? safeNum(r.resultados.calificacion) : '-',
+        r.gestion && r.gestion.calificacion != null ? safeNum(r.gestion.calificacion) : '-'
+      ]);
+    });
+
+    /* ----------------------------------------------------
+       HOJA 4: DISTRIBUCIÓN IDF
+       ---------------------------------------------------- */
+    var rowsDist = [];
+    rowsDist.push(['GEOGRAFÍA Y DISTRIBUCIÓN DE RANGOS IDF — VIGENCIA ' + selYear]);
+    rowsDist.push(['Vigencia Seleccionada:', selYear, 'Vigencia Anterior:', prevYear, 'Fecha de Exportación:', new Date().toLocaleDateString('es-CO')]);
+    rowsDist.push([]);
+
+    /* Summary KPIs */
+    var maxRec = null, minRec = null;
+    nacDepts.forEach(function(dd){
+      if(dd.idf == null) return;
+      if(!maxRec || dd.idf > maxRec.idf) maxRec = dd;
+      if(!minRec || dd.idf < minRec.idf) minRec = dd;
+    });
+    var maxIdf = maxRec ? maxRec.idf : null;
+    var minIdf = minRec ? minRec.idf : null;
+    var gapIdf = (maxIdf != null && minIdf != null) ? (maxIdf - minIdf) : null;
+    var varNac = (natAvgSel != null && natAvgPrev != null) ? natAvgSel - natAvgPrev : null;
+
+    var countsDist = {};
+    RANGO_ORDER.forEach(function(r){ countsDist[r] = 0; });
+    nacDepts.forEach(function(dd){ if(dd.idf != null){ var r = getRango(dd.idf); countsDist[r] = (countsDist[r]||0) + 1; } });
+    var riesgoCount = countsDist.Riesgo || 0;
+    var riesgoPct = nacDepts.length > 0 ? ((riesgoCount / nacDepts.length) * 100).toFixed(1) : '0';
+
+    rowsDist.push(['1. RESUMEN Y KPIS NACIONALES']);
+    rowsDist.push(['Métrica', 'Valor', 'Detalle']);
+    rowsDist.push(['IDF Promedio Nacional ' + selYear, safeNum(natAvgSel), 'Vigencia ' + selYear]);
+    rowsDist.push(['IDF Promedio Año Anterior (' + prevYear + ')', safeNum(natAvgPrev), 'Vigencia ' + prevYear]);
+    rowsDist.push(['Variación IDF Nacional frente a ' + prevYear, varNac != null ? (varNac >= 0 ? '+' : '') + safeNum(varNac) + ' pp' : '-', 'Puntos porcentuales']);
+    rowsDist.push(['IDF Máximo', safeNum(maxIdf), maxRec ? formatDeptName(maxRec.departamento) : '-']);
+    rowsDist.push(['IDF Mínimo', safeNum(minIdf), minRec ? formatDeptName(minRec.departamento) : '-']);
+    rowsDist.push(['Brecha (Máximo - Mínimo)', safeNum(gapIdf), 'Diferencia en puntos entre el mayor y menor IDF']);
+    rowsDist.push(['Departamentos Evaluados', nacDepts.length, 'Total de entidades departamentales evaluadas']);
+    rowsDist.push(['Departamentos en Rango Riesgo', riesgoCount, riesgoPct + '% del total nacional']);
+    rowsDist.push([]);
+
+    /* Entradas y Salidas */
+    var entraronMap = {}, salieronMap = {};
+    RANGO_ORDER.forEach(function(r){ entraronMap[r] = 0; salieronMap[r] = 0; });
+    var curKeys = Object.keys(ydCurrent);
+    var prevKeys = Object.keys(ydPrev);
+    var allKeys = Array.from(new Set(curKeys.concat(prevKeys)));
+    allKeys.forEach(function(k){
+      var cIt = ydCurrent[k];
+      var pIt = ydPrev[k];
+      var cR = (cIt && cIt.idf != null) ? getRango(cIt.idf) : null;
+      var pR = (pIt && pIt.idf != null) ? getRango(pIt.idf) : null;
+      if(cR && cR !== pR) entraronMap[cR] = (entraronMap[cR] || 0) + 1;
+      if(pR && pR !== cR) salieronMap[pR] = (salieronMap[pR] || 0) + 1;
+    });
+
+    rowsDist.push(['2. DISTRIBUCIÓN POR RANGOS DE DESEMPEÑO FISCAL']);
+    rowsDist.push(['Rango de Desempeño', 'Cantidad Departamentos', '% del Total', 'IDF Promedio', 'Entraron frente a ' + prevYear, 'Salieron frente a ' + prevYear]);
+    RANGO_ORDER.forEach(function(r){
+      var c = countsDist[r] || 0;
+      var p = nacDepts.length > 0 ? (c / nacDepts.length * 100).toFixed(1) + '%' : '0%';
+      var arr = nacDepts.filter(function(dd){ return dd.idf != null && getRango(dd.idf) === r; }).map(function(dd){ return dd.idf; });
+      var a = arr.length ? avg(arr) : null;
+      rowsDist.push([
+        rangoLabel(r),
+        c,
+        p,
+        a != null ? safeNum(a) : '-',
+        entraronMap[r] || 0,
+        salieronMap[r] || 0
+      ]);
+    });
+    rowsDist.push([]);
+
+    /* Listado Geográfico Completo */
+    rowsDist.push(['3. LISTADO COMPLETO Y GEOGRAFÍA DE DEPARTAMENTOS']);
+    rowsDist.push(['Posición', 'Código DANE', 'Departamento', 'Región', 'Categoría Ley 617', 'Tipología', 'IDF ' + selYear, 'IDF ' + prevYear, 'Variación (pp)', 'Rango IDF']);
+    allDeptsSorted.forEach(function(item, idx){
+      var r = item.rec;
+      var cIdf = r.idf;
+      var pIdf = item.prevVal;
+      var diff = (cIdf != null && pIdf != null) ? cIdf - pIdf : null;
+      rowsDist.push([
+        idx + 1,
+        r.codigo || r.divipola_5 || item.code,
+        formatDeptName(r.departamento || item.code),
+        r.region || '-',
+        r.categoria || '-',
+        r.tipologia ? ('Tipología ' + Math.round(r.tipologia)) : '-',
+        safeNum(cIdf),
+        pIdf != null ? safeNum(pIdf) : '-',
+        diff != null ? (diff >= 0 ? '+' : '') + safeNum(diff) : '-',
+        r.rango || getRango(cIdf)
+      ]);
+    });
+
+    /* ----------------------------------------------------
+       HOJA 5: RESULTADOS HISTÓRICOS (2020 - 2024)
+       ---------------------------------------------------- */
+    var rowsHist = [];
+    rowsHist.push(['HISTÓRICO COMPLETO DE RESULTADOS IDF (2020 - 2024) — TODOS LOS DEPARTAMENTOS']);
+    rowsHist.push(['Fuente: Departamento Nacional de Planeación — DNP · DDFF · SFFT', '', 'Fecha de Exportación:', new Date().toLocaleDateString('es-CO')]);
+    rowsHist.push([]);
+
+    var histHdr = ['Código DANE', 'Departamento', 'Región', 'Categoría Ley 617', 'Tipología'];
+    anios.forEach(function(y){
+      histHdr.push('IDF ' + y);
+      histHdr.push('Rango ' + y);
+      histHdr.push('Ranking ' + y);
+      histHdr.push('Puntaje Res. Fiscales ' + y);
+      histHdr.push('Puntaje Gestión Fin. ' + y);
+    });
+    rowsHist.push(histHdr);
+
+    var allDeptKeys = getDeptList();
+    allDeptKeys.forEach(function(deptKey){
+      var latestRec = (ydCurrent[deptKey]) || ((idfData.records['2024']||{})[deptKey]) || ((idfData.records['2023']||{})[deptKey]) || {};
+      var row = [
+        latestRec.codigo || latestRec.divipola_5 || deptKey,
+        formatDeptName(latestRec.departamento || deptKey),
+        latestRec.region || '-',
+        latestRec.categoria || '-',
+        latestRec.tipologia ? ('Tipología ' + Math.round(latestRec.tipologia)) : '-'
+      ];
+
+      anios.forEach(function(y){
+        var yRec = (idfData.records[y] || {})[deptKey];
+        if(yRec && yRec.idf != null){
+          row.push(safeNum(yRec.idf));
+          row.push(yRec.rango || getRango(yRec.idf));
+          row.push(yRec.ranking || '-');
+          row.push(yRec.resultados && yRec.resultados.calificacion != null ? safeNum(yRec.resultados.calificacion) : '-');
+          row.push(yRec.gestion && yRec.gestion.calificacion != null ? safeNum(yRec.gestion.calificacion) : '-');
+        } else {
+          row.push('-', '-', '-', '-', '-');
+        }
+      });
+      rowsHist.push(row);
+    });
+
+    /* Combinar las 5 secciones en un CSV integral con todos los datos */
+    var combinedRows = [
+      ['========================================================================================'],
+      ['ÍNDICE DE DESEMPEÑO FISCAL (IDF) — REPORTE INTEGRAL'],
+      ['Fuente: Departamento Nacional de Planeación — DNP · DDFF · SFFT'],
+      ['Vigencia Seleccionada: ' + selYear, 'Departamento Activo: ' + deptName, 'Fecha de Descarga: ' + new Date().toLocaleDateString('es-CO')],
+      ['========================================================================================'],
+      [],
+      ['----------------------------------------------------------------------------------------'],
+      ['=== SECCIÓN 1: INSTRUCTIVO Y METODOLOGÍA DEL IDF ==='],
+      ['----------------------------------------------------------------------------------------']
+    ].concat(rowsInst)
+     .concat([
+       [],
+       ['----------------------------------------------------------------------------------------'],
+       ['=== SECCIÓN 2: FICHA DEPARTAMENTAL (' + deptName.toUpperCase() + ') ==='],
+       ['----------------------------------------------------------------------------------------']
+     ])
+     .concat(rowsFicha)
+     .concat([
+       [],
+       ['----------------------------------------------------------------------------------------'],
+       ['=== SECCIÓN 3: CONSOLIDADO Y COMPARATIVO NACIONAL ==='],
+       ['----------------------------------------------------------------------------------------']
+     ])
+     .concat(rowsConsol)
+     .concat([
+       [],
+       ['----------------------------------------------------------------------------------------'],
+       ['=== SECCIÓN 4: GEOGRAFÍA Y DISTRIBUCIÓN DE RANGOS IDF ==='],
+       ['----------------------------------------------------------------------------------------']
+     ])
+     .concat(rowsDist)
+     .concat([
+       [],
+       ['----------------------------------------------------------------------------------------'],
+       ['=== SECCIÓN 5: RESULTADOS HISTÓRICOS (2020 - 2024) — TODOS LOS DEPARTAMENTOS ==='],
+       ['----------------------------------------------------------------------------------------']
+     ])
+     .concat(rowsHist);
+
+    downloadCSV(combinedRows, 'Índice de desempeño fiscal.csv');
+  }
+
   function downloadCSV(rows, filename){
-    /* rows: array of arrays (first row = headers) */
     var csv = rows.map(function(r){
       return r.map(function(cell){
         var s = cell==null ? '' : String(cell);
-        /* escape quotes and wrap in quotes if needed */
         if(s.indexOf(',')>=0 || s.indexOf('"')>=0 || s.indexOf('\n')>=0){
           s = '"'+s.replace(/"/g,'""')+'"';
         }
         return s;
       }).join(',');
     }).join('\r\n');
-    var bom = '\uFEFF'; // UTF-8 BOM for Excel
+    var bom = '\uFEFF';
     var blob = new Blob([bom+csv], {type:'text/csv;charset=utf-8;'});
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
@@ -2286,220 +3125,10 @@ footer.foot{
   }
 
   function setupCSVButtons(){
-    /* 1. Instructivo CSV */
     var instBtn = document.getElementById('inst-csv-btn');
     if(instBtn){
       instBtn.addEventListener('click', function(){
-        if(!idfData) return;
-        var rows = [];
-        rows.push(['INFORMACIÓN GENERAL - INSTRUCTIVO IDF']);
-        rows.push(['Vigencia Seleccionada', selectedYear]);
-        rows.push([]);
-        
-        /* Summary per year */
-        rows.push(['EVOLUCIÓN NACIONAL (2021 - 2024)']);
-        rows.push(['Vigencia','IDF Promedio Nacional','Var. (pp)','Departamentos Evaluados','IDF Máximo','IDF Mínimo']);
-        var anios = idfData.meta.anios;
-        var prevAvg = null;
-        anios.forEach(function(y){
-          var yd = idfData.records[y] || {};
-          var scores = Object.values(yd).map(function(d){return d.idf;}).filter(function(v){return v!=null;});
-          var avgV = scores.length ? avg(scores) : null;
-          var varPP = (prevAvg!=null && avgV!=null) ? (avgV - prevAvg) : null;
-          var maxV = scores.length ? Math.max.apply(null,scores) : null;
-          var minV = scores.length ? Math.min.apply(null,scores) : null;
-          rows.push([y, avgV!=null?fmt(avgV):'-', varPP!=null?(varPP>=0?'+':'')+fmt(varPP):'-', scores.length, maxV!=null?fmt(maxV):'-', minV!=null?fmt(minV):'-']);
-          prevAvg = avgV;
-        });
-
-        /* Ranking for selected year */
-        rows.push([]);
-        rows.push(['RANKING DE DEPARTAMENTOS IDF '+selectedYear]);
-        rows.push(['Posición','Departamento','IDF '+selectedYear,'IDF Año Anterior','Rango Desempeño']);
-        var ydCurrent = idfData.records[selectedYear] || {};
-        var prevY = String(parseInt(selectedYear)-1);
-        var ydPrev = idfData.records[prevY] || {};
-        var depts = Object.keys(ydCurrent).map(function(k){
-          return [k, ydCurrent[k].idf, ydPrev[k]?ydPrev[k].idf:null];
-        }).filter(function(d){ return d[1]!=null; }).sort(function(a,b){ return b[1]-a[1]; });
-
-        depts.forEach(function(item, idx){
-          var rName = getRango(item[1]);
-          rows.push([idx+1, item[0], fmt(item[1]), item[2]!=null?fmt(item[2]):'-', rName]);
-        });
-
-        /* Distribution by range */
-        rows.push([]);
-        rows.push(['DISTRIBUCIÓN POR RANGOS DE DESEMPEÑO - '+selectedYear]);
-        rows.push(['Rango de Desempeño','Cantidad de Departamentos','% del Total','IDF Promedio']);
-        var counts = {};
-        RANGO_ORDER.forEach(function(r){ counts[r]={count:0,sum:0}; });
-        Object.values(ydCurrent).forEach(function(d){
-          if(d.idf!=null){
-            var r=getRango(d.idf);
-            counts[r].count++;
-            counts[r].sum+=d.idf;
-          }
-        });
-        var totalDepts = Object.values(ydCurrent).length;
-        RANGO_ORDER.forEach(function(r){
-          var c = counts[r].count;
-          var a = c>0 ? counts[r].sum/c : null;
-          rows.push([r, c, (totalDepts>0?fmtPct(c/totalDepts*100):'-'), a!=null?fmt(a):'-']);
-        });
-
-        downloadCSV(rows, 'IDF_Instructivo_'+selectedYear+'.csv');
-      });
-    }
-
-    /* 2. Ficha Departamental CSV */
-    var fichaBtn = document.getElementById('ficha-csv-btn');
-    if(fichaBtn){
-      fichaBtn.addEventListener('click', function(){
-        if(!idfData || !selectedDept) return;
-        var yd = idfData.records[selectedYear] || {};
-        var d = yd[selectedDept];
-        if(!d) return;
-
-        var rows = [];
-        rows.push(['FICHA DEPARTAMENTAL IDF']);
-        rows.push(['Departamento', selectedDept]);
-        rows.push(['Vigencia Seleccionada', selectedYear]);
-        rows.push(['Categoría Ley 617', d.categoria||'-']);
-        rows.push(['Región', d.region||'-']);
-        rows.push(['Tipología', d.tipologia?('Tipología '+Math.round(d.tipologia)):'-']);
-        rows.push(['IDF Total', fmt(d.idf)]);
-        rows.push(['Rango de Desempeño', d.rango||getRango(d.idf)]);
-        rows.push([]);
-
-        /* Dimensión 1: Resultados Fiscales */
-        rows.push(['DIMENSIÓN 1: RESULTADOS FISCALES (Ponderador 80%)']);
-        rows.push(['Indicador','Resultado Evaluado','Calificación Indicador']);
-        if(d.resultados && d.resultados.indicadores){
-          Object.keys(d.resultados.indicadores).forEach(function(k){
-            var ind = d.resultados.indicadores[k];
-            rows.push([ind.nombre, fmt(ind.resultado), fmt(ind.calificacion)]);
-          });
-          rows.push(['Subtotal Dimensión Resultados Fiscales','', fmt(d.resultados.calificacion)]);
-        }
-
-        /* Dimensión 2: Gestión Financiera */
-        rows.push([]);
-        rows.push(['DIMENSIÓN 2: GESTIÓN FINANCIERA TERRITORIAL (Ponderador 20%)']);
-        rows.push(['Indicador','Resultado Evaluado','Calificación Indicador']);
-        if(d.gestion && d.gestion.indicadores){
-          Object.keys(d.gestion.indicadores).forEach(function(k){
-            var ind = d.gestion.indicadores[k];
-            rows.push([ind.nombre, fmt(ind.resultado), fmt(ind.calificacion)]);
-          });
-          rows.push(['Subtotal Dimensión Gestión Financiera','', fmt(d.gestion.calificacion)]);
-        }
-
-        /* Historical Trend for selected Department */
-        rows.push([]);
-        rows.push(['EVOLUCIÓN HISTÓRICA DEL DEPARTAMENTO ('+selectedDept+')']);
-        rows.push(['Vigencia','IDF Puntaje Total','Rango Desempeño']);
-        idfData.meta.anios.forEach(function(y){
-          var ydHist = idfData.records[y] || {};
-          var dHist = ydHist[selectedDept];
-          if(dHist && dHist.idf!=null){
-            rows.push([y, fmt(dHist.idf), dHist.rango||getRango(dHist.idf)]);
-          }
-        });
-
-        downloadCSV(rows, 'IDF_Ficha_'+selectedDept.replace(/\s+/g,'_')+'_'+selectedYear+'.csv');
-      });
-    }
-
-    /* 3. Consolidado CSV */
-    var consolBtn = document.getElementById('consol-csv-btn');
-    if(consolBtn){
-      consolBtn.addEventListener('click', function(){
-        if(!idfData) return;
-        var yd = idfData.records[selectedYear] || {};
-        var prevY = String(parseInt(selectedYear)-1);
-        var ydPrev = idfData.records[prevY] || {};
-
-        var rows = [];
-        rows.push(['CONSOLIDADO NACIONAL IDF - VIGENCIA '+selectedYear]);
-        rows.push(['Posición','Código DANE','Departamento','Categoría Ley 617','Región','Tipología','IDF '+selectedYear,'IDF '+prevY,'Variación (pp)','Rango Desempeño','Puntaje Res. Fiscales','Puntaje Gestión Fin.']);
-
-        var allDepts = Object.entries(yd).map(function(e){
-          var code = e[0];
-          var rec = e[1];
-          var prevRec = ydPrev[code];
-          var prevVal = prevRec ? prevRec.idf : null;
-          return { code: code, rec: rec, prevVal: prevVal };
-        }).filter(function(item){ return item.rec.idf!=null; }).sort(function(a,b){ return b.rec.idf - a.rec.idf; });
-
-        allDepts.forEach(function(item, idx){
-          var r = item.rec;
-          var curIdf = r.idf;
-          var prevIdf = item.prevVal;
-          var diff = (curIdf!=null && prevIdf!=null) ? (curIdf - prevIdf) : null;
-          var resFisc = (r.resultados && r.resultados.calificacion!=null) ? r.resultados.calificacion : null;
-          var gestFin = (r.gestion && r.gestion.calificacion!=null) ? r.gestion.calificacion : null;
-          rows.push([
-            idx + 1,
-            r.codigo || item.code,
-            r.departamento || item.code,
-            r.categoria || '-',
-            r.region || '-',
-            r.tipologia ? ('Tipología '+Math.round(r.tipologia)) : '-',
-            fmt(curIdf),
-            prevIdf!=null ? fmt(prevIdf) : '-',
-            diff!=null ? (diff>=0?'+':'')+fmt(diff) : '-',
-            r.rango || getRango(curIdf),
-            resFisc!=null ? fmt(resFisc) : '-',
-            gestFin!=null ? fmt(gestFin) : '-'
-          ]);
-        });
-
-        downloadCSV(rows, 'IDF_Consolidado_'+selectedYear+'.csv');
-      });
-    }
-
-    /* 4. Distribución CSV */
-    var distBtn = document.getElementById('dist-csv-btn');
-    if(distBtn){
-      distBtn.addEventListener('click', function(){
-        if(!idfData) return;
-        var yd = idfData.records[selectedYear] || {};
-        var prevY = String(parseInt(selectedYear)-1);
-        var ydPrev = idfData.records[prevY] || {};
-
-        var rows = [];
-        rows.push(['DISTRIBUCIÓN GEOGRÁFICA Y DE RANGOS IDF - VIGENCIA '+selectedYear]);
-        rows.push(['Posición','Código DANE','Departamento','Región','Categoría Ley 617','Tipología','IDF '+selectedYear,'IDF '+prevY,'Variación (pp)','Rango Desempeño']);
-
-        var allDepts = Object.entries(yd).map(function(e){
-          var code = e[0];
-          var rec = e[1];
-          var prevRec = ydPrev[code];
-          var prevVal = prevRec ? prevRec.idf : null;
-          return { code: code, rec: rec, prevVal: prevVal };
-        }).filter(function(item){ return item.rec.idf!=null; }).sort(function(a,b){ return b.rec.idf - a.rec.idf; });
-
-        allDepts.forEach(function(item, idx){
-          var r = item.rec;
-          var curIdf = r.idf;
-          var prevIdf = item.prevVal;
-          var diff = (curIdf!=null && prevIdf!=null) ? (curIdf - prevIdf) : null;
-          rows.push([
-            idx + 1,
-            r.codigo || item.code,
-            r.departamento || item.code,
-            r.region || '-',
-            r.categoria || '-',
-            r.tipologia ? ('Tipología '+Math.round(r.tipologia)) : '-',
-            fmt(curIdf),
-            prevIdf!=null ? fmt(prevIdf) : '-',
-            diff!=null ? (diff>=0?'+':'')+fmt(diff) : '-',
-            r.rango || getRango(curIdf)
-          ]);
-        });
-
-        downloadCSV(rows, 'IDF_Distribucion_'+selectedYear+'.csv');
+        exportarIndiceDesempenoFiscal();
       });
     }
   }
