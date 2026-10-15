@@ -1412,7 +1412,28 @@ table.consol-table tr.dim-gest-row td {
 .dist-filters{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px;}
 .dist-filters .f label{display:block;font-size:12px;color:var(--navy);font-weight:700;margin-bottom:4px;}
 .dist-filters .f select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:3px;font-size:12.5px;color:#37415a;}
-.dist-layout{display:grid;grid-template-columns:2fr 1fr;gap:14px;align-items:start;}
+.dist-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;align-items:start;}
+
+/* ===== ETIQUETAS DE DATOS EN EL MAPA ===== */
+.map-labels-layer{
+  display:none !important; /* Ocultas en visualización normal del dashboard */
+  pointer-events:none;
+}
+.map-data-label{
+  display:none !important; /* Ocultas en visualización normal del dashboard */
+  font-family:"Segoe UI",Roboto,Arial,Helvetica,sans-serif;
+  font-size:4.2px;
+  font-weight:700;
+  fill:#0f172a;
+  paint-order:stroke fill;
+  stroke:#ffffff;
+  stroke-width:1.1px;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  pointer-events:none;
+  user-select:none;
+}
+
 
 /* ===== RESPONSIVE MEDIA QUERIES FOR 100% WIDTH FLEXIBILITY ===== */
 @media(max-width:1100px){
@@ -1490,31 +1511,312 @@ footer.foot{
 .src-note{font-size:9.5px;color:var(--muted);padding:6px 14px;text-align:right;}
 
 /* Print styles */
+@page {
+  size: portrait;
+  margin: 8mm;
+}
+@page distLandscapePage {
+  size: landscape;
+  margin: 6mm 8mm;
+}
+
 @media print{
   *{-webkit-print-color-adjust:exact !important;color-adjust:exact !important;print-color-adjust:exact !important;}
-  body{background:#fff !important;margin:0;padding:10px !important;font-size:11px !important;}
-  .topnav,#inst-year-filter,#inst-print-btn,.map-wrap button,.foot,.src-note,.print-modal{display:none !important;}
+  body{background:#fff !important;margin:0 !important;padding:0 !important;font-size:10px !important;color:#1c2438 !important;}
+  .app{width:100% !important;max-width:100% !important;padding:0 !important;margin:0 !important;}
+
+  /* Elementos interactivos o de navegación que no deben imprimirse */
+  .topnav,#inst-year-filter,#inst-print-btn,.map-wrap button,.map-ctrl,.foot,.src-note,.print-modal,#dist-print-modal,.csv-btn,#mapTooltip,.departamento-select,.consol-controls-bar{display:none !important;}
+  #page-instructivo .panel:has(#inst-year-filter),
+  #page-instructivo .panel:has(#inst-print-btn),
+  #page-distribucion .panel-body:has(#dist-year-filter),
+  #page-distribucion .dist-filters{display:none !important;}
+
   .page{display:none !important;}
   .page.print-show{display:block !important;}
-  .panel{break-inside:avoid;page-break-inside:avoid;border:1px solid #ddd !important;margin-bottom:8px !important;}
-  .panel-body{padding:10px !important;}
-  .chart-title{font-size:16px !important;}
-  .dist-table{font-size:10px !important;}
-  .dist-table th,.dist-table td{padding:4px 6px !important;}
-  .region-chart-area{height:200px !important;}
-  .rank-chart{height:200px !important;}
-  .rangos-wrap{flex-wrap:wrap !important;}
-  .intro-title{font-size:13px !important;}
-  .section-bar{font-size:12px !important;}
+
+  /* ===== OPTIMIZACIÓN CONTENIDO INICIAL INSTRUCTIVO (Evitar amontonamiento) ===== */
+  #page-instructivo .hero{
+    display:flex !important;
+    justify-content:space-between !important;
+    align-items:center !important;
+    background:#fff !important;
+    border:1px solid #dde3ee !important;
+    border-radius:6px !important;
+    padding:6px 12px !important;
+    margin-bottom:6px !important;
+    box-shadow:none !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+  #page-instructivo .hero-left{display:flex !important;flex:1 !important;}
+  #page-instructivo .hero-title{
+    background:var(--navy) !important;
+    padding:6px 12px !important;
+    border-radius:4px !important;
+    color:#fff !important;
+  }
+  #page-instructivo .hero-title h1{
+    font-size:16px !important;
+    line-height:1.15 !important;
+    margin:0 !important;
+  }
+  #page-instructivo .hero-title p{
+    font-size:8.5px !important;
+    margin:2px 0 0 !important;
+    color:#cfd8e8 !important;
+  }
+  #page-instructivo .hero-links{display:none !important;} /* Ocultar enlaces de navegación web */
+  #page-instructivo .hero-logos{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    gap:3px !important;
+    padding:0 6px !important;
+  }
+  #page-instructivo .hero-logos-row{
+    display:flex !important;
+    gap:10px !important;
+    align-items:center !important;
+  }
+  #page-instructivo .hero-logos img{
+    height:36px !important;
+    width:auto !important;
+    max-width:130px !important;
+    object-fit:contain !important;
+  }
+  #page-instructivo .hero-inst-text{
+    font-size:7.5px !important;
+    line-height:1.2 !important;
+    border-top:1px solid #dde3ee !important;
+    padding-top:2px !important;
+    margin-top:2px !important;
+  }
+
+  /* Tarjetas explicativas de introducción */
+  #sec-que-mide{margin-bottom:6px !important;border:1px solid #dde3ee !important;border-radius:4px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
+  #sec-que-mide .intro-title{font-size:10.5px !important;padding:3px 8px !important;}
+  #sec-que-mide .intro-text{font-size:8.5px !important;line-height:1.35 !important;padding:5px 8px !important;}
+
+  #sec-dimensiones{margin-bottom:6px !important;border:1px solid #dde3ee !important;border-radius:4px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
+  #sec-dimensiones .section-bar{font-size:10px !important;padding:3px 8px !important;}
+  #sec-dimensiones .split80{display:grid !important;grid-template-columns:1fr 1fr !important;gap:6px !important;padding:4px 8px !important;}
+  #sec-dimensiones .pct-row{gap:6px !important;margin-bottom:2px !important;}
+  #sec-dimensiones .pct-num{font-size:18px !important;}
+  #sec-dimensiones .big-pct{font-size:11px !important;}
+  #sec-dimensiones .dim-desc{font-size:8px !important;line-height:1.2 !important;}
+  #sec-dimensiones .dim-items{gap:3px !important;margin-top:3px !important;}
+  #sec-dimensiones .dim-item{font-size:7.5px !important;padding:1px 5px !important;}
+
+  #sec-rangos{margin-bottom:6px !important;border:1px solid #dde3ee !important;border-radius:4px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
+  #sec-rangos .section-bar{font-size:10px !important;padding:3px 8px !important;}
+  #sec-rangos .rangos-wrap{display:flex !important;flex-wrap:nowrap !important;gap:4px !important;padding:4px 6px !important;}
+  #sec-rangos .rango-card{flex:1 !important;padding:3px 5px !important;}
+  #sec-rangos .rango-num{font-size:9px !important;}
+  #sec-rangos .rango-name{font-size:8.5px !important;}
+  #sec-rangos .rango-score{font-size:7.5px !important;}
+  #sec-rangos .rango-desc{font-size:7px !important;line-height:1.15 !important;}
+
+  #sec-como-usar{margin-bottom:6px !important;border:1px solid #dde3ee !important;border-radius:4px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
+  #sec-como-usar .section-bar{font-size:10px !important;padding:3px 8px !important;}
+  #sec-como-usar .como-usar-grid{display:grid !important;grid-template-columns:repeat(4,1fr) !important;gap:4px !important;padding:4px 6px !important;}
+  #sec-como-usar .como-usar-step{padding:3px 5px !important;}
+  #sec-como-usar .step-num{font-size:10px !important;}
+  #sec-como-usar .step-title{font-size:8.5px !important;}
+  #sec-como-usar .step-desc{font-size:7px !important;line-height:1.15 !important;}
+
+  /* ===== APROVECHAMIENTO DE PÁGINAS Y FLUJO DE TABLAS ===== */
+  table{width:100% !important;border-collapse:collapse !important;break-inside:auto !important;page-break-inside:auto !important;}
+  tr{break-inside:avoid !important;page-break-inside:avoid !important;}
+  thead{display:table-header-group !important;}
+  th,td{padding:2.5px 4px !important;font-size:8px !important;line-height:1.2 !important;}
+
+  .panel{border:1px solid #dde3ee !important;border-radius:4px !important;margin-bottom:6px !important;}
+  .panel:has(table){break-inside:auto !important;page-break-inside:auto !important;}
+  .panel-body{padding:6px 10px !important;}
+  .panel-body:has(#chart-regiones),
+  .panel-body:has(#chart-categorias),
+  .panel-body:has(#chart-tipologia),
+  .panel-body:has(#chart-ranking){break-inside:avoid !important;page-break-inside:avoid !important;}
+
+  #chart-regiones,#chart-categorias,#chart-tipologia,#chart-ranking{height:160px !important;max-height:160px !important;}
+  .ranking-conventions{gap:6px !important;margin-top:4px !important;font-size:7.5px !important;}
+
+  /* Encabezados no deben quedar huérfanos al pie de página */
+  h1,h2,h3,.section-bar,.intro-title,.chart-title{break-after:avoid !important;page-break-after:avoid !important;}
+
+  /* Ficha Departamental en impresión */
+  #page-ficha .ficha-header{display:flex !important;justify-content:space-between !important;align-items:center !important;padding:6px 10px !important;margin-bottom:4px !important;}
+  #page-ficha .ficha-header h2{font-size:14px !important;margin:0 0 2px !important;}
+  #page-ficha .ficha-header p{font-size:8.5px !important;margin:0 !important;}
+  #page-ficha .idf-card{padding:4px 8px !important;}
+  #page-ficha .select-boxes{display:flex !important;gap:4px !important;margin-bottom:4px !important;}
+  #page-ficha .select-box{flex:1 !important;padding:4px 6px !important;}
+  #page-ficha .select-box .k{font-size:7.5px !important;}
+  #page-ficha .select-box .v{font-size:12px !important;}
+  #page-ficha .fin-grid{display:grid !important;grid-template-columns:1fr auto !important;gap:6px !important;}
+  #page-ficha .side{width:150px !important;padding:4px 6px !important;font-size:7.5px !important;}
+
+  /* Consolidado en impresión */
+  #page-consolidado .consol-kpi-row{display:grid !important;grid-template-columns:repeat(3,1fr) !important;gap:4px !important;margin-bottom:4px !important;}
+  #page-consolidado .consol-kpi-box{padding:4px 6px !important;}
+  #page-consolidado .kpi-rank-big{font-size:18px !important;}
+  #page-consolidado .idf-val-num{font-size:17px !important;}
+  #page-consolidado .consol-grid{display:grid !important;grid-template-columns:1.6fr 1fr !important;gap:6px !important;}
+
+  /* ===== DISTRIBUCIÓN IDF: FORMATO APAISADO Y HOJA ÚNICA ===== */
+  #page-distribucion{
+    page: distLandscapePage !important;
+    break-before: page !important;
+    page-break-before: always !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    max-height: 98vh !important;
+    overflow: hidden !important;
+    padding: 4px 8px !important;
+    box-sizing: border-box !important;
+  }
+  #page-distribucion .panel-body:first-child{
+    padding: 4px 8px !important;
+    margin-bottom: 4px !important;
+    border: 1px solid #dde3ee !important;
+    border-radius: 4px !important;
+  }
+  #page-distribucion .chart-title{font-size: 13.5px !important; font-weight: 800 !important; margin: 0 !important;}
+  #page-distribucion .chart-sub{font-size: 9.5px !important; margin: 2px 0 0 !important;}
+  #page-distribucion .dist-top{
+    grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    margin-bottom: 5px !important;
+  }
+  #page-distribucion .dist-top .stat-card{
+    padding: 3px 4px !important;
+    border: 1px solid #dde3ee !important;
+    border-radius: 4px !important;
+    text-align: center !important;
+  }
+  #page-distribucion .dist-top .stat-card .v{font-size: 13px !important; font-weight: 800 !important; line-height: 1.1 !important;}
+  #page-distribucion .dist-top .stat-card .k{font-size: 7.5px !important; margin-top: 1px !important; line-height: 1.1 !important; font-weight: 700 !important;}
+  #page-distribucion .dist-top .stat-card .sub{font-size: 7px !important; margin-top: 1px !important; line-height: 1 !important;}
+  #page-distribucion .dist-layout{
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr) !important;
+    gap: 8px !important;
+    align-items: start !important;
+  }
+  #page-distribucion .map-wrap{
+    height: auto !important;
+    overflow: hidden !important;
+    padding: 2px 4px !important;
+    border: 1px solid #dde3ee !important;
+    border-radius: 6px !important;
+    position: relative !important;
+  }
+  #page-distribucion #colombia-map>svg{
+    width: 98% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 480px !important;
+    margin: 30px auto 2px !important;
+    display: block !important;
+  }
+  #page-distribucion .map-year-label{
+    top: 6px !important;
+    font-size: 15px !important;
+    padding: 1px 10px !important;
+    z-index: 10 !important;
+    border: 1px solid #dde3ee !important;
+    border-radius: 4px !important;
+    background: rgba(255,255,255,0.92) !important;
+  }
+  #page-distribucion .map-legend{
+    top: 6px !important;
+    left: 6px !important;
+    padding: 4px 6px !important;
+    font-size: 8.5px !important;
+    gap: 2px !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+  #page-distribucion .map-labels-layer{display: inline !important;}
+  #page-distribucion .map-data-label{
+    display: inline !important;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif !important;
+    font-size: 4.2px !important;
+    font-weight: 700 !important;
+    fill: #0f172a !important;
+    paint-order: stroke fill !important;
+    stroke: #ffffff !important;
+    stroke-width: 1.1px !important;
+  }
+  #page-distribucion .dist-bars{
+    padding: 6px 10px !important;
+    border: 1px solid #dde3ee !important;
+    border-radius: 6px !important;
+  }
+  #page-distribucion .dist-section-header{margin-bottom: 4px !important;}
+  #page-distribucion .dist-header-title{font-size: 11.5px !important;}
+  #page-distribucion .dist-header-sub{font-size: 9px !important; margin-top: 1px !important;}
+  #page-distribucion .dist-rows-container{gap: 4px !important;}
+  #page-distribucion .dist-row-card{padding: 2px 0 !important; gap: 6px !important;}
+  #page-distribucion .dist-col-label{width: 115px !important; font-size: 9px !important;}
+  #page-distribucion .dist-track{height: 20px !important;}
+  #page-distribucion .dist-pct-pill{font-size: 8.5px !important; padding: 1px 5px !important;}
+  #page-distribucion .dist-col-count{font-size: 11px !important; width: 28px !important;}
+  #page-distribucion .badge-in,#page-distribucion .badge-out{font-size: 7.5px !important; padding: 1px 4px !important;}
+  #page-distribucion .dist-highlight-note{margin-top: 6px !important; padding: 4px 6px !important; font-size: 8px !important;}
+
+  /* Vista de impresión dedicada de Distribución IDF (Imprimir vistas / todos los períodos) */
   body.distribution-print-mode .app{display:none !important;}
   body.distribution-print-mode #dist-print-view{display:block !important;}
-  body.distribution-print-mode #dist-print-view .dist-print-sheet{break-inside:auto;page-break-inside:auto;break-after:page;page-break-after:always;}
-  body.distribution-print-mode #dist-print-view .dist-print-sheet:last-child{break-after:auto;page-break-after:auto;}
-  body.distribution-print-mode #dist-print-view .dist-top{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;}
-  body.distribution-print-mode #dist-print-view .dist-layout{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:8px;}
-  body.distribution-print-mode #dist-print-view .map-wrap{height:auto;overflow:hidden;}
-  body.distribution-print-mode #dist-print-view #colombia-map>svg{width:65% !important;margin:0 auto !important;}
-  body.distribution-print-mode #dist-print-view .dist-bars{padding:10px 12px;}
+  body.distribution-print-mode #dist-print-view .map-labels-layer{display:inline !important;}
+  body.distribution-print-mode #dist-print-view .map-data-label{
+    display:inline !important;
+    font-family:"Segoe UI",Roboto,Arial,sans-serif !important;
+    font-size:4.2px !important;
+    font-weight:700 !important;
+    fill:#0f172a !important;
+    paint-order:stroke fill !important;
+    stroke:#ffffff !important;
+    stroke-width:1.1px !important;
+  }
+  body.distribution-print-mode #dist-print-view .dist-print-sheet{
+    page: distLandscapePage !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+    break-after:page !important;
+    page-break-after:always !important;
+    padding:4px 8px !important;
+    box-sizing:border-box !important;
+    max-height:98vh !important;
+    overflow:hidden !important;
+  }
+  body.distribution-print-mode #dist-print-view .dist-print-sheet:last-child{break-after:auto !important;page-break-after:auto !important;}
+  body.distribution-print-mode #dist-print-view .panel-body{padding:4px 8px !important;margin-bottom:4px !important;border:1px solid #dde3ee !important;border-radius:4px !important;}
+  body.distribution-print-mode #dist-print-view .chart-title{font-size:13.5px !important;font-weight:800 !important;margin:0 !important;}
+  body.distribution-print-mode #dist-print-view .chart-sub{font-size:9.5px !important;margin:2px 0 0 !important;}
+  body.distribution-print-mode #dist-print-view .dist-top{grid-template-columns:repeat(8,minmax(0,1fr)) !important;gap:4px !important;margin-bottom:5px !important;}
+  body.distribution-print-mode #dist-print-view .dist-top .stat-card{padding:3px 4px !important;border:1px solid #dde3ee !important;border-radius:4px !important;text-align:center !important;}
+  body.distribution-print-mode #dist-print-view .dist-top .stat-card .v{font-size:13px !important;font-weight:800 !important;line-height:1.1 !important;}
+  body.distribution-print-mode #dist-print-view .dist-top .stat-card .k{font-size:7.5px !important;margin-top:1px !important;line-height:1.1 !important;font-weight:700 !important;}
+  body.distribution-print-mode #dist-print-view .dist-top .stat-card .sub{font-size:7px !important;margin-top:1px !important;line-height:1 !important;}
+  body.distribution-print-mode #dist-print-view .dist-layout{display:grid !important;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr) !important;gap:8px !important;align-items:start !important;}
+  body.distribution-print-mode #dist-print-view .map-wrap{height:auto !important;overflow:hidden !important;padding:2px 4px !important;border:1px solid #dde3ee !important;border-radius:6px !important;position:relative !important;}
+  body.distribution-print-mode #dist-print-view #colombia-map>svg{width:98% !important;max-width:100% !important;height:auto !important;max-height:480px !important;margin:30px auto 2px !important;display:block !important;}
+  body.distribution-print-mode #dist-print-view .map-year-label{top:6px !important;font-size:15px !important;padding:1px 10px !important;z-index:10 !important;border:1px solid #dde3ee !important;border-radius:4px !important;background:rgba(255,255,255,0.92) !important;}
+  body.distribution-print-mode #dist-print-view .map-legend{top:6px !important;left:6px !important;padding:4px 6px !important;font-size:8.5px !important;gap:2px !important;box-shadow:none !important;border:1px solid #ccc !important;}
+  body.distribution-print-mode #dist-print-view .dist-bars{padding:6px 10px !important;border:1px solid #dde3ee !important;border-radius:6px !important;}
+  body.distribution-print-mode #dist-print-view .dist-section-header{margin-bottom:4px !important;}
+  body.distribution-print-mode #dist-print-view .dist-header-title{font-size:11.5px !important;}
+  body.distribution-print-mode #dist-print-view .dist-header-sub{font-size:9px !important;margin-top:1px !important;}
+  body.distribution-print-mode #dist-print-view .dist-rows-container{gap:4px !important;}
+  body.distribution-print-mode #dist-print-view .dist-row-card{padding:2px 0 !important;gap:6px !important;}
+  body.distribution-print-mode #dist-print-view .dist-col-label{width:115px !important;font-size:9px !important;}
+  body.distribution-print-mode #dist-print-view .dist-track{height:20px !important;}
+  body.distribution-print-mode #dist-print-view .dist-pct-pill{font-size:8.5px !important;padding:1px 5px !important;}
+  body.distribution-print-mode #dist-print-view .dist-col-count{font-size:11px !important;width:28px !important;}
+  body.distribution-print-mode #dist-print-view .badge-in,body.distribution-print-mode #dist-print-view .badge-out{font-size:7.5px !important;padding:1px 4px !important;}
+  body.distribution-print-mode #dist-print-view .dist-highlight-note{margin-top:6px !important;padding:4px 6px !important;font-size:8px !important;}
 }
 
 /* Print selection modal */
@@ -2095,11 +2397,10 @@ footer.foot{
       </div>
     </div>
 
-    <div class="panel panel-body">
-      <div style="display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;">
-        <div class="dist-filters" style="grid-template-columns:repeat(2,1fr);flex:1;margin-bottom:0;">
-          <div class="f"><label>Año</label><select id="dist-year-filter"></select></div>
-          <div class="f"><label>Departamento</label><select id="dist-dept-filter"><option>Todos</option></select></div>
+    <div class="panel panel-body" style="padding:10px 14px;">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div class="dist-filters" style="display:flex;align-items:center;gap:14px;margin-bottom:0;">
+          <div class="f" style="min-width:180px;"><label>Año</label><select id="dist-year-filter"></select></div>
         </div>
       </div>
     </div>
@@ -3172,8 +3473,6 @@ footer.foot{
     } else if(pageId === 'distribucion'){
       var yearSel = document.getElementById('dist-year-filter');
       if(yearSel) yearSel.value = selectedYear;
-      var deptSel = document.getElementById('dist-dept-filter');
-      if(deptSel) deptSel.value = selectedDept || 'Todos';
       refreshDistribucion();
     }
   }
@@ -4597,8 +4896,7 @@ footer.foot{
     var prevTotal = prevAll.length;
 
     var titleEl = document.getElementById('dist-title');
-    var titleSuffix = selectedDept ? ' — '+selectedDept : '';
-    if(titleEl) titleEl.textContent = 'Geografía y Distribución de Rangos IDF — Vigencia '+selectedYear+titleSuffix;
+    if(titleEl) titleEl.textContent = 'Geografía y Distribución de Rangos IDF — Vigencia '+selectedYear;
 
     var yearLabel = document.getElementById('map-year-label');
     if(yearLabel) yearLabel.textContent = selectedYear;
@@ -4803,31 +5101,14 @@ footer.foot{
         yearSel.appendChild(opt);
       });
     }
-    var deptSel = document.getElementById('dist-dept-filter');
-    if(deptSel){
-      deptSel.innerHTML = '<option>Todos</option>';
-      getDeptList().forEach(function(d){
-        var opt = document.createElement('option');
-        opt.value = d; opt.textContent = d;
-        deptSel.appendChild(opt);
-      });
-    }
   }
 
   function setupDistFilters(){
     var yearSel = document.getElementById('dist-year-filter');
-    var deptSel = document.getElementById('dist-dept-filter');
     if(yearSel){
       yearSel.addEventListener('change', function(){
         selectedYear = this.value;
         updatePage('distribucion');
-      });
-    }
-    if(deptSel){
-      deptSel.addEventListener('change', function(){
-        selectedDept = this.value === 'Todos' ? null : this.value;
-        updatePage('distribucion');
-        highlightDeptOnMap(selectedDept);
       });
     }
   }
@@ -4880,7 +5161,7 @@ footer.foot{
       container.innerHTML = '';
       var svg = d3.select(container).append('svg')
         .attr('viewBox', '0 0 '+width+' '+height)
-        .style('display','block').style('width','75%').style('height','auto').style('margin','50px auto 0');
+        .style('display','block').style('width','92%').style('height','auto').style('margin','32px auto 0');
 
       var g = svg.append('g');
       var defs = svg.append('defs');
@@ -4981,7 +5262,6 @@ footer.foot{
           var rango = getDeptRango(deptName);
           var prevY = String(parseInt(selectedYear)-1);
 
-          var isSelectedDept = deptName && selectedDept && deptName.toLowerCase() === selectedDept.toLowerCase();
           d3.select(this)
             .attr('stroke','#0f172a')
             .attr('stroke-width', 0.65);
@@ -5032,10 +5312,8 @@ footer.foot{
         .on('click', function(e, d){
           var deptName = findDeptName(d.properties);
           if(!deptName) return;
-          selectedDept = deptName;
-          var deptSel = document.getElementById('dist-dept-filter');
-          if(deptSel) deptSel.value = deptName;
-          updatePage('distribucion');
+          selectedDept = (selectedDept === deptName) ? null : deptName;
+          highlightDeptOnMap(selectedDept);
         })
         .on('mouseout', function(){
           highlightDeptOnMap(selectedDept);
@@ -5043,7 +5321,61 @@ footer.foot{
           var tooltip = document.getElementById('mapTooltip');
           if(tooltip) tooltip.style.display='none';
         });
+
+      /* Calibración de offsets para etiquetas de departamentos pequeños y vecinos */
+      var normAccents = function(s){
+        return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+      };
+      var labelOffsets = {
+        'SAN ANDRES': { dx: 0, dy: 0 },
+        'ATLANTICO': { dx: 1, dy: -3 },
+        'MAGDALENA': { dx: 1, dy: 1 },
+        'BOLIVAR': { dx: 1, dy: 3 },
+        'SUCRE': { dx: -3, dy: -1 },
+        'CORDOBA': { dx: 0, dy: 0 },
+        'CALDAS': { dx: 3, dy: -3 },
+        'RISARALDA': { dx: -4, dy: -1 },
+        'QUINDIO': { dx: -3, dy: 3 },
+        'CUNDINAMARCA': { dx: 5, dy: -5 },
+        'TOLIMA': { dx: 2, dy: 3 },
+        'VALLE DEL CAUCA': { dx: -3, dy: 0 }
+      };
+
+      var labelsGroup = g.append('g').attr('class', 'map-labels-layer');
+
+      var labels = labelsGroup.selectAll('text')
+        .data(departamentos.features)
+        .enter().append('text')
+        .attr('class', 'map-data-label')
+        .attr('font-size', '4.2px')
+        .attr('font-weight', '700')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .attr('x', function(d){
+          var deptName = findDeptName(d.properties);
+          var pt = path.centroid(d);
+          var key = normAccents(deptName);
+          var off = (key && labelOffsets[key]) ? labelOffsets[key].dx : 0;
+          return pt[0] + off;
+        })
+        .attr('y', function(d){
+          var deptName = findDeptName(d.properties);
+          var pt = path.centroid(d);
+          var key = normAccents(deptName);
+          var off = (key && labelOffsets[key]) ? labelOffsets[key].dy : 0;
+          return pt[1] + off;
+        })
+        .style('pointer-events', 'none')
+        .style('user-select', 'none')
+        .text(function(d){
+          var deptName = findDeptName(d.properties);
+          var score = deptName ? getDeptIdF(deptName) : null;
+          return score != null ? fmt(score) : '';
+        });
+
       mapState.paths = paths;
+      mapState.labels = labels;
+      mapState.labelsGroup = labelsGroup;
     }
 
     updateMap();
@@ -5060,6 +5392,7 @@ footer.foot{
         .attr('filter', null);
       if(selected) path.raise();
     });
+    if(mapState.labelsGroup) mapState.labelsGroup.raise();
   }
 
   function updateMap(){
@@ -5074,6 +5407,13 @@ footer.foot{
         var score = deptName ? mapState.getDeptIdF(deptName) : null;
         return mapState.colorForScore(score);
       });
+    if(mapState.labels){
+      mapState.labels.text(function(d){
+        var deptName = mapState.findDeptName(d.properties);
+        var score = deptName ? mapState.getDeptIdF(deptName) : null;
+        return score != null ? fmt(score) : '';
+      });
+    }
     highlightDeptOnMap(selectedDept);
   }
 
