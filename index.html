@@ -2444,9 +2444,10 @@ footer.foot{
   /* ================================================================
      CONFIGURATION
      ================================================================ */
-  const DATA_URL  = 'data/datos_idf.json';
-  const GEO_URL   = 'geo/departamentos.json';
-  const CODES_URL = 'geo/codigos.json';
+  const API_BASE_URL      = 'http://localhost:8000/api/v1';
+  const DATA_FALLBACK_URL = 'data/datos_idf.json';
+  const GEO_URL           = 'geo/departamentos.json';
+  const CODES_URL         = 'geo/codigos.json';
 
   const IDF_COLORS = {
     Deterioro:  '#f4443c',
@@ -5438,12 +5439,71 @@ footer.foot{
   }
 
   /* ================================================================
+     NOTIFICACIÓN DE CONEXIÓN
+     ================================================================ */
+  function mostrarAvisoConexion(mensaje){
+    var existente = document.getElementById('api-aviso-toast');
+    if(existente) existente.remove();
+
+    var toast = document.createElement('div');
+    toast.id = 'api-aviso-toast';
+    toast.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:99999;background:#fffbeb;border:1px solid #fcd34d;color:#92400e;padding:12px 16px;border-radius:8px;font-size:12px;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,0.15);display:flex;align-items:center;gap:12px;max-width:420px;line-height:1.4;';
+    toast.innerHTML = '<span>⚠️ ' + mensaje + '</span><button style="background:none;border:none;color:#92400e;font-size:15px;cursor:pointer;padding:0 4px;font-weight:800;line-height:1;" onclick="this.parentElement.remove()">✕</button>';
+    document.body.appendChild(toast);
+
+    setTimeout(function(){
+      if(toast && toast.parentElement){
+        toast.style.transition = 'opacity 0.4s ease';
+        toast.style.opacity = '0';
+        setTimeout(function(){ if(toast.parentElement) toast.remove(); }, 400);
+      }
+    }, 8000);
+  }
+
+  /* ================================================================
+     DATA LOADER (API REST SQLite con Fallback a JSON Local)
+     ================================================================ */
+  async function loadIdfData(){
+    // 1. Intentar conectar a la API REST SQLite
+    try {
+      var controller = new AbortController();
+      var timeoutId = setTimeout(function(){ controller.abort(); }, 3500);
+      var apiEndpoint = (window.location.origin.includes('localhost:8000') || window.location.origin.includes('127.0.0.1:8000'))
+        ? '/api/v1/datos-completos'
+        : `${API_BASE_URL}/datos-completos`;
+      var res = await fetch(apiEndpoint, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if(res.ok){
+        var data = await res.json();
+        console.log('✔ Conectado a la base de datos relacional SQLite (API REST)');
+        return data;
+      }
+    } catch(err){
+      console.warn('⚠ Falló la conexión con la API REST local (' + err.message + '). Activando respaldo local.');
+      mostrarAvisoConexion('Falló la conexión con la base de datos local. Se están utilizando los datos de respaldo.');
+    }
+
+    // 2. Fallback resiliente a archivo JSON local
+    try {
+      var fallbackRes = await fetch(DATA_FALLBACK_URL);
+      var fallbackData = await fallbackRes.json();
+      console.log('ℹ Datos cargados desde archivo local (data/datos_idf.json)');
+      return fallbackData;
+    } catch(fallbackErr){
+      console.error('✘ Error crítico: No se pudieron cargar los datos:', fallbackErr);
+      mostrarAvisoConexion('Error: No fue posible cargar la información ni de la base de datos ni del archivo local.');
+      throw fallbackErr;
+    }
+  }
+
+  /* ================================================================
      INITIALIZE EVERYTHING
      ================================================================ */
   async function init(){
     try {
       var responses = await Promise.all([
-        fetch(DATA_URL).then(function(r){return r.json();}),
+        loadIdfData(),
         fetch(GEO_URL).then(function(r){return r.json();}),
         fetch(CODES_URL).then(function(r){return r.json();})
       ]);
