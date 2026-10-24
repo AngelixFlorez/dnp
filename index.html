@@ -2445,7 +2445,7 @@ footer.foot{
      CONFIGURATION
      ================================================================ */
   const API_BASE_URL      = 'http://127.0.0.1:8000/api/v1';
-  const DATA_FALLBACK_URL = 'data/datos_idf.json';
+  // Fallback JSON removido: backend maneja MySQL -> SQLite
   const GEO_URL           = 'geo/departamentos.json';
   const CODES_URL         = 'geo/codigos.json';
 
@@ -5464,37 +5464,26 @@ footer.foot{
      DATA LOADER (API REST SQLite con Fallback a JSON Local)
      ================================================================ */
   async function loadIdfData(){
-    // 1. Intentar conectar a la API REST (MySQL / SQLite)
     try {
       var controller = new AbortController();
-      var timeoutId = setTimeout(function(){ controller.abort(); }, 3500);
+      var timeoutId = setTimeout(function(){ controller.abort(); }, 5000);
       var origin = window.location.origin;
       var apiEndpoint = (origin.includes('127.0.0.1:8000') || origin.includes('localhost:8000'))
         ? '/api/v1/datos-completos'
-        : `${API_BASE_URL}/datos-completos`;
+        : API_BASE_URL + '/datos-completos';
       var res = await fetch(apiEndpoint, { signal: controller.signal });
       clearTimeout(timeoutId);
 
       if(res.ok){
         var data = await res.json();
-        console.log('✔ Conectado a la base de datos (API REST)');
+        console.log('OK Conectado a la base de datos (API REST)');
         return data;
       }
+      throw new Error('Respuesta no OK: ' + res.status);
     } catch(err){
-      console.warn('⚠ Falló la conexión con la API REST local (' + err.message + '). Activando respaldo local.');
-      mostrarAvisoConexion('Falló la conexión con la base de datos local. Se están utilizando los datos de respaldo.');
-    }
-
-    // 2. Fallback resiliente a archivo JSON local
-    try {
-      var fallbackRes = await fetch(DATA_FALLBACK_URL);
-      var fallbackData = await fallbackRes.json();
-      console.log('ℹ Datos cargados desde archivo local (data/datos_idf.json)');
-      return fallbackData;
-    } catch(fallbackErr){
-      console.error('✘ Error crítico: No se pudieron cargar los datos:', fallbackErr);
-      mostrarAvisoConexion('Error: No fue posible cargar la información ni de la base de datos ni del archivo local.');
-      throw fallbackErr;
+      console.error('Error: No se pudo conectar a la API:', err);
+      mostrarAvisoConexion('Error: No fue posible conectar con el servidor de datos. Verifique que el backend este corriendo.');
+      throw err;
     }
   }
 
