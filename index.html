@@ -2444,7 +2444,7 @@ footer.foot{
   /* ================================================================
      CONFIGURATION
      ================================================================ */
-  const API_BASE_URL      = 'http://127.0.0.1:8000/api/v1';
+  // const API_BASE_URL = 'http://127.0.0.1:8000/api/v1'; // No usado: rutas relativas
   // Fallback JSON removido: backend maneja MySQL -> SQLite
   const GEO_URL           = 'geo/departamentos.json';
   const CODES_URL         = 'geo/codigos.json';
@@ -5467,10 +5467,9 @@ footer.foot{
     try {
       var controller = new AbortController();
       var timeoutId = setTimeout(function(){ controller.abort(); }, 5000);
-      var origin = window.location.origin;
-      var apiEndpoint = (origin.includes('127.0.0.1:8000') || origin.includes('localhost:8000'))
-        ? '/api/v1/datos-completos'
-        : API_BASE_URL + '/datos-completos';
+      // Usar ruta relativa para que funcione en cualquier dominio (local, Render, etc.)
+      // El backend FastAPI sirve tanto la API como el frontend en el mismo origen
+      var apiEndpoint = '/api/v1/datos-completos';
       var res = await fetch(apiEndpoint, { signal: controller.signal });
       clearTimeout(timeoutId);
 
