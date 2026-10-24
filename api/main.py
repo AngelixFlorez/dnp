@@ -6,9 +6,11 @@ Provee endpoints analíticos de alta velocidad basados en FastAPI y SQLite relac
 Documentación interactiva disponible en /docs (Swagger UI) y /redoc.
 """
 
-from fastapi import FastAPI, HTTPException, Path, Query
+from fastapi import FastAPI, HTTPException, Path, Query, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+import shutil
+import tempfile
 from typing import Optional
 
 from api.services import (
@@ -194,6 +196,43 @@ def api_get_datos_completos():
     (llaves `meta`, `records` y `dashboard`), ofreciendo compatibilidad 100% inmediata con el frontend existente.
     """
     return get_datos_completos()
+
+
+@app.post("/api/v1/admin/cargar-excel", tags=["Administración & Ingesta"])
+async def api_cargar_excel(
+    archivo: UploadFile = File(..., description="Archivo Excel (.xlsx o .xls) con nuevas vigencias o ajustes departamentales")
+):
+    """
+    **Endpoint de Ingesta Institucional:**
+    Permite subir cualquier archivo de Excel sin importar su nombre o ubicación.
+    El backend extrae los registros, normaliza variables, actualiza transaccionalmente 
+    la base de datos relacional y recalcula las vistas analíticas en tiempo real.
+    """
+    if not (archivo.filename.lower().endswith(".xlsx") or archivo.filename.lower().endswith(".xls")):
+        raise HTTPException(
+            status_code=400,
+            detail="Formato de archivo no admitido. Debe subir un libro de Microsoft Excel (.xlsx o .xls)."
+        )
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as tmp:
+        shutil.copyfileobj(archivo.file, tmp)
+        tmp_path = tmp.name
+
+    try:
+        from scripts.cargar_datos_excel import ejecutar_pipeline_etl
+        res = ejecutar_pipeline_etl(excel_path=tmp_path)
+        return {
+            "mensaje": f"Archivo '{archivo.filename}' procesado e integrado exitosamente en la base de datos.",
+            "detalle": res
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error durante la ingesta del archivo Excel: {str(e)}"
+        )
+    finally:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
 
 
 if __name__ == "__main__":

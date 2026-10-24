@@ -82,9 +82,22 @@ def resolver_rango_id(rango_texto, idf_val):
 # ══════════════════════════════════════════
 # PASO 2.1  Lectura de la hoja maestra
 # ══════════════════════════════════════════
-def paso_2_1():
-    print("[2.1] Leyendo hoja maestra…")
-    df = pd.read_excel(EXCEL, sheet_name=SHEET, header=3)
+def paso_2_1(excel_path=None, sheet_name=None):
+    archivo = excel_path or EXCEL
+    hoja = sheet_name or SHEET
+
+    if not os.path.exists(archivo):
+        raise FileNotFoundError(f"No se encontró el archivo Excel en: {archivo}")
+
+    xl = pd.ExcelFile(archivo)
+    if hoja not in xl.sheet_names:
+        # Búsqueda inteligente de hoja que contenga variables IDF
+        candidatos = [s for s in xl.sheet_names if 'IDF' in s or 'variable' in s.lower() or 'con var' in s.lower()]
+        hoja = candidatos[0] if candidatos else xl.sheet_names[0]
+        print(f"[2.1] ℹ Hoja '{sheet_name}' no encontrada. Auto-detectada hoja: '{hoja}'")
+
+    print(f"[2.1] Leyendo hoja maestra '{hoja}' desde '{os.path.basename(archivo)}'…")
+    df = pd.read_excel(archivo, sheet_name=hoja, header=3)
     df.columns = df.columns.astype(str).str.strip()
 
     # Conservar solo filas con Departamento y Año válidos
@@ -522,15 +535,20 @@ def paso_2_4(conn):
 
 
 # ══════════════════════════════════════════
-# MAIN
+# EJECUCIÓN MODULAR DEL PIPELINE ETL
 # ══════════════════════════════════════════
-if __name__ == '__main__':
+def ejecutar_pipeline_etl(excel_path=None, sheet_name=None, db_path=None):
+    archivo = excel_path or EXCEL
+    base_datos = db_path or DB_PATH
+
     print("=" * 62)
-    print("FASE 2 — ETL: Excel → Base de Datos SQLite IDF")
+    print("PIPELINE ETL: Excel → Base de Datos Relacional IDF")
+    print(f"Archivo origen : {archivo}")
+    print(f"Base de datos  : {base_datos}")
     print("=" * 62)
 
     # ── 2.1 Lectura ──────────────────────────────────────────────
-    df = paso_2_1()
+    df = paso_2_1(archivo, sheet_name)
 
     # ── 2.2 Transformación fila a fila ───────────────────────────
     print("[2.2] Transformando y normalizando registros…")
@@ -539,19 +557,8 @@ if __name__ == '__main__':
         registros.append(transformar_fila(row))
     print(f"[2.2] ✔ {len(registros)} registros transformados.")
 
-    # Resumen de nulos en insumos CUIPO por año
-    nulos_cuipo = {}
-    for rec in registros:
-        a = rec['anio']
-        tiene = any(v is not None for v in rec['insumos'].values())
-        nulos_cuipo[a] = nulos_cuipo.get(a, 0) + (0 if tiene else 1)
-    for a in sorted(nulos_cuipo):
-        n = nulos_cuipo[a]
-        nota = "  ← nulos CUIPO esperados" if n > 0 else ""
-        print(f"       Año {a}: {n} fila(s) sin insumos CUIPO{nota}")
-
     # ── 2.3 Inserción transaccional ──────────────────────────────
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(base_datos)
     conn.execute("PRAGMA foreign_keys = ON")
 
     print("[2.3] Iniciando transacción de carga…")
@@ -561,56 +568,38 @@ if __name__ == '__main__':
         conn.rollback()
         conn.close()
         print(f"[ERROR CRÍTICO] {e}")
-        sys.exit(1)
+        raise e
+
+    # Asegurar que las vigencias procesadas estén registradas en vigencia_fiscal
+    anios_cargados = sorted(list(set(r['anio'] for r in registros)))
+    for a in anios_cargados:
+        conn.execute("INSERT OR IGNORE INTO vigencia_fiscal (anio, es_vigencia_activa) VALUES (?, 0)", (a,))
+    if anios_cargados:
+        max_a = max(anios_cargados)
+        conn.execute("UPDATE vigencia_fiscal SET es_vigencia_activa = CASE WHEN anio = ? THEN 1 ELSE 0 END", (max_a,))
+    conn.commit()
 
     # ── 2.4 Vistas analíticas ────────────────────────────────────
     paso_2_4(conn)
 
-    # ── Verificación final ───────────────────────────────────────
-    print()
-    print("─" * 50)
-    print("VERIFICACIÓN RÁPIDA DE CARGA:")
-
-    tablas = [
-        'clasificacion_anual',
-        'insumo_presupuestal_cuipo',
-        'evaluacion_resultados_fiscales',
-        'evaluacion_gestion_territorial',
-        'resultado_idf_anual',
-    ]
-    for t in tablas:
-        n = conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
-        print(f"  {t:<45} {n:>4} filas")
-
-    print()
-    print("  Registros con variación calculada:")
-    n_var = conn.execute(
-        "SELECT COUNT(*) FROM resultado_idf_anual WHERE variacion_puntos_porcentuales IS NOT NULL"
-    ).fetchone()[0]
-    print(f"    {n_var} de {ok} (las 32 filas de 2020 no tienen año anterior → variación=NULL)")
-
-    print()
-    print("  Muestra — IDF 2024 (Top 5 por ranking):")
-    rows = conn.execute("""
-        SELECT d.nombre_visual, r.puntaje_idf_final, cr.codigo, r.ranking_nacional,
-               ROUND(r.variacion_puntos_porcentuales,2) as var
-        FROM resultado_idf_anual r
-        JOIN departamento d ON r.departamento_id = d.codigo_divipola_2
-        JOIN catalogo_rango_desempeno cr ON r.rango_id = cr.rango_id
-        WHERE r.anio = 2024
-        ORDER BY r.ranking_nacional
-        LIMIT 5
-    """).fetchall()
-    for rw in rows:
-        print(f"    #{rw[3]:02d}  {rw[0]:<25} IDF={rw[1]:.4f}  {rw[2]:<12}  Var={rw[4]}")
-
     conn.close()
 
-    print()
     print("=" * 62)
     if not errores:
-        print("✔  FASE 2 COMPLETADA SIN ERRORES")
+        print("✔  ETL COMPLETADO EXITOSAMENTE")
     else:
-        print(f"⚠  FASE 2 COMPLETADA CON {len(errores)} ADVERTENCIAS")
-    print(f"   Base de datos: {DB_PATH}")
+        print(f"⚠  ETL COMPLETADO CON {len(errores)} ADVERTENCIAS")
+    print(f"   Base de datos actualizada: {base_datos}")
     print("=" * 62)
+    return {"status": "ok", "registros_procesados": ok, "vigencias": anios_cargados, "errores": errores}
+
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description="Pipeline ETL de carga para el IDF Departamental DNP")
+    parser.add_argument("--archivo", default=None, help="Ruta al archivo Excel a procesar")
+    parser.add_argument("--hoja", default=None, help="Nombre de la hoja en el Excel (auto-detectada si se omite)")
+    parser.add_argument("--bd", default=None, help="Ruta a la base de datos SQLite de destino")
+    args = parser.parse_args()
+
+    ejecutar_pipeline_etl(excel_path=args.archivo, sheet_name=args.hoja, db_path=args.bd)

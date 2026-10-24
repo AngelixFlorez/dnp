@@ -2444,7 +2444,7 @@ footer.foot{
   /* ================================================================
      CONFIGURATION
      ================================================================ */
-  const API_BASE_URL      = 'http://localhost:8000/api/v1';
+  const API_BASE_URL      = 'http://127.0.0.1:8000/api/v1';
   const DATA_FALLBACK_URL = 'data/datos_idf.json';
   const GEO_URL           = 'geo/departamentos.json';
   const CODES_URL         = 'geo/codigos.json';
@@ -5464,11 +5464,12 @@ footer.foot{
      DATA LOADER (API REST SQLite con Fallback a JSON Local)
      ================================================================ */
   async function loadIdfData(){
-    // 1. Intentar conectar a la API REST SQLite
+    // 1. Intentar conectar a la API REST (MySQL / SQLite)
     try {
       var controller = new AbortController();
       var timeoutId = setTimeout(function(){ controller.abort(); }, 3500);
-      var apiEndpoint = (window.location.origin.includes('localhost:8000') || window.location.origin.includes('127.0.0.1:8000'))
+      var origin = window.location.origin;
+      var apiEndpoint = (origin.includes('127.0.0.1:8000') || origin.includes('localhost:8000'))
         ? '/api/v1/datos-completos'
         : `${API_BASE_URL}/datos-completos`;
       var res = await fetch(apiEndpoint, { signal: controller.signal });
@@ -5476,7 +5477,7 @@ footer.foot{
 
       if(res.ok){
         var data = await res.json();
-        console.log('✔ Conectado a la base de datos relacional SQLite (API REST)');
+        console.log('✔ Conectado a la base de datos (API REST)');
         return data;
       }
     } catch(err){

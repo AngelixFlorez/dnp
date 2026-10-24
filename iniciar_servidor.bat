@@ -14,14 +14,14 @@ echo [2/2] Esperando inicio del servidor...
 timeout /t 3 /nobreak >nul
 
 echo Abriendo visualizador en el navegador...
-start http://localhost:8000/
+start http://127.0.0.1:8000/
 
 echo.
 echo ====================================================================
 echo  Sistema iniciado correctamente:
-echo   - Visualizador Web:       http://localhost:8000/
-echo   - Documentacion Swagger:  http://localhost:8000/docs
-echo   - API Health Check:       http://localhost:8000/health
+echo   - Visualizador Web:       http://127.0.0.1:8000/
+echo   - Documentacion Swagger:  http://127.0.0.1:8000/docs
+echo   - API Health Check:       http://127.0.0.1:8000/health
 echo ====================================================================
 echo Puedes cerrar esta ventana. El servidor continuara en su terminal.
 pause
