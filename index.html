@@ -1538,6 +1538,7 @@ footer.foot{
     display:flex !important;
     justify-content:space-between !important;
     align-items:center !important;
+    text-align:left !important;
     background:#fff !important;
     border:1px solid #dde3ee !important;
     border-radius:6px !important;
@@ -1553,19 +1554,23 @@ footer.foot{
     padding:6px 12px !important;
     border-radius:4px !important;
     color:#fff !important;
+    text-align:left !important;
+    align-items:flex-start !important;
   }
   #page-instructivo .hero-title h1{
-    font-size:16px !important;
-    line-height:1.15 !important;
+    font-size:20px !important;
+    line-height:1.1 !important;
     margin:0 !important;
+    text-align:left !important;
   }
   #page-instructivo .hero-title p{
-    font-size:10px !important;
+    font-size:11.5px !important;
     line-height:1.2 !important;
     margin:5px 0 0 !important;
     position:relative !important;
     top:4px !important;
     color:#cfd8e8 !important;
+    text-align:left !important;
   }
   #page-instructivo .hero-links{display:none !important;} /* Ocultar enlaces de navegación web */
   #page-instructivo .hero-logos{
@@ -1653,19 +1658,20 @@ footer.foot{
   #page-instructivo > .panel:has(table) th,
   #page-instructivo > .panel:has(table) td{font-size:9.5px !important;padding:3px 4px !important;}
   #page-instructivo #chart-tipologia .tipologia-table th,
-  #page-instructivo #chart-tipologia .tipologia-table td{font-size:9.5px !important;padding:3px 4px !important;}
+  #page-instructivo #chart-tipologia .tipologia-table td{font-size:10.5px !important;padding:4px 5px !important;}
   #page-instructivo > .panel:last-child .dist-table th,
   #page-instructivo > .panel:last-child .dist-table td{font-size:9.5px !important;padding:3.5px 4px !important;}
   #page-instructivo > .panel:has(> .intro-title):has(> table) table th,
   #page-instructivo > .panel:has(> .intro-title):has(> table) table td{font-size:10px !important;padding:4px 5px !important;}
   #page-instructivo .region-bar-group .bar .val{font-size:9px !important;}
   #page-instructivo .region-chart-labels .rlbl{font-size:11px !important;}
-  #page-instructivo .rank-bar .val{font-size:8.5px !important;}
+  #page-instructivo .rank-bar .val{font-size:9.5px !important;}
+  #page-instructivo .rank-lbl-col span{font-size:9px !important;}
   #chart-regiones,#chart-categorias,#chart-tipologia,#chart-ranking{height:auto !important;max-height:none !important;overflow:visible !important;}
   #chart-regiones .region-chart-labels,
   #chart-categorias .region-chart-labels,
   #chart-ranking .rank-labels-area{overflow:visible !important;break-inside:avoid !important;page-break-inside:avoid !important;}
-  .ranking-conventions{position:static !important;display:flex !important;clear:both !important;gap:6px !important;margin-top:4px !important;font-size:7.5px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
+  .ranking-conventions{position:static !important;display:flex !important;clear:both !important;gap:6px !important;margin-top:4px !important;font-size:8.5px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
 
   /* Encabezados no deben quedar huérfanos al pie de página */
   h1,h2,h3,.section-bar,.intro-title,.chart-title{break-after:avoid !important;page-break-after:avoid !important;}
@@ -1750,7 +1756,7 @@ footer.foot{
     page-break-inside: auto !important;
     max-height: none !important;
     overflow: visible !important;
-    padding: 4px 8px !important;
+    padding: 2px 8px !important;
     box-sizing: border-box !important;
   }
   #page-distribucion .panel-body:first-child{
@@ -1778,7 +1784,7 @@ footer.foot{
   #page-distribucion .dist-layout{
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
-    gap: 6px !important;
+    gap: 4px !important;
     align-items: start !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
@@ -1795,7 +1801,7 @@ footer.foot{
     justify-content: center !important;
   }
   #page-distribucion #colombia-map>svg{
-    width: 470px !important;
+    width: 490px !important;
     max-width: 100% !important;
     height: auto !important;
     max-height: none !important;
@@ -1842,14 +1848,14 @@ footer.foot{
   #page-distribucion .dist-section-header{margin-bottom: 4px !important;}
   #page-distribucion .dist-header-title{font-size: 11.5px !important;}
   #page-distribucion .dist-header-sub{font-size: 9px !important; margin-top: 1px !important;}
-  #page-distribucion .dist-rows-container{gap: 4px !important;min-width:0 !important;}
-  #page-distribucion .dist-row-card{padding: 2px 0 !important; gap: 5px !important;min-width:0 !important;}
+  #page-distribucion .dist-rows-container{gap: 2px !important;min-width:0 !important;}
+  #page-distribucion .dist-row-card{padding: 1px 0 !important; gap: 5px !important;min-width:0 !important;}
   #page-distribucion .dist-col-label{width: 105px !important; font-size: 8.5px !important;}
   #page-distribucion .dist-track{height: 20px !important;}
   #page-distribucion .dist-pct-pill{font-size: 8.5px !important; padding: 1px 5px !important;}
   #page-distribucion .dist-col-count{font-size: 11px !important; width: 28px !important;}
   #page-distribucion .badge-in,#page-distribucion .badge-out{font-size: 7.5px !important; padding: 1px 4px !important;}
-  #page-distribucion .dist-highlight-note{margin-top: 6px !important; padding: 4px 6px !important; font-size: 8px !important;}
+  #page-distribucion .dist-highlight-note{margin-top: 4px !important; padding: 3px 5px !important; font-size: 8px !important;}
 
   /* Vista de impresión dedicada de Distribución IDF (Imprimir vistas / todos los períodos) */
   body.distribution-print-mode .app{display:none !important;}
@@ -1871,7 +1877,7 @@ footer.foot{
     page-break-inside:avoid !important;
     break-after:page !important;
     page-break-after:always !important;
-    padding:4px 8px !important;
+    padding:2px 8px !important;
     box-sizing:border-box !important;
     max-height:none !important;
     overflow:visible !important;
@@ -1885,23 +1891,23 @@ footer.foot{
   body.distribution-print-mode #dist-print-view .dist-top .stat-card .v{font-size:13px !important;font-weight:800 !important;line-height:1.1 !important;}
   body.distribution-print-mode #dist-print-view .dist-top .stat-card .k{font-size:7.5px !important;margin-top:1px !important;line-height:1.1 !important;font-weight:700 !important;}
   body.distribution-print-mode #dist-print-view .dist-top .stat-card .sub{font-size:7px !important;margin-top:1px !important;line-height:1 !important;}
-  body.distribution-print-mode #dist-print-view .dist-layout{display:grid !important;grid-template-columns:minmax(0,1fr) !important;gap:6px !important;align-items:start !important;break-inside:avoid !important;page-break-inside:avoid !important;}
+  body.distribution-print-mode #dist-print-view .dist-layout{display:grid !important;grid-template-columns:minmax(0,1fr) !important;gap:4px !important;align-items:start !important;break-inside:avoid !important;page-break-inside:avoid !important;}
   body.distribution-print-mode #dist-print-view .map-wrap{height:auto !important;min-width:0 !important;overflow:visible !important;padding:2px 4px !important;border:1px solid #dde3ee !important;border-radius:6px !important;position:relative !important;display:flex !important;justify-content:center !important;}
-  body.distribution-print-mode #dist-print-view #colombia-map>svg{width:470px !important;max-width:100% !important;height:auto !important;max-height:none !important;margin:36px auto 2px !important;display:block !important;}
+  body.distribution-print-mode #dist-print-view #colombia-map>svg{width:490px !important;max-width:100% !important;height:auto !important;max-height:none !important;margin:36px auto 2px !important;display:block !important;}
   body.distribution-print-mode #dist-print-view .map-year-label{top:6px !important;font-size:15px !important;padding:1px 10px !important;z-index:10 !important;border:1px solid #dde3ee !important;border-radius:4px !important;background:rgba(255,255,255,0.92) !important;}
   body.distribution-print-mode #dist-print-view .map-legend{top:6px !important;left:6px !important;padding:4px 6px !important;font-size:8.5px !important;gap:2px !important;box-shadow:none !important;border:1px solid #ccc !important;}
   body.distribution-print-mode #dist-print-view .dist-bars{width:100% !important;padding:6px 10px !important;min-width:0 !important;box-sizing:border-box !important;border:1px solid #dde3ee !important;border-radius:6px !important;}
   body.distribution-print-mode #dist-print-view .dist-section-header{margin-bottom:4px !important;}
   body.distribution-print-mode #dist-print-view .dist-header-title{font-size:11.5px !important;}
   body.distribution-print-mode #dist-print-view .dist-header-sub{font-size:9px !important;margin-top:1px !important;}
-  body.distribution-print-mode #dist-print-view .dist-rows-container{gap:4px !important;min-width:0 !important;}
-  body.distribution-print-mode #dist-print-view .dist-row-card{padding:2px 0 !important;gap:5px !important;min-width:0 !important;}
+  body.distribution-print-mode #dist-print-view .dist-rows-container{gap:2px !important;min-width:0 !important;}
+  body.distribution-print-mode #dist-print-view .dist-row-card{padding:1px 0 !important;gap:5px !important;min-width:0 !important;}
   body.distribution-print-mode #dist-print-view .dist-col-label{width:105px !important;font-size:8.5px !important;}
   body.distribution-print-mode #dist-print-view .dist-track{height:20px !important;}
   body.distribution-print-mode #dist-print-view .dist-pct-pill{font-size:8.5px !important;padding:1px 5px !important;}
   body.distribution-print-mode #dist-print-view .dist-col-count{font-size:11px !important;width:28px !important;}
   body.distribution-print-mode #dist-print-view .badge-in,body.distribution-print-mode #dist-print-view .badge-out{font-size:7.5px !important;padding:1px 4px !important;}
-  body.distribution-print-mode #dist-print-view .dist-highlight-note{margin-top:6px !important;padding:4px 6px !important;font-size:8px !important;}
+  body.distribution-print-mode #dist-print-view .dist-highlight-note{margin-top:4px !important;padding:3px 5px !important;font-size:8px !important;}
 }
 
 /* Print selection modal */
