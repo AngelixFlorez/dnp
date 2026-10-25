@@ -2567,9 +2567,11 @@ footer.foot{
     return m[r]||r||'N/A';
   }
   function fmt(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':n.toFixed(1).replace('.',','); }
+  function fmt2(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':n.toFixed(2).replace('.',','); }
   function fmtPct(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':n.toFixed(1).replace('.',',')+'%'; }
   function fmtTrendValue(v){ if(v==null||v===''||!isFinite(Number(v)))return '–'; return Number(v).toFixed(2).replace('.',','); }
   function fmtInt(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':Math.round(n).toLocaleString('es-CO'); }
+  var moneyFormatter = new Intl.NumberFormat('es-CO',{maximumFractionDigits:16});
 
   /* Smooth scroll to section */
   window.scrollToSection = function(id){
@@ -2695,7 +2697,7 @@ footer.foot{
     function safeNum(v){
       if(v == null || v === '' || isNaN(v)) return '-';
       var n = parseFloat(v);
-      return isNaN(n) ? '-' : Number(n.toFixed(2));
+      return isNaN(n) ? '-' : n;
     }
 
     /* ----------------------------------------------------
@@ -4195,8 +4197,7 @@ footer.foot{
   function fmtMoney(v){
     if(v==null||v===''||isNaN(v)) return '–';
     var n = parseFloat(v);
-    if(Math.abs(n) > 100000) n = n / 1000;
-    return '$' + Math.round(n).toLocaleString('es-CO');
+    return '$' + moneyFormatter.format(n);
   }
 
   function getVarHtml(pres, indKey){
@@ -4356,10 +4357,10 @@ footer.foot{
         tr.innerHTML='<td class="left"><b>'+ind.nombre+'</b></td>' +
                      '<td class="varcell">'+varHtmlPrev+'</td>' +
                      '<td class="varcell">'+varHtmlCur+'</td>' +
-                     '<td>'+fmt(pi?pi.resultado:null)+'</td>' +
-                     '<td>'+fmt(ind.resultado)+'</td>' +
-                     '<td>'+fmt(pi?pi.calificacion:null)+'</td>' +
-                     '<td class="'+vClass+'">'+fmt(ind.calificacion)+'</td>' +
+                     '<td>'+fmt2(pi?pi.resultado:null)+'</td>' +
+                     '<td>'+fmt2(ind.resultado)+'</td>' +
+                     '<td>'+fmt2(pi?pi.calificacion:null)+'</td>' +
+                     '<td class="'+vClass+'">'+fmt2(ind.calificacion)+'</td>' +
                      '<td class="'+vClass+'">'+vPct+(vDot?' <span class="status-dot '+vDot+'"></span>':'')+'</td>';
         resTbody.appendChild(tr);
       });
@@ -4423,10 +4424,10 @@ footer.foot{
         tr.innerHTML='<td class="left"><b>'+ind.nombre+'</b></td>' +
                      '<td class="varcell">'+varHtmlPrev+'</td>' +
                      '<td class="varcell">'+varHtmlCur+'</td>' +
-                     '<td>'+fmt(pi?pi.resultado:null)+'</td>' +
-                     '<td>'+fmt(ind.resultado)+'</td>' +
-                     '<td>'+fmt(pi?pi.calificacion:null)+'</td>' +
-                     '<td class="'+vClass+'">'+fmt(ind.calificacion)+'</td>' +
+                     '<td>'+fmt2(pi?pi.resultado:null)+'</td>' +
+                     '<td>'+fmt2(ind.resultado)+'</td>' +
+                     '<td>'+fmt2(pi?pi.calificacion:null)+'</td>' +
+                     '<td class="'+vClass+'">'+fmt2(ind.calificacion)+'</td>' +
                      '<td class="'+vClass+'">'+vPct+(vDot?' <span class="status-dot '+vDot+'"></span>':'')+'</td>';
         gestTbody.appendChild(tr);
       });
@@ -5261,7 +5262,7 @@ footer.foot{
       container.innerHTML = '';
       var svg = d3.select(container).append('svg')
         .attr('viewBox', '0 0 '+width+' '+height)
-        .style('display','block').style('width','92%').style('height','auto').style('margin','32px auto 0');
+        .style('display','block').style('width','88%').style('height','auto').style('margin','32px auto 0');
 
       var g = svg.append('g');
       var defs = svg.append('defs');
