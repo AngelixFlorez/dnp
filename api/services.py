@@ -523,7 +523,7 @@ def get_datos_completos() -> Dict[str, Any]:
                     "ranking": r['ranking'],
                     "resultados": {
                         "score": _clean_val(r['resultados_score']),
-                        "calificacion": _clean_val(r['resultados_score']),
+                        "calificacion": _clean_val(r['resultados_aporte']),
                         "indicadores": {
                             "dependencia_transferencias": {
                                 "nombre": "Dependencia de las transferencias",
@@ -556,7 +556,7 @@ def get_datos_completos() -> Dict[str, Any]:
                     "gestion": {
                         "score": _clean_val(r['gestion_score']),
                         "gestion_mas_bonos": _clean_val(r['gestion_score']),
-                        "calificacion": _clean_val(r['gestion_score']),
+                        "calificacion": _clean_val(r['gestion_aporte']),
                         "indicadores": {
                             "holgura": {
                                 "nombre": "Holgura",
