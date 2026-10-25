@@ -2571,7 +2571,7 @@ footer.foot{
   function fmtPct(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':n.toFixed(1).replace('.',',')+'%'; }
   function fmtTrendValue(v){ if(v==null||v===''||!isFinite(Number(v)))return '–'; return Number(v).toFixed(2).replace('.',','); }
   function fmtInt(v){ if(v==null||v==='')return '–'; var n=parseFloat(v); return isNaN(n)?'–':Math.round(n).toLocaleString('es-CO'); }
-  var moneyFormatter = new Intl.NumberFormat('es-CO',{maximumFractionDigits:16});
+  var moneyFormatter = new Intl.NumberFormat('es-CO',{maximumFractionDigits:0});
 
   /* Smooth scroll to section */
   window.scrollToSection = function(id){
