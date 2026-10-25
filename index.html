@@ -1596,36 +1596,43 @@ footer.foot{
 
   /* Tarjetas explicativas de introducción */
   #sec-que-mide{margin-bottom:6px !important;border:1px solid #dde3ee !important;border-radius:4px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
-  #sec-que-mide .intro-title{font-size:11px !important;padding:4px 8px !important;}
+  #sec-que-mide .intro-title,
+  #sec-rangos .section-bar,
+  #sec-como-usar .intro-title,
+  #page-instructivo > .panel:has(> .intro-title):has(> table) > .intro-title:not(.green){
+    font-size:13px !important;
+    font-weight:700 !important;
+    line-height:1.2 !important;
+    padding:7px 10px !important;
+  }
   #sec-que-mide .intro-text,
-  #sec-como-usar .intro-text{font-size:11px !important;line-height:1.3 !important;padding:6px 9px !important;}
+  #sec-como-usar .intro-text{font-size:12.5px !important;line-height:1.35 !important;padding:7px 10px !important;}
 
   #sec-dimensiones{margin-bottom:6px !important;border:1px solid #dde3ee !important;border-radius:4px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
-  #sec-dimensiones .section-bar{font-size:11px !important;padding:4px 8px !important;}
-  #sec-dimensiones .split80{display:grid !important;grid-template-columns:1fr 1fr !important;gap:6px !important;padding:5px 8px !important;}
-  #sec-dimensiones .pct-row{gap:6px !important;margin-bottom:2px !important;}
-  #sec-dimensiones .pct-num{font-size:19px !important;}
-  #sec-dimensiones .big-pct{font-size:11px !important;}
-  #sec-dimensiones .pct-desc{font-size:10px !important;line-height:1.25 !important;}
-  #sec-dimensiones .dim-desc{font-size:10px !important;line-height:1.25 !important;}
-  #sec-dimensiones .dim-items{gap:3px !important;margin-top:4px !important;}
-  #sec-dimensiones .dim-item{font-size:8.5px !important;padding:2px 5px !important;}
+  #sec-dimensiones .section-bar{font-size:13px !important;font-weight:700 !important;line-height:1.2 !important;padding:7px 10px !important;}
+  #sec-dimensiones .split80{display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px !important;padding:7px 10px !important;}
+  #sec-dimensiones .pct-row{gap:8px !important;margin-bottom:3px !important;}
+  #sec-dimensiones .pct-num{font-size:20px !important;}
+  #sec-dimensiones .big-pct{font-size:13px !important;}
+  #sec-dimensiones .big-pct .lbl{font-size:11.5px !important;}
+  #sec-dimensiones .pct-desc{font-size:11.5px !important;line-height:1.3 !important;}
+  #sec-dimensiones .dim-desc{font-size:11.5px !important;line-height:1.3 !important;}
+  #sec-dimensiones .dim-items{gap:4px !important;margin-top:5px !important;}
+  #sec-dimensiones .dim-item{font-size:10px !important;padding:2px 6px !important;}
 
   #sec-rangos{margin-bottom:6px !important;border:1px solid #dde3ee !important;border-radius:4px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
-  #sec-rangos .section-bar{font-size:11px !important;padding:4px 8px !important;}
-  #sec-rangos .rangos-wrap{display:flex !important;flex-wrap:nowrap !important;gap:5px !important;padding:5px 7px !important;}
+  #sec-rangos .rangos-wrap{display:flex !important;flex-wrap:nowrap !important;gap:6px !important;padding:6px 8px !important;}
   #sec-rangos .rango-card{flex:1 !important;padding:3px 5px !important;}
-  #sec-rangos .rango-card .pts{font-size:9.5px !important;padding:3px 4px !important;}
-  #sec-rangos .rango-card .name{font-size:9.5px !important;padding:3px 4px 1px !important;}
-  #sec-rangos .rango-card .desc{font-size:9.5px !important;line-height:1.25 !important;padding:0 4px 4px !important;}
+  #sec-rangos .rango-card .pts{font-size:10.5px !important;padding:4px 5px !important;}
+  #sec-rangos .rango-card .name{font-size:11px !important;padding:4px 5px 2px !important;}
+  #sec-rangos .rango-card .desc{font-size:10.5px !important;line-height:1.3 !important;padding:0 5px 5px !important;}
 
   #sec-como-usar{margin-bottom:6px !important;border:1px solid #dde3ee !important;border-radius:4px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
-  #sec-como-usar .section-bar{font-size:11px !important;padding:4px 8px !important;}
-  #sec-como-usar .como-usar-grid{display:grid !important;grid-template-columns:repeat(4,1fr) !important;gap:5px !important;padding:5px 7px !important;}
-  #sec-como-usar .como-usar-step{padding:4px 5px !important;}
-  #sec-como-usar .step-num{font-size:10px !important;}
-  #sec-como-usar .step-title{font-size:9px !important;}
-  #sec-como-usar .step-desc{font-size:8.5px !important;line-height:1.2 !important;}
+  #sec-como-usar .como-usar-grid{display:grid !important;grid-template-columns:repeat(4,1fr) !important;gap:6px !important;padding:6px 8px !important;}
+  #sec-como-usar .como-usar-step{padding:5px 6px !important;}
+  #sec-como-usar .step-num{font-size:11px !important;}
+  #sec-como-usar .step-title{font-size:10px !important;}
+  #sec-como-usar .step-desc{font-size:9.5px !important;line-height:1.25 !important;}
 
   /* ===== APROVECHAMIENTO DE PÁGINAS Y FLUJO DE TABLAS ===== */
   table{width:100% !important;border-collapse:collapse !important;break-inside:auto !important;page-break-inside:auto !important;}
@@ -1649,6 +1656,8 @@ footer.foot{
   #page-instructivo #chart-tipologia .tipologia-table td{font-size:9.5px !important;padding:3px 4px !important;}
   #page-instructivo > .panel:last-child .dist-table th,
   #page-instructivo > .panel:last-child .dist-table td{font-size:9.5px !important;padding:3.5px 4px !important;}
+  #page-instructivo > .panel:has(> .intro-title):has(> table) table th,
+  #page-instructivo > .panel:has(> .intro-title):has(> table) table td{font-size:10px !important;padding:4px 5px !important;}
   #page-instructivo .region-bar-group .bar .val{font-size:9px !important;}
   #page-instructivo .region-chart-labels .rlbl{font-size:11px !important;}
   #page-instructivo .rank-bar .val{font-size:8.5px !important;}
@@ -1696,7 +1705,7 @@ footer.foot{
   #page-consolidado .consol-kpi-box{padding:3px 5px !important;min-height:0 !important;}
   #page-consolidado .consol-kpi-rank-box{gap:5px !important;}
   #page-consolidado .kpi-rank-big{font-size:16px !important;}
-  #page-consolidado .rango-pill{font-size:8.5px !important;padding:2px 5px !important;white-space:normal !important;}
+  #page-consolidado .rango-pill{font-size:9.5px !important;padding:4px 7px !important;white-space:normal !important;}
   #page-consolidado .idf-tag-badge{font-size:14px !important;padding:0 9px !important;}
   #page-consolidado .idf-vals-container{padding:2px 5px !important;}
   #page-consolidado .idf-val-num{font-size:16px !important;}
@@ -1708,10 +1717,18 @@ footer.foot{
   #page-consolidado .consol-view-content{overflow:visible !important;}
   #page-consolidado .consol-view-title{white-space:normal !important;overflow:visible !important;text-overflow:clip !important;}
   #page-consolidado .consol-view-desc{overflow:visible !important;}
+  #page-consolidado .consol-controls-bar{display:flex !important;align-items:center !important;justify-content:space-between !important;gap:6px !important;margin:0 0 6px !important;flex-wrap:nowrap !important;width:100% !important;}
+  #page-consolidado .consol-tabs-row{flex:none !important;}
+  #page-consolidado .consol-tabs-row button{font-size:9px !important;padding:3px 8px !important;}
+  #page-consolidado .consol-selectors-group{display:flex !important;align-items:flex-end !important;gap:8px !important;flex-wrap:nowrap !important;}
+  #page-consolidado .consol-select-item{gap:2px !important;}
+  #page-consolidado .consol-select-item label{font-size:8.5px !important;}
+  #page-consolidado .consol-select-item select{font-size:9px !important;padding:2px 5px !important;min-width:75px !important;}
+  #page-consolidado .consol-select-item select#consol-dept-select{min-width:130px !important;}
   #page-consolidado .consol-grid{display:grid !important;grid-template-columns:1.25fr 1fr !important;gap:6px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
-  #page-consolidado .consol-table-box{padding:8px !important;overflow:visible !important;}
-  #page-consolidado .consol-table th{font-size:8.5px !important;padding:4px !important;}
-  #page-consolidado .consol-table td{font-size:8.5px !important;padding:4px !important;}
+  #page-consolidado .consol-table-box{padding:9px !important;overflow:visible !important;}
+  #page-consolidado .consol-table th{font-size:9px !important;padding:5px !important;}
+  #page-consolidado .consol-table td{font-size:9px !important;padding:5px !important;}
   #page-consolidado .consol-chart-box{padding:6px 8px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
   #page-consolidado .consol-rank-header{gap:3px !important;margin-bottom:4px !important;padding-bottom:4px !important;}
   #page-consolidado .rank-main-title{font-size:11px !important;}
@@ -1778,7 +1795,7 @@ footer.foot{
     justify-content: center !important;
   }
   #page-distribucion #colombia-map>svg{
-    width: 440px !important;
+    width: 470px !important;
     max-width: 100% !important;
     height: auto !important;
     max-height: none !important;
@@ -1870,7 +1887,7 @@ footer.foot{
   body.distribution-print-mode #dist-print-view .dist-top .stat-card .sub{font-size:7px !important;margin-top:1px !important;line-height:1 !important;}
   body.distribution-print-mode #dist-print-view .dist-layout{display:grid !important;grid-template-columns:minmax(0,1fr) !important;gap:6px !important;align-items:start !important;break-inside:avoid !important;page-break-inside:avoid !important;}
   body.distribution-print-mode #dist-print-view .map-wrap{height:auto !important;min-width:0 !important;overflow:visible !important;padding:2px 4px !important;border:1px solid #dde3ee !important;border-radius:6px !important;position:relative !important;display:flex !important;justify-content:center !important;}
-  body.distribution-print-mode #dist-print-view #colombia-map>svg{width:440px !important;max-width:100% !important;height:auto !important;max-height:none !important;margin:36px auto 2px !important;display:block !important;}
+  body.distribution-print-mode #dist-print-view #colombia-map>svg{width:470px !important;max-width:100% !important;height:auto !important;max-height:none !important;margin:36px auto 2px !important;display:block !important;}
   body.distribution-print-mode #dist-print-view .map-year-label{top:6px !important;font-size:15px !important;padding:1px 10px !important;z-index:10 !important;border:1px solid #dde3ee !important;border-radius:4px !important;background:rgba(255,255,255,0.92) !important;}
   body.distribution-print-mode #dist-print-view .map-legend{top:6px !important;left:6px !important;padding:4px 6px !important;font-size:8.5px !important;gap:2px !important;box-shadow:none !important;border:1px solid #ccc !important;}
   body.distribution-print-mode #dist-print-view .dist-bars{width:100% !important;padding:6px 10px !important;min-width:0 !important;box-sizing:border-box !important;border:1px solid #dde3ee !important;border-radius:6px !important;}
