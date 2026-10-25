@@ -1697,6 +1697,8 @@ footer.foot{
   #page-ficha .fin-table td.left{font-size:9px !important;padding-top:4px !important;}
   #page-ficha .fin-table td.varcell{font-size:8.5px !important;line-height:1.2 !important;padding:4px !important;}
   #page-ficha .fin-table td.varcell .val{font-size:9px !important;}
+  #page-ficha .fin-table .status-dot{display:block !important;margin:2px auto 0 !important;vertical-align:initial !important;}
+  #page-ficha .side .legend div:first-child .dot{background:var(--green) !important;}
   #page-ficha .panel:has(.result-header),
   #page-ficha .panel:has(.trend-title){break-inside:avoid !important;page-break-inside:avoid !important;}
   #page-ficha .panel:has(.result-header){break-after:avoid !important;page-break-after:avoid !important;}
@@ -1733,8 +1735,8 @@ footer.foot{
   #page-consolidado .consol-select-item select#consol-dept-select{min-width:130px !important;}
   #page-consolidado .consol-grid{display:grid !important;grid-template-columns:1.25fr 1fr !important;gap:6px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
   #page-consolidado .consol-table-box{padding:9px !important;overflow:visible !important;}
-  #page-consolidado .consol-table th{font-size:9px !important;padding:5px !important;}
-  #page-consolidado .consol-table td{font-size:9px !important;padding:5px !important;}
+  #page-consolidado .consol-table th{font-size:9.5px !important;padding:5.5px !important;}
+  #page-consolidado .consol-table td{font-size:9.5px !important;padding:5.5px !important;}
   #page-consolidado .consol-chart-box{padding:6px 8px !important;break-inside:avoid !important;page-break-inside:avoid !important;}
   #page-consolidado .consol-rank-header{gap:3px !important;margin-bottom:4px !important;padding-bottom:4px !important;}
   #page-consolidado .rank-main-title{font-size:11px !important;}
@@ -1807,6 +1809,11 @@ footer.foot{
     max-height: none !important;
     margin: 36px auto 2px !important;
     display: block !important;
+  }
+  #page-distribucion #colombia-map>svg>g{
+    transform:scale(1.2) !important;
+    transform-box:fill-box !important;
+    transform-origin:center top !important;
   }
   #page-distribucion .map-year-label{
     top: 6px !important;
@@ -1894,6 +1901,7 @@ footer.foot{
   body.distribution-print-mode #dist-print-view .dist-layout{display:grid !important;grid-template-columns:minmax(0,1fr) !important;gap:4px !important;align-items:start !important;break-inside:avoid !important;page-break-inside:avoid !important;}
   body.distribution-print-mode #dist-print-view .map-wrap{height:auto !important;min-width:0 !important;overflow:visible !important;padding:2px 4px !important;border:1px solid #dde3ee !important;border-radius:6px !important;position:relative !important;display:flex !important;justify-content:center !important;}
   body.distribution-print-mode #dist-print-view #colombia-map>svg{width:490px !important;max-width:100% !important;height:auto !important;max-height:none !important;margin:36px auto 2px !important;display:block !important;}
+  body.distribution-print-mode #dist-print-view #colombia-map>svg>g{transform:scale(1.2) !important;transform-box:fill-box !important;transform-origin:center top !important;}
   body.distribution-print-mode #dist-print-view .map-year-label{top:6px !important;font-size:15px !important;padding:1px 10px !important;z-index:10 !important;border:1px solid #dde3ee !important;border-radius:4px !important;background:rgba(255,255,255,0.92) !important;}
   body.distribution-print-mode #dist-print-view .map-legend{top:6px !important;left:6px !important;padding:4px 6px !important;font-size:8.5px !important;gap:2px !important;box-shadow:none !important;border:1px solid #ccc !important;}
   body.distribution-print-mode #dist-print-view .dist-bars{width:100% !important;padding:6px 10px !important;min-width:0 !important;box-sizing:border-box !important;border:1px solid #dde3ee !important;border-radius:6px !important;}
