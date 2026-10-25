@@ -4737,10 +4737,10 @@ footer.foot{
 
         var tr = document.createElement('tr');
         tr.innerHTML = '<td class="left">' + resIndNames[i] + '</td>' +
-                       '<td>' + fmt(curRes) + '</td>' +
-                       '<td class="' + getCalClass(curCal) + '">' + fmt(curCal) + '</td>' +
-                       '<td>' + fmt(compRes) + '</td>' +
-                       '<td class="' + getCalClass(compCal) + '">' + fmt(compCal) + '</td>';
+                       '<td>' + fmt2(curRes) + '</td>' +
+                       '<td class="' + getCalClass(curCal) + '">' + fmt2(curCal) + '</td>' +
+                       '<td>' + fmt2(compRes) + '</td>' +
+                       '<td class="' + getCalClass(compCal) + '">' + fmt2(compCal) + '</td>';
         compTbody.appendChild(tr);
       });
 
@@ -4753,10 +4753,10 @@ footer.foot{
       var trDR = document.createElement('tr');
       trDR.className = 'dim-res-row';
       trDR.innerHTML = '<td class="left">Dimensión de Resultados Fiscales</td>' +
-                       '<td>' + fmt(curResResult) + '</td>' +
-                       '<td class="' + getCalClass(curResScore) + '">' + fmt(curResScore) + '</td>' +
-                       '<td>' + fmt(compResResultAvg || curResResult) + '</td>' +
-                       '<td class="' + getCalClass(compResScore) + '">' + fmt(compResScore) + '</td>';
+                       '<td>' + fmt2(curResResult) + '</td>' +
+                       '<td class="' + getCalClass(curResScore) + '">' + fmt2(curResScore) + '</td>' +
+                       '<td>' + fmt2(compResResultAvg || curResResult) + '</td>' +
+                       '<td class="' + getCalClass(compResScore) + '">' + fmt2(compResScore) + '</td>';
       compTbody.appendChild(trDR);
 
       /* Management Dimension Indicators */
@@ -4787,10 +4787,10 @@ footer.foot{
 
         var tr = document.createElement('tr');
         tr.innerHTML = '<td class="left">' + gestIndNames[i] + '</td>' +
-                       '<td>' + fmt(curRes) + '</td>' +
-                       '<td class="' + getCalClass(curCal) + '">' + fmt(curCal) + '</td>' +
-                       '<td>' + fmt(compRes) + '</td>' +
-                       '<td class="' + getCalClass(compCal) + '">' + fmt(compCal) + '</td>';
+                       '<td>' + fmt2(curRes) + '</td>' +
+                       '<td class="' + getCalClass(curCal) + '">' + fmt2(curCal) + '</td>' +
+                       '<td>' + fmt2(compRes) + '</td>' +
+                       '<td class="' + getCalClass(compCal) + '">' + fmt2(compCal) + '</td>';
         compTbody.appendChild(tr);
       });
 
@@ -4806,10 +4806,10 @@ footer.foot{
       var trDG = document.createElement('tr');
       trDG.className = 'dim-gest-row';
       trDG.innerHTML = '<td class="left">Dimensión de Gestión Financiera</td>' +
-                       '<td>' + fmt(curGestScore) + '<div class="sub-bono-text">Resultado + bonos: ' + fmt(curGestBonos) + '</div></td>' +
-                       '<td class="' + getCalClass(curGestCal) + '">' + fmt(curGestCal) + '</td>' +
-                       '<td>' + fmt(compGestScoreAvg) + '<div class="sub-bono-text">Resultado + bonos: ' + fmt(compGestBonosAvg) + '</div></td>' +
-                       '<td class="' + getCalClass(compGestCalAvg) + '">' + fmt(compGestCalAvg) + '</td>';
+                       '<td>' + fmt2(curGestScore) + '<div class="sub-bono-text">Resultado + bonos: ' + fmt2(curGestBonos) + '</div></td>' +
+                       '<td class="' + getCalClass(curGestCal) + '">' + fmt2(curGestCal) + '</td>' +
+                       '<td>' + fmt2(compGestScoreAvg) + '<div class="sub-bono-text">Resultado + bonos: ' + fmt2(compGestBonosAvg) + '</div></td>' +
+                       '<td class="' + getCalClass(compGestCalAvg) + '">' + fmt2(compGestCalAvg) + '</td>';
       compTbody.appendChild(trDG);
     }
 
